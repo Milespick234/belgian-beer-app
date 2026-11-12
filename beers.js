@@ -570,7 +570,7 @@ window.BEER_DATA.push(
     imageUrl: "https://drive.google.com/file/d/1Y939o0K_8SWq0LtMNRq604URN_Zk_GLx/view?usp=drive_link",
     productUrl: "https://www.dedochtervandekorenaar.be/en/core-range/lensemble/",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Brouwerij+De+Dochter+van+de+Korenaar+Baarle-Hertog+Belgium",
-    summary: "オランダ領内に点在するベルギーの飛地バールレ＝ヘルトグで造られる、度数13.0%のバーレーワイン／ストロング・ダークエール。重厚なモルトの甘みとホップの苦味が圧巻です。",
+    summary: "オランダ領内に点在するベルギーの飛地バールレ＝ヘルトフで造られる、度数13.0%のバーレーワイン／ストロング・ダークエール。重厚なモルトの甘みとホップの苦味が圧巻です。",
     importer: "日本未発売・スポット輸入銘柄",
     ingredients: "大麦麦芽（複数種のカラメル・ロースト麦芽）、糖類、ホップ、酵母、水",
     brewingMethod: "高濃度の麦汁を時間をかけて発酵・熟成させ、13.0%というワイン並みのアルコール度数と豊かなボディを引き出すクラフト製法。",
