@@ -30,6 +30,9 @@
       --map-bg-hover: #0284c7;
       --map-text: #082f49;
       --map-border: #0284c7;
+      --sort-bg: #e2f3d5;
+      --sort-border: #95c47a;
+      --sort-text: #183114;
     }
 
     html.dark {
@@ -55,6 +58,9 @@
       --map-bg-hover: #7dd3fc;
       --map-text: #082f49;
       --map-border: #7dd3fc;
+      --sort-bg: #d9f2c7;
+      --sort-border: #84b867;
+      --sort-text: #14260e;
     }
 
     * {
@@ -230,7 +236,7 @@
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      padding: 4px 9px;
+      padding: 4px 10px;
       border-radius: 6px;
       background: var(--bg-elevated);
       border: 1px solid var(--border);
@@ -374,6 +380,36 @@
       border-color: var(--accent);
     }
 
+    /* HORAL情報バナー（#HORAL選択時に表示） */
+    .horal-banner {
+      display: none;
+      margin: 10px 0 6px;
+      padding: 11px 14px;
+      border-radius: 10px;
+      background: var(--bg-surface);
+      border: 1px solid var(--sort-border);
+      border-left: 5px solid #4d7c0f;
+      box-shadow: var(--shadow);
+      font-size: 0.85rem;
+    }
+
+    .horal-banner.show {
+      display: block;
+    }
+
+    .horal-banner-title {
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 4px;
+      font-size: 0.9rem;
+    }
+
+    .horal-banner-text {
+      margin: 0;
+      color: var(--text-primary);
+      line-height: 1.55;
+    }
+
     .status-bar {
       display: flex;
       flex-wrap: wrap;
@@ -423,15 +459,21 @@
       color: var(--text-secondary);
     }
 
+    /* 並び替えボタン（セレクトボックス）：背景色を薄い黄緑色に変更 */
     .sort-select {
       padding: 6px 10px;
       border-radius: 8px;
-      border: 1px solid var(--border);
-      background: var(--bg-surface);
-      color: var(--text-primary);
+      border: 1px solid var(--sort-border);
+      background-color: var(--sort-bg);
+      color: var(--sort-text);
       font-size: 0.85rem;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
+      transition: filter 0.15s;
+    }
+
+    .sort-select:hover {
+      filter: brightness(0.96);
     }
 
     .beer-grid {
@@ -464,7 +506,6 @@
       align-items: flex-start;
     }
 
-    /* 画像クリックで拡大ポップアップ可能であることを示す */
     .card-thumb-wrap {
       position: relative;
       width: 78px;
@@ -526,7 +567,6 @@
       word-break: break-word;
     }
 
-    /* 初期画面カード内のお気に入り追加・解除ボタン */
     .card-fav-btn {
       display: inline-flex;
       align-items: center;
@@ -673,6 +713,13 @@
       color: var(--accent);
     }
 
+    .tag-link.horal-tag {
+      border-color: var(--sort-border);
+      background: var(--sort-bg);
+      color: var(--sort-text);
+      font-weight: 700;
+    }
+
     /* Mapボタン：背景を水色に設定 */
     .map-btn {
       display: inline-flex;
@@ -716,7 +763,6 @@
       display: flex;
     }
 
-    /* 画像拡大ポップアップ用ライトボックス（詳細モーダルより前面に表示） */
     .image-lightbox {
       z-index: 1500;
       background: rgba(0, 0, 0, 0.84);
@@ -1111,8 +1157,8 @@
 
       <div class="portal-row">
         <span class="portal-label">情報サイト:</span>
-        <a href="https://www.belgianbeer.co.jp/search.php" target="_blank" rel="noopener noreferrer" class="portal-link">ベルギービールJapan</a>
-        <a href="https://kinki-beer.jp/" target="_blank" rel="noopener noreferrer" class="portal-link">KINKI BEER</a>
+        <a href="https://www.belgianbeer.co.jp/search.php" target="_blank" rel="noopener noreferrer" class="portal-link">木屋</a>
+        <a href="https://kinki-beer.jp/" target="_blank" rel="noopener noreferrer" class="portal-link">KINKI</a>
         <a href="https://www.worldbeer.co.jp/beer/belgium/index.html" target="_blank" rel="noopener noreferrer" class="portal-link">廣島</a>
         <a href="https://konishi.be/beer.html?product-list_page=10" target="_blank" rel="noopener noreferrer" class="portal-link">小西酒造</a>
       </div>
@@ -1137,6 +1183,15 @@
         <div id="subfilterGrid" class="subfilter-grid"></div>
       </div>
     </section>
+
+    <!-- HORAL加盟醸造所情報バナー（#HORAL絞り込み時に自動表示） -->
+    <aside id="horalBanner" class="horal-banner" aria-label="HORAL加盟醸造所情報">
+      <div class="horal-banner-title">HORAL（伝統ランビック高等評議会）加盟醸造所一覧</div>
+      <p class="horal-banner-text">
+        伝統的なランビックおよびオード・グーズの保護・普及を目的とする団体「HORAL」の加盟醸造所は、以下の12醸造所です：<br>
+        <strong>Boon、De Troch、Den Herberg、Eylenbosch、Hanssens、Kestemont、Lambiek Fabriek、Lindemans、Mort Subite、Oud Beersel、Sako、Timmermans</strong>
+      </p>
+    </aside>
 
     <div class="status-bar">
       <div class="count-area">
@@ -1240,9 +1295,25 @@
         THEME: 'bbn_theme_v1'
       };
 
+      // HORAL加盟醸造所マスターリスト（重複除去済み全12醸造所）
+      const HORAL_BREWERIES = [
+        'Boon',
+        'De Troch',
+        'Den Herberg',
+        'Eylenbosch',
+        'Hanssens',
+        'Kestemont',
+        'Lambiek Fabriek',
+        'Lindemans',
+        'Mort Subite',
+        'Oud Beersel',
+        'Sako',
+        'Timmermans'
+      ];
+
       const FILTER_OPTIONS = {
         style: ['すべて', 'ランビック', 'トラピスト', 'アビイ', 'トリプル', 'ダブル', 'セゾン', 'サワー', 'ホワイト', 'アンバー', 'ブラウン', 'ピルスナー', 'IPA', 'フルーツ'],
-        term: ['#ランビック', '#トラピスト', '#アビイ', '#ブレタノマイセス', '#修道院', '#レッド', '#ゴールデン', '#ダーク', '#ダブル', '#ハイアルコール'],
+        term: ['#ランビック', '#トラピスト', '#アビイ', '#ブレタノマイセス', '#修道院', '#レッド', '#ゴールデン', '#ダーク', '#ダブル', '#ハイアルコール', '#HORAL'],
         abv: ['4.9%以下', '5.0%〜6.9%', '7.0%〜8.9%', '9.0%以上'],
         region: ['西フランデレン州', '東フランデレン州', 'フラームス・ブラバント州', 'アントウェルペン州', 'リンブルフ州', 'ワロン・ブラバント州', 'ナミュール州', 'エノー州', 'リエージュ州', 'リュクサンブール州']
       };
@@ -1262,6 +1333,24 @@
         beers = window.BEER_DATA;
       }
 
+      // HORAL加盟醸造所かどうかを判定するヘルパー関数
+      function isHoralMember(beer) {
+        if (!beer) return false;
+        const terms = beer.terms || [];
+        if (terms.includes('#HORAL') || terms.includes('HORAL')) return true;
+        const brewLower = (beer.brewery || '').toLowerCase();
+        return HORAL_BREWERIES.some(member => brewLower.includes(member.toLowerCase()));
+      }
+
+      // 各ビールの表示用用語リスト取得（HORAL加盟醸造所の場合は自動で#HORALを付与）
+      function getEffectiveTerms(beer) {
+        const base = Array.isArray(beer.terms) ? beer.terms.slice() : [];
+        if (isHoralMember(beer) && !base.includes('#HORAL')) {
+          base.push('#HORAL');
+        }
+        return base;
+      }
+
       let favorites = loadJson(STORAGE_KEYS.FAVORITES, []);
       let memos = loadJson(STORAGE_KEYS.MEMOS, {});
       let currentFilter = { type: 'all', value: 'all' };
@@ -1271,6 +1360,7 @@
       const beerGrid = document.getElementById('beerGrid');
       const resultCount = document.getElementById('resultCount');
       const activeFilterBadge = document.getElementById('activeFilterBadge');
+      const horalBanner = document.getElementById('horalBanner');
       const searchInput = document.getElementById('searchInput');
       const sortSelect = document.getElementById('sortSelect');
       const subfilterDrawer = document.getElementById('subfilterDrawer');
@@ -1357,7 +1447,6 @@
         return img;
       }
 
-      // ラベル画像拡大ポップアップを開く
       function openImageModal(beer) {
         document.getElementById('imageModalTitle').textContent = beer.name;
         document.getElementById('imageModalReading').textContent = `${beer.reading}（${beer.brewery}）`;
@@ -1371,7 +1460,6 @@
         imageModal.classList.remove('open');
       }
 
-      // お気に入り登録・解除の共通処理
       function toggleFavorite(beerId) {
         if (favorites.includes(beerId)) {
           favorites = favorites.filter(f => f !== beerId);
@@ -1480,8 +1568,11 @@
         const keyword = searchInput.value.trim().toLowerCase();
 
         return beers.filter(beer => {
+          const effectiveTerms = getEffectiveTerms(beer);
+
           if (keyword) {
             const entry = getMemoEntry(beer.id);
+            const horalText = isHoralMember(beer) ? 'HORAL 加盟醸造所' : '';
             const haystack = [
               beer.name,
               beer.reading,
@@ -1494,7 +1585,8 @@
               beer.brewingMethod,
               beer.flavorProfile,
               beer.history,
-              (beer.terms || []).join(' '),
+              effectiveTerms.join(' '),
+              horalText,
               entry.date,
               entry.text
             ].join(' ').toLowerCase();
@@ -1509,7 +1601,7 @@
           }
           if (type === 'style') {
             if (value === 'ダブル') {
-              return beer.style === 'ダブル' || (beer.terms || []).includes('#ダブル');
+              return beer.style === 'ダブル' || effectiveTerms.includes('#ダブル');
             }
             return beer.style === value;
           }
@@ -1520,14 +1612,16 @@
             return beer.region === value;
           }
           if (type === 'term') {
-            const terms = beer.terms || [];
+            if (value === '#HORAL' || value === 'HORAL') {
+              return isHoralMember(beer);
+            }
             if (value === '#ダブル') {
-              return terms.includes('#ダブル') || beer.style === 'ダブル';
+              return effectiveTerms.includes('#ダブル') || beer.style === 'ダブル';
             }
             if (value === '#ゴールデン' || value === '#ゴールデ') {
-              return terms.includes('#ゴールデン') || terms.includes('#ゴールデ');
+              return effectiveTerms.includes('#ゴールデン') || effectiveTerms.includes('#ゴールデ');
             }
-            return terms.includes(value);
+            return effectiveTerms.includes(value);
           }
           if (type === 'abv') {
             const abv = Number(beer.abv);
@@ -1591,6 +1685,12 @@
         resultCount.innerHTML = `該当件数: <span>${filtered.length}</span> 件 / 全 ${beers.length} 件`;
 
         const keyword = searchInput.value.trim();
+        const isHoralFilterActive =
+          (currentFilter.type === 'term' && (currentFilter.value === '#HORAL' || currentFilter.value === 'HORAL')) ||
+          keyword.toLowerCase() === 'horal';
+
+        horalBanner.classList.toggle('show', isHoralFilterActive);
+
         if (keyword) {
           activeFilterBadge.style.display = 'inline-flex';
           activeFilterBadge.textContent = `検索語: 「${keyword}」`;
@@ -1637,7 +1737,6 @@
           const top = document.createElement('div');
           top.className = 'card-top';
 
-          // ラベル画像枠（クリックで拡大ポップアップ表示）
           const thumbWrap = document.createElement('div');
           thumbWrap.className = 'card-thumb-wrap';
           thumbWrap.title = 'クリックでラベル画像を拡大表示';
@@ -1670,7 +1769,6 @@
             titleRow.appendChild(nameSpan);
           }
 
-          // 初期画面カード内のお気に入り登録・解除ボタン
           const isFav = favorites.includes(beer.id);
           const cardFavBtn = document.createElement('button');
           cardFavBtn.type = 'button';
@@ -1748,10 +1846,10 @@
 
           const tagsWrap = document.createElement('div');
           tagsWrap.className = 'card-tags';
-          (beer.terms || []).forEach(term => {
+          getEffectiveTerms(beer).forEach(term => {
             const tBtn = document.createElement('button');
             tBtn.type = 'button';
-            tBtn.className = 'tag-link';
+            tBtn.className = term === '#HORAL' ? 'tag-link horal-tag' : 'tag-link';
             tBtn.textContent = term;
             tBtn.addEventListener('click', e => {
               e.stopPropagation();
@@ -1852,10 +1950,10 @@
         const termSpec = document.createElement('div');
         termSpec.className = 'spec-item';
         termSpec.innerHTML = '<span class="spec-label">関連用語:</span>';
-        (beer.terms || []).forEach(t => {
+        getEffectiveTerms(beer).forEach(t => {
           const tBtn = document.createElement('button');
           tBtn.type = 'button';
-          tBtn.className = 'tag-link';
+          tBtn.className = t === '#HORAL' ? 'tag-link horal-tag' : 'tag-link';
           tBtn.textContent = t;
           tBtn.addEventListener('click', () => applySingleCondition('term', t));
           termSpec.appendChild(tBtn);
@@ -1872,6 +1970,14 @@
           { title: '特徴・アロマ・味わい', text: beer.flavorProfile },
           { title: '歴史・醸造所エピソード・豆知識', text: beer.history }
         ];
+
+        // HORAL加盟醸造所の場合は詳細モーダルにも加盟情報を自動追加
+        if (isHoralMember(beer)) {
+          sections.push({
+            title: 'HORAL（伝統ランビック高等評議会）加盟情報',
+            text: `この醸造所は伝統的なランビックの保護・継承を目的とする団体「HORAL」の加盟メンバーです。現在のHORAL加盟醸造所：${HORAL_BREWERIES.join('、')}`
+          });
+        }
 
         sections.forEach(sec => {
           const div = document.createElement('div');
@@ -1972,6 +2078,10 @@
           userMemoBlock = `\n【テイスティングメモ${dateHeader}】\n${entry.text}\n`;
         }
 
+        const horalNote = isHoralMember(b)
+          ? `【HORAL加盟】伝統ランビック高等評議会（HORAL）加盟醸造所`
+          : '';
+
         const noteText = [
           `■ ${b.name}（${b.reading}）`,
           `醸造所: ${b.brewery}（${b.region}）`,
@@ -1979,6 +2089,7 @@
           `輸入元: ${b.importer}`,
           b.productUrl ? `商品ページ: ${b.productUrl}` : '',
           `Google Map: ${b.mapUrl}`,
+          horalNote,
           ``,
           `【原材料】${b.ingredients}`,
           `【製法・醸造の特徴】${b.brewingMethod}`,
@@ -2048,7 +2159,6 @@
         if (e.target === detailModal) closeDetailModal();
       });
 
-      // 画像拡大モーダルの閉じる操作
       document.getElementById('closeImageModalBtn').addEventListener('click', closeImageModal);
       imageModal.addEventListener('click', e => {
         if (e.target === imageModal) closeImageModal();
