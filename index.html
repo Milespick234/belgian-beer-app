@@ -1,730 +1,1964 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Belgian Beer Navigator</title>
-    
-    <!-- iPhone Safari向け PWA（ネイティブアプリ風フルスクリーン起動）設定 -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Beer Nav">
-    
-    <!-- タブアイコン -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='25' y='25' width='50' height='60' rx='5' fill='%23f39c12'/><rect x='20' y='15' width='60' height='15' rx='5' fill='%23ffffff'/><path d='M75,35 h10 a10,10 0 0,1 10,10 v15 a10,10 0 0,1 -10,10 h-10' fill='none' stroke='%23f39c12' stroke-width='8'/></svg>">
-    
-    <!-- ダークモード初期判定（画面チラつき防止） -->
-    <script>
-        const savedTheme = localStorage.getItem('belgianBeerTheme');
-        if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark-theme');
-        }
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Belgian Beer Navigator</title>
+  <!-- クロスプラットフォーム対応インラインSVGファビコン（文字化け防止） -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23b45309'/%3E%3Cpath d='M20 14h24l-2 16c-1 8-6 12-10 12s-9-4-10-12l-2-16z' fill='%23fbbf24'/%3E%3Cpath d='M20 14h24v6H20z' fill='%23fffbeb'/%3E%3Cpath d='M32 42v10M23 52h18' stroke='%23fffbeb' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --bg-page: #f3efe6;
+      --bg-surface: #fbf9f4;
+      --bg-elevated: #ede7db;
+      --bg-chip: #e6dfd1;
+      --bg-chip-hover: #d8cebc;
+      --text-primary: #241f1c;
+      --text-secondary: #574f49;
+      --text-muted: #786e66;
+      --accent: #9a4d0e;
+      --accent-hover: #7c3c09;
+      --accent-soft: #f5e6d3;
+      --border: #dcd3c4;
+      --shadow: 0 2px 8px rgba(36, 31, 28, 0.08);
+      --danger: #dc2626;
+      --danger-hover: #b91c1c;
+      --purple: #7c3aed;
+      --purple-hover: #6d28d9;
+      --fav-color: #d97706;
+    }
 
-    <style>
-        /* ライトモード変数（基本） */
-        :root {
-            --bg-main: #f5f2eb; --bg-card: #ffffff; --bg-modal: #ffffff;
-            --text-main: #2c2c2c; --text-sub: #595959; --accent: #d35400;
-            --link-color: #2980b9; --btn-l1-bg: #4a6572; --btn-l1-text: #ffffff;
-            --btn-l2-bg: #e2dcd0; --btn-l2-text: #2c2c2c; --btn-hover: #f39c12;
-            --border-color: #e0e0e0; --shadow: 0 2px 6px rgba(0,0,0,0.06);
-            --star-off: #cccccc; --star-on: #f39c12; --count-bg: rgba(211, 84, 0, 0.1);
-            --memo-bg: #fffbf5;
-        }
-        /* ダークモード変数 */
-        html.dark-theme {
-            --bg-main: #1a1a1a; --bg-card: #2c2c2c; --bg-modal: #2a2a2a;
-            --text-main: #e0e0e0; --text-sub: #aaaaaa; --accent: #e67e22;
-            --link-color: #5dade2; --btn-l1-bg: #34495e; --btn-l1-text: #ffffff;
-            --btn-l2-bg: #424242; --btn-l2-text: #e0e0e0; --btn-hover: #d35400;
-            --border-color: #444444; --shadow: 0 2px 6px rgba(0,0,0,0.3);
-            --star-off: #555555; --star-on: #f39c12; --count-bg: rgba(230, 126, 34, 0.15);
-            --memo-bg: #332d27;
-        }
-        
-        body { background-color: var(--bg-main); color: var(--text-main); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; margin: 0; padding: 10px; line-height: 1.5; transition: background-color 0.3s, color 0.3s; }
-        .container { max-width: 1200px; margin: 0 auto; }
-        
-        /* ヘッダー・設定アイコン群 */
-        .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        h1 { font-size: 22px; margin: 0; }
-        .header-actions { display: flex; gap: 8px; }
-        .icon-btn { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 50%; width: 36px; height: 36px; font-size: 16px; cursor: pointer; display: flex; justify-content: center; align-items: center; color: var(--text-main); transition: all 0.2s; box-shadow: var(--shadow); }
-        .icon-btn:hover { background: var(--border-color); }
-        
-        .portal-links { font-size: 13px; background: var(--bg-card); padding: 8px 12px; border-radius: 6px; display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 15px; border: 1px solid var(--border-color); }
-        .portal-links a { color: var(--link-color); text-decoration: none; font-weight: bold; }
-        
-        .controls-wrapper { background: var(--bg-card); padding: 12px; border-radius: 8px; box-shadow: var(--shadow); margin-bottom: 15px; border: 1px solid var(--border-color); position: sticky; top: 5px; z-index: 90; }
-        .search-sort-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
-        .search-bar, .sort-select { padding: 8px 12px; font-size: 16px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--bg-main); color: var(--text-main); }
-        .search-bar { flex: 1; min-width: 200px; }
-        
-        .hit-count-top { font-size: 14px; font-weight: bold; color: var(--accent); background: var(--count-bg); padding: 6px 12px; border-radius: 6px; display: inline-block; margin-bottom: 10px; border: 1px dashed var(--accent); }
-        
-        .level1-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-        .btn { border: none; border-radius: 20px; padding: 6px 14px; font-size: 13px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
-        .btn-l1 { background-color: var(--btn-l1-bg); color: var(--btn-l1-text); }
-        .btn-l1.active { background-color: var(--accent); font-weight: bold; }
-        .btn-fav { background-color: var(--bg-main); color: var(--star-on); border: 1px solid var(--border-color); font-weight: bold; }
-        .btn-fav.active { background-color: var(--star-on); color: #fff; border-color: var(--star-on); }
-        .btn-reset { background-color: #c0392b; color: white; }
-        .btn-random { background-color: #8e44ad; color: white; font-weight: bold; }
-        .btn-random:hover { background-color: #9b59b6; }
-        
-        .level2-container { display: none; margin-top: 10px; padding: 10px; border-radius: 6px; background: var(--bg-main); border-left: 4px solid var(--accent); }
-        .level2-container.active { display: block; }
-        .level2-row { display: flex; flex-wrap: wrap; gap: 6px; }
-        .btn-l2 { background-color: var(--btn-l2-bg); color: var(--btn-l2-text); border: 1px solid var(--border-color); }
-        .btn-l2.active { background-color: var(--btn-hover); color: #fff; border-color: var(--btn-hover); font-weight: bold; }
-        
-        .beer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 15px; }
-        .beer-card { background: var(--bg-card); border-radius: 8px; padding: 12px; border: 1px solid var(--border-color); cursor: pointer; display: flex; flex-direction: column; }
-        .card-top { display: flex; gap: 12px; margin-bottom: 10px; }
-        .beer-img { width: 80px; height: 120px; object-fit: contain; background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 4px; }
-        .beer-info { flex: 1; min-width: 0; }
-        .beer-title-row { display: flex; justify-content: space-between; align-items: flex-start; }
-        .beer-name { font-size: 16px; font-weight: bold; margin: 0 0 2px 0; }
-        .beer-name a { color: var(--accent); text-decoration: none; }
-        .star-btn { background: none; border: none; font-size: 24px; color: var(--star-off); cursor: pointer; padding: 0 5px; line-height: 1; }
-        .star-btn.active { color: var(--star-on); }
-        .beer-reading { font-size: 11px; color: var(--text-sub); display: block; margin-bottom: 4px; }
-        .meta-line { font-size: 12px; color: var(--text-sub); margin-bottom: 2px; }
-        
-        .clickable-link { color: var(--link-color); cursor: pointer; text-decoration: underline; text-decoration-color: rgba(41, 128, 185, 0.4); transition: color 0.2s; font-weight: bold; }
-        .clickable-link:hover { color: var(--accent); text-decoration-color: var(--accent); }
-        .tag-link { color: #16a085; text-decoration-color: rgba(22, 160, 133, 0.4); }
-        .tag-link:hover { color: var(--accent); }
-        .map-link { display: inline-block; background: var(--link-color); color: #fff; padding: 2px 8px; border-radius: 4px; text-decoration: none; font-size: 10px; font-weight: bold; margin-left: 4px; }
-        .map-link:hover { background: var(--accent); }
-        .tag-list { margin-top: 4px; font-size: 11px; }
-        .beer-desc { font-size: 12px; color: var(--text-main); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; background: var(--bg-main); padding: 8px; border-radius: 4px; }
-        
-        /* モーダル */
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 15px; }
-        .modal-overlay.active { display: flex; }
-        .modal-content { background: var(--bg-modal); padding: 20px; border-radius: 10px; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .modal-top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
-        .modal-top-title { font-size: 14px; font-weight: bold; color: var(--text-sub); margin: 0; }
-        .modal-close { background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 4px; font-size: 14px; color: var(--text-main); cursor: pointer; padding: 4px 12px; font-weight: bold; }
-        .modal-header { display: flex; gap: 15px; margin-bottom: 15px; }
-        .modal-img { width: 120px; height: 180px; object-fit: contain; background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 6px; cursor: zoom-in; }
-        .modal-title { font-size: 20px; margin: 0 0 5px 0; display: inline-block; }
-        .modal-title a { color: var(--accent); text-decoration: none; }
-        .modal-body { font-size: 13.5px; line-height: 1.6; }
-        .detail-section { margin-bottom: 12px; background: var(--bg-main); padding: 10px 12px; border-radius: 6px; border-left: 4px solid var(--accent); }
-        .detail-section h4 { font-size: 13px; color: var(--accent); margin: 0 0 4px 0; border-bottom: 1px dashed var(--border-color); padding-bottom: 4px; }
-        .detail-section p { margin: 0; color: var(--text-main); }
+    html.dark {
+      --bg-page: #181615;
+      --bg-surface: #23201e;
+      --bg-elevated: #2e2a27;
+      --bg-chip: #35302c;
+      --bg-chip-hover: #453e39;
+      --text-primary: #f2ede6;
+      --text-secondary: #c9bfb5;
+      --text-muted: #9a8f85;
+      --accent: #e08e36;
+      --accent-hover: #f0a14b;
+      --accent-soft: #3a2b1c;
+      --border: #3d3733;
+      --shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
+      --danger: #dc2626;
+      --danger-hover: #ef4444;
+      --purple: #8b5cf6;
+      --purple-hover: #7c3aed;
+      --fav-color: #fbbf24;
+    }
 
-        /* メモ領域 */
-        .memo-section { margin-top: 15px; background: var(--memo-bg); padding: 15px; border-radius: 8px; border: 1px solid var(--accent); }
-        .memo-section h4 { margin: 0 0 10px 0; color: var(--accent); font-size: 14px; }
-        .memo-input { width: 100%; box-sizing: border-box; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; font-family: inherit; font-size: 13.5px; color: var(--text-main); background: var(--bg-card); }
-        .btn-save-memo { background-color: var(--accent); color: white; border: none; padding: 6px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 13px; }
-        .memo-saved-msg { color: #27ae60; font-size: 12px; font-weight: bold; opacity: 0; transition: opacity 0.3s; }
-        .memo-saved-msg.show { opacity: 1; }
-        
-        .btn-evernote { background-color: #00a82d; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; }
+    * {
+      box-sizing: border-box;
+    }
 
-        /* Lightbox */
-        .lightbox-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
-        .lightbox-overlay.active { display: flex; }
-        .lightbox-img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; }
-        .lightbox-close { position: absolute; top: 20px; right: 20px; font-size: 30px; color: #fff; cursor: pointer; background: rgba(0,0,0,0.5); width: 44px; height: 44px; display: flex; justify-content: center; align-items: center; border-radius: 50%; border: 1px solid rgba(255,255,255,0.3); }
-        
-        /* 設定モーダル用 */
-        .settings-btn-block { width: 100%; text-align: center; display: block; box-sizing: border-box; padding: 10px; margin-bottom: 10px; font-size: 14px; font-weight: bold; border-radius: 6px; cursor: pointer; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main); }
-        .settings-btn-block:hover { background: var(--border-color); }
-    </style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", Meiryo, sans-serif;
+      line-height: 1.55;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 10px 14px 40px;
+    }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 4px 0 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .app-title {
+      margin: 0;
+      font-size: clamp(1.25rem, 3.2vw, 1.65rem);
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      color: var(--accent);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 7px 11px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .icon-btn:hover {
+      background: var(--bg-elevated);
+      border-color: var(--accent);
+    }
+
+    .control-panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-top: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .search-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .search-input-wrap {
+      position: relative;
+      flex: 1 1 240px;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input-wrap svg {
+      position: absolute;
+      left: 10px;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 8px 10px 8px 34px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg-page);
+      color: var(--text-primary);
+      font-size: 0.95rem;
+    }
+
+    .search-input:focus {
+      outline: 2px solid var(--accent);
+      border-color: transparent;
+    }
+
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+
+    .action-btn:hover {
+      background: var(--bg-chip-hover);
+    }
+
+    .action-btn.primary {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+    }
+
+    .action-btn.primary:hover {
+      background: var(--accent-hover);
+    }
+
+    /* 今日の1杯ボタン：紫色 */
+    .action-btn.purple-btn {
+      background: var(--purple);
+      color: #ffffff;
+      border-color: var(--purple);
+    }
+
+    .action-btn.purple-btn:hover {
+      background: var(--purple-hover);
+      border-color: var(--purple-hover);
+    }
+
+    .portal-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border);
+      font-size: 0.8rem;
+    }
+
+    .portal-label {
+      color: var(--text-muted);
+      font-weight: 700;
+      margin-right: 2px;
+    }
+
+    .portal-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 9px;
+      border-radius: 6px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      text-decoration: none;
+      font-weight: 600;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .portal-link:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+    }
+
+    .filter-tab-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 7px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg-chip);
+      color: var(--text-primary);
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .filter-tab-btn:hover {
+      background: var(--bg-chip-hover);
+    }
+
+    .filter-tab-btn.drawer-open {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+    }
+
+    .filter-tab-btn.active-filter {
+      border-color: var(--accent);
+      box-shadow: inset 0 0 0 1px var(--accent);
+    }
+
+    /* リセットボタン：赤色 */
+    .filter-tab-btn.reset-btn {
+      background: var(--danger);
+      color: #ffffff;
+      border-color: var(--danger);
+    }
+
+    .filter-tab-btn.reset-btn:hover {
+      background: var(--danger-hover);
+      border-color: var(--danger-hover);
+    }
+
+    /* お気に入りボタン：黄色文字（視認性の高い濃色ベース＋鮮やかな黄色文字） */
+    .filter-tab-btn.fav-tab-btn {
+      background: #332b24;
+      color: #facc15;
+      border-color: #ca8a04;
+    }
+
+    .filter-tab-btn.fav-tab-btn:hover {
+      background: #453a30;
+      color: #fde047;
+      border-color: #eab308;
+    }
+
+    .filter-tab-btn.fav-tab-btn.active-filter {
+      background: #241e19;
+      color: #fde047;
+      border-color: #facc15;
+      box-shadow: 0 0 0 2px rgba(250, 204, 21, 0.45);
+    }
+
+    .subfilter-drawer {
+      display: none;
+      margin-top: 8px;
+      padding: 10px;
+      border-radius: 8px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      animation: fadeIn 0.15s ease-out;
+    }
+
+    .subfilter-drawer.open {
+      display: block;
+    }
+
+    .subfilter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+
+    .subfilter-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 2px 6px;
+    }
+
+    .subfilter-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .sub-chip {
+      padding: 6px 11px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .sub-chip:hover {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+    }
+
+    .status-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin: 12px 2px 10px;
+    }
+
+    .count-area {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .result-count {
+      font-size: 0.96rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .result-count span {
+      font-size: 1.2rem;
+      color: var(--accent);
+    }
+
+    .active-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .sort-area {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+
+    .sort-select {
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .beer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 14px;
+    }
+
+    .beer-card {
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+
+    .beer-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+    }
+
+    .card-top {
+      display: flex;
+      gap: 12px;
+      padding: 12px;
+      align-items: flex-start;
+    }
+
+    .card-thumb-wrap {
+      width: 78px;
+      height: 112px;
+      flex-shrink: 0;
+      border-radius: 8px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .card-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 3px;
+    }
+
+    .card-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .card-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .beer-name-link {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--accent);
+      text-decoration: none;
+      line-height: 1.3;
+      word-break: break-word;
+    }
+
+    .beer-name-link:hover {
+      text-decoration: underline;
+    }
+
+    .fav-indicator {
+      color: var(--fav-color);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .beer-reading {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .card-meta-list {
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      font-size: 0.82rem;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .inline-link {
+      background: none;
+      border: none;
+      padding: 0;
+      color: var(--text-primary);
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: underline;
+      text-decoration-color: var(--border);
+      text-underline-offset: 2px;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .inline-link:hover {
+      color: var(--accent);
+      text-decoration-color: var(--accent);
+    }
+
+    .style-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 800;
+      border: 1px solid transparent;
+      cursor: pointer;
+    }
+
+    .style-badge:hover {
+      border-color: var(--accent);
+    }
+
+    .abv-badge {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 6px;
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .card-body {
+      padding: 0 12px 10px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-summary {
+      margin: 0;
+      font-size: 0.84rem;
+      color: var(--text-secondary);
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: var(--bg-elevated);
+      border-top: 1px solid var(--border);
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .tag-link {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .tag-link:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .map-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 0.78rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+
+    .map-btn:hover {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+    }
+
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.62);
+      z-index: 1000;
+      padding: 14px;
+      overflow-y: auto;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-dialog {
+      width: 100%;
+      max-width: 760px;
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin: auto;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+      overflow: hidden;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--bg-elevated);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-title-group {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .modal-beer-title {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 800;
+      line-height: 1.3;
+    }
+
+    .modal-beer-title a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .modal-beer-title a:hover {
+      text-decoration: underline;
+    }
+
+    .modal-reading {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .modal-close-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 7px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .modal-close-btn:hover {
+      background: var(--danger);
+      color: #ffffff;
+      border-color: var(--danger);
+    }
+
+    .modal-body {
+      padding: 16px;
+      max-height: 72vh;
+      overflow-y: auto;
+    }
+
+    .detail-hero {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .detail-img-box {
+      width: 120px;
+      height: 170px;
+      border-radius: 10px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .detail-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 6px;
+    }
+
+    .detail-specs {
+      flex: 1 1 260px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      font-size: 0.9rem;
+    }
+
+    .spec-item {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .spec-label {
+      font-weight: 800;
+      color: var(--text-secondary);
+      min-width: 86px;
+    }
+
+    .detail-section {
+      margin-bottom: 14px;
+    }
+
+    .detail-section h3 {
+      margin: 0 0 5px;
+      font-size: 0.94rem;
+      font-weight: 800;
+      color: var(--accent);
+      border-left: 4px solid var(--accent);
+      padding-left: 8px;
+    }
+
+    .detail-section p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      line-height: 1.65;
+    }
+
+    /* テイスティングメモ日付行 */
+    .memo-date-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin: 8px 0;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+
+    .memo-date-input {
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg-page);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.88rem;
+      cursor: pointer;
+    }
+
+    html.dark .memo-date-input {
+      color-scheme: dark;
+    }
+
+    .memo-today-btn {
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .memo-today-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .memo-box {
+      width: 100%;
+      min-height: 76px;
+      padding: 9px 11px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg-page);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.9rem;
+      resize: vertical;
+    }
+
+    .memo-hint {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .modal-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: var(--bg-elevated);
+      border-top: 1px solid var(--border);
+    }
+
+    .fav-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .fav-toggle-btn.is-fav {
+      background: var(--fav-color);
+      color: #ffffff;
+      border-color: var(--fav-color);
+    }
+
+    .evernote-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 14px;
+      border-radius: 8px;
+      border: 1px solid #00a82d;
+      background: #00a82d;
+      color: #ffffff;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .evernote-btn:hover {
+      background: #008a25;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #241f1c;
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+      z-index: 2000;
+      max-width: 92vw;
+      text-align: center;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 36px 18px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text-secondary);
+    }
+
+    .error-box {
+      text-align: left;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 14px 16px;
+      border-radius: 8px;
+      background: var(--bg-elevated);
+      border-left: 4px solid var(--danger);
+      font-size: 0.88rem;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 8px 10px 32px;
+      }
+      .control-panel {
+        padding: 8px 10px;
+      }
+      .filter-tab-btn {
+        padding: 6px 9px;
+        font-size: 0.8rem;
+      }
+      .beer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <header class="app-header">
+      <h1 class="app-title">Belgian Beer Navigator</h1>
+      <div class="header-actions">
+        <button type="button" id="themeToggleBtn" class="icon-btn" title="ダークモード切替" aria-label="ダークモード切替"></button>
+        <button type="button" id="settingsBtn" class="icon-btn" title="データバックアップ・復元" aria-label="設定">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>設定</span>
+        </button>
+      </div>
+    </header>
 
-<div class="container">
-    <div class="header-row">
-        <h1>Belgian Beer Navigator</h1>
-        <div class="header-actions">
-            <!-- ダークモード手動切替 -->
-            <button class="icon-btn" id="themeToggleBtn" onclick="toggleTheme()" title="テーマ切替">🌙</button>
-            <!-- データバックアップ・復元用の設定 -->
-            <button class="icon-btn" onclick="openSettings()" title="設定・バックアップ">⚙️</button>
+    <section class="control-panel" aria-label="検索フィルター">
+      <div class="search-row">
+        <div class="search-input-wrap">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="search" id="searchInput" class="search-input" placeholder="ビール名・読み・醸造所・特徴・テイスティングメモを検索...">
         </div>
+        <!-- 今日の1杯ボタン（紫色） -->
+        <button type="button" id="randomBtn" class="action-btn purple-btn" title="現在の絞り込み条件からランダムで1杯表示">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.2" fill="currentColor"/><circle cx="15.5" cy="8.5" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="8.5" cy="15.5" r="1.2" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.2" fill="currentColor"/></svg>
+          <span>今日の1杯</span>
+        </button>
+      </div>
+
+      <div class="portal-row">
+        <span class="portal-label">情報サイト:</span>
+        <a href="https://www.belgianbeer.co.jp/search.php" target="_blank" rel="noopener noreferrer" class="portal-link">ベルギービールJapan</a>
+        <a href="https://kinki-beer.jp/" target="_blank" rel="noopener noreferrer" class="portal-link">KINKI BEER</a>
+        <a href="https://www.worldbeer.co.jp/beer/belgium/index.html" target="_blank" rel="noopener noreferrer" class="portal-link">廣島</a>
+        <a href="https://konishi.be/beer.html?product-list_page=10" target="_blank" rel="noopener noreferrer" class="portal-link">小西酒造</a>
+      </div>
+
+      <div class="filter-bar" role="toolbar" aria-label="カテゴリー絞り込み">
+        <!-- リセットボタン（赤色） -->
+        <button type="button" id="resetBtn" class="filter-tab-btn reset-btn">リセット</button>
+        <button type="button" class="filter-tab-btn" data-drawer="style">ビール分類</button>
+        <button type="button" class="filter-tab-btn" data-drawer="brewery">醸造所</button>
+        <button type="button" class="filter-tab-btn" data-drawer="region">地域</button>
+        <button type="button" class="filter-tab-btn" data-drawer="term">用語</button>
+        <button type="button" class="filter-tab-btn" data-drawer="abv">アルコール度数</button>
+        <!-- お気に入りボタン（黄色文字） -->
+        <button type="button" id="favFilterBtn" class="filter-tab-btn fav-tab-btn">★ お気に入り</button>
+      </div>
+
+      <div id="subfilterDrawer" class="subfilter-drawer">
+        <div class="subfilter-header">
+          <span id="subfilterTitle">選択してください</span>
+          <button type="button" id="closeDrawerBtn" class="subfilter-close">閉じる</button>
+        </div>
+        <div id="subfilterGrid" class="subfilter-grid"></div>
+      </div>
+    </section>
+
+    <div class="status-bar">
+      <div class="count-area">
+        <div class="result-count" id="resultCount">該当件数: <span>0</span> 件</div>
+        <div id="activeFilterBadge" class="active-badge" style="display:none;"></div>
+      </div>
+      <div class="sort-area">
+        <label for="sortSelect">並び替え:</label>
+        <select id="sortSelect" class="sort-select">
+          <option value="abv-desc" selected>アルコール度数（高い順）</option>
+          <option value="abv-asc">アルコール度数（低い順）</option>
+          <option value="name-ja">名前の五十音順</option>
+          <option value="style">ビールの分類毎</option>
+          <option value="brewery">醸造所毎</option>
+          <option value="region">地域毎</option>
+        </select>
+      </div>
     </div>
-    
-    <div class="portal-links">
-        <span>🔗 ポータルサイト:</span>
-        <a href="https://www.belgianbeer.co.jp/search.php" target="_blank">ベルギービールJapan</a>
-        <a href="https://kinki-beer.jp/" target="_blank">KINKI BEER</a>
-        <a href="https://www.worldbeer.co.jp/beer/belgium/index.html" target="_blank">廣島</a>
-        <a href="https://konishi.be/beer.html?product-list_page=10" target="_blank">小西酒造</a>
+
+    <main id="beerGrid" class="beer-grid" aria-live="polite"></main>
+  </div>
+
+  <!-- ビール詳細ポップアップモーダル -->
+  <div id="detailModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalBeerTitle">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h2 id="modalBeerTitle" class="modal-beer-title"></h2>
+          <div id="modalBeerReading" class="modal-reading"></div>
+        </div>
+        <button type="button" id="closeDetailBtn" class="modal-close-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <span>閉じる</span>
+        </button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+      <div class="modal-footer">
+        <button type="button" id="modalFavBtn" class="fav-toggle-btn"></button>
+        <button type="button" id="evernoteBtn" class="evernote-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          <span>Evernoteへ送る</span>
+        </button>
+      </div>
     </div>
+  </div>
 
-    <div class="controls-wrapper" id="controlsWrapper">
-        <div class="search-sort-row">
-            <input type="text" id="searchInput" class="search-bar" placeholder="名前、特徴、テイスティングメモで検索...">
-            <select id="sortSelect" class="sort-select">
-                <option value="name">五十音順</option>
-                <option value="category">分類毎</option>
-                <option value="brewery">醸造所毎</option>
-                <option value="region">地域毎</option>
-                <option value="abv_desc" selected>アルコール度数 (高い順)</option>
-                <option value="abv_asc">アルコール度数 (低い順)</option>
-            </select>
+  <!-- 設定・データバックアップモーダル -->
+  <div id="settingsModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    <div class="modal-dialog" style="max-width: 520px;">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h2 id="settingsTitle" class="modal-beer-title">データバックアップ・復元</h2>
         </div>
-        
-        <div id="hitCountDisplay" class="hit-count-top">全 0 件中 0 件 を表示</div>
-        
-        <div class="level1-row">
-            <button class="btn btn-reset" onclick="resetFilters()">リセット</button>
-            <!-- 今日の1杯ランダム提案ボタン -->
-            <button class="btn btn-random" onclick="showRandomBeer()" title="現在の絞り込みからランダムに1件表示">🎲 今日の1杯</button>
-            <button class="btn btn-fav" id="favFilterBtn" onclick="toggleFavoritesFilter()">★ お気に入り</button>
-            <button class="btn btn-l1" onclick="toggleLevel1('category')">ビール分類</button>
-            <button class="btn btn-l1" onclick="toggleLevel1('brewery')">醸造所</button>
-            <button class="btn btn-l1" onclick="toggleLevel1('tag')">用語</button>
-            <button class="btn btn-l1" onclick="toggleLevel1('region')">地域</button>
-            <button class="btn btn-l1" onclick="toggleLevel1('abv')">アルコール度数</button>
+        <button type="button" id="closeSettingsBtn" class="modal-close-btn">閉じる</button>
+      </div>
+      <div class="modal-body">
+        <div class="detail-section">
+          <h3>JSONファイルへ保存（バックアップ）</h3>
+          <p style="margin-bottom:10px;">登録した「お気に入り」と「テイスティングメモ（日付・感想）」を、MacやiPhone本体にJSON形式でダウンロード保存します（※ビール図鑑のマスターデータは <code>beers.js</code> に保存されています）。</p>
+          <button type="button" id="exportJsonBtn" class="action-btn primary">お気に入り・メモを保存 (.json)</button>
         </div>
-        <div id="level2Container" class="level2-container"><div id="level2Buttons" class="level2-row"></div></div>
+        <hr style="border:none; border-top:1px solid var(--border); margin:16px 0;">
+        <div class="detail-section">
+          <h3>JSONファイルから復元</h3>
+          <p style="margin-bottom:10px;">保存済みのバックアップファイル（.json）を選択して、お気に入りとメモを復元します。</p>
+          <input type="file" id="importJsonInput" accept=".json,application/json" style="font-size:0.86rem;">
+        </div>
+      </div>
     </div>
-    <div class="beer-grid" id="beerGrid"></div>
-</div>
+  </div>
 
-<!-- ビール詳細モーダル -->
-<div class="modal-overlay" id="beerModal" onclick="closeModal('beerModal', event)">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <div class="modal-top-bar">
-            <h3 class="modal-top-title">詳細情報</h3>
-            <button class="modal-close" onclick="closeModal('beerModal', event)">✖ 閉じる</button>
-        </div>
-        <div id="modalContentInner"></div>
-    </div>
-</div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<!-- 設定モーダル（バックアップ・インポート） -->
-<div class="modal-overlay" id="settingsModal" onclick="closeModal('settingsModal', event)">
-    <div class="modal-content" style="max-width: 400px;" onclick="event.stopPropagation()">
-        <div class="modal-top-bar">
-            <h3 class="modal-top-title">⚙️ 設定・データ管理</h3>
-            <button class="modal-close" onclick="closeModal('settingsModal', event)">✖ 閉じる</button>
-        </div>
-        <div class="modal-body">
-            <p style="font-size: 12px; color: var(--text-sub); margin-bottom:15px;">機種変更時などに「お気に入り」と「テイスティングメモ」をバックアップ・復元できます。</p>
-            <button class="settings-btn-block" onclick="exportData()" style="color:var(--accent); border-color:var(--accent);">📤 データをバックアップ (保存)</button>
-            <hr style="border-top:1px dashed var(--border-color); margin: 15px 0;">
-            <label class="settings-btn-block">
-                📥 データを復元 (読込)
-                <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importData(event)">
-            </label>
-            <p style="font-size: 11px; color: var(--text-sub); margin-top:5px;">※ 復元すると現在のデータは上書きされます。</p>
-        </div>
-    </div>
-</div>
+  <!-- データ部ファイル2 -->
+  <script src="beers.js"></script>
 
-<!-- 画像拡大Lightbox -->
-<div class="lightbox-overlay" id="lightbox" onclick="closeLightbox(event)">
-    <div class="lightbox-close" onclick="closeLightbox(event)">&times;</div>
-    <img src="" alt="拡大画像" id="lightboxImg" class="lightbox-img" onclick="event.stopPropagation()">
-</div>
+  <script>
+    (function () {
+      'use strict';
 
-<script>
-// === ダークモード手動切替 ===
-function toggleTheme() {
-    document.documentElement.classList.toggle('dark-theme');
-    const isDark = document.documentElement.classList.contains('dark-theme');
-    localStorage.setItem('belgianBeerTheme', isDark ? 'dark' : 'light');
-    updateThemeIcon(isDark);
-}
-function updateThemeIcon(isDark) {
-    document.getElementById('themeToggleBtn').innerText = isDark ? '☀️' : '🌙';
-}
-updateThemeIcon(document.documentElement.classList.contains('dark-theme'));
+      const STORAGE_KEYS = {
+        FAVORITES: 'bbn_favorites_v1',
+        MEMOS: 'bbn_memos_v1',
+        THEME: 'bbn_theme_v1'
+      };
 
-// === 全127銘柄データ ===
-const rawData = [
-  [1, "Abbaye des Rocs", "アベイ・デ・ロック", "https://www.arome.jp/products/detail/715", "12bQfXO7pEhF_YnaMueoTzn1Z8z7Uhper", "アビイ", 9.0, "アベイ・デ・ロック醸造所", "Brasserie de l'Abbaye des Rocs", "エノー州", ["#修道院", "#アビイ", "#ブラウン", "#ダーク"], "豊かなモルトの風味とスパイシーな香りが特徴。高品質な水と厳選されたモルトを使用。", "取扱各社", "麦芽、ホップ、酵母", "純粋な水を使用し複数種のモルトをブレンド。瓶内二次発酵。", "ドライフルーツやカラメルのアロマ。スパイシーさとモルトの甘み。", "1979年設立。修道院の名を冠するが村の遺跡に由来。"],
-  [2, "Achel Bruin", "アヘル・ブリューン", "https://belgianbrasseriecourt.jp/drink/achel-brown/", "1h2RZskvv6-dXPtUFva4GGNd8afX0zaMZ", "トラピスト", 8.0, "アヘル醸造所", "Brouwerij Achelse Kluis", "リンブルフ州", ["#トラピスト", "#修道院", "#ブラウン", "#ダーク"], "ロースト麦芽の香ばしさとドライな後味。", "三井食品", "麦芽、ホップ、糖類", "伝統的な修道院製法、瓶内二次発酵。", "カラメルの甘みと洋梨のような香り。後味はドライ。", "2021年最後の修道士退去、2023年トラピスト資格喪失。"],
-  [3, "Ara bier", "アラ･ビール", "https://www.drankgigant.nl/ara-bier.html", "19hmH3VD1iCmdJ410_GuoRigCyW1OUk-y", "ペールエール", 8.0, "ドゥ・ドール醸造所", "De Dolle Brouwers", "西フランデレン州", ["#ゴールデン"], "フルーティーでホッピーな味わい。クリス・ヘルテレールによる個性的ラベル。", "取扱各社", "麦芽、ホップ", "ドライホッピング等の手法を取り入れ醸造。", "柑橘類やマスカットのような爽やかなフルーティーさと苦味。", "ラベルにはアラ（オウム）が描かれている。"],
-  [4, "Barbar", "バルバール", "https://belgianbeer.site/products/barbar", "1EFmQU7YMjoVKcDSXEclPilqiEnnIhEn5", "ブロンド", 8.0, "ルフェーブル醸造所", "Brasserie Lefebvre", "ワロン・ブラバント州", ["#ゴールデン"], "はちみつを使用した特徴的な製法。ほのかな甘みとスパイシーさ。", "取扱各社", "麦芽、ホップ、はちみつ", "麦汁煮沸時にはちみつを投入するレシピ。", "はちみつのまろやかな甘みと柑橘系の風味。", "古代ガリア人の「はちみつ酒」からインスピレーション。"],
-  [5, "Bieken", "ビーケン", "https://www.belgianbeer.co.jp/products/detail.php?product_id=95", "1DPIfSNJub8-15wOf_CfJgZSyd0G5h5mO", "ブロンド", 8.5, "ボスティールス醸造所", "Brouwerij Bosteels", "東フランデレン州", ["#ゴールデン"], "はちみつを加えた甘くまろやかなビール。", "取扱各社", "麦芽、ホップ、はちみつ", "はちみつを使用し芳醇に醸造。", "花の蜜のような甘い香りと滑らかな口当たり。", "ボスティールス醸造所が手掛ける隠れた名作。"],
-  [6, "Bink Blond", "ビンク・ブロンド", "https://belgianbeer.site/products/bink-blond", "1d-dVd1r-oigzZ8Q0zEsU-kitqUQZ5tUk", "ブロンド", 5.5, "ケルコム醸造所", "Brouwerij Kerkom", "リンブルフ州", ["#ゴールデン"], "ホップの苦味が効いた爽快なブロンドエール。", "取扱各社", "麦芽、ホップ", "伝統的なブロンドエールの製法。", "爽快な苦味とすっきりした麦芽の甘み。", "ビンクは地元の方言での愛称。"],
-  [7, "Blanche de Bruxelles", "ブロンシュ ド ブリュッセル", "https://ohtsuki-saketen.com/beer/Brasserie_Lefebvre_SA/Blanche_de_Bruxelles_330ml.html", "1ekvuztYewV_mW-HxoFe6DjzfXv9DKCSW", "ホワイト", 4.5, "ルフェーブル醸造所", "Brasserie Lefebvre", "ワロン・ブラバント州", ["#ホワイト"], "小便小僧のラベル。コリアンダーとオレンジピールの爽やかな香り。", "取扱各社", "大麦麦芽、小麦、スパイス", "生の小麦とスパイスによる伝統的ホワイト製法。", "シトラス系の香りとスパイシーな風味。", "ブリュッセルの象徴「小便小僧」がラベル。"],
-  [8, "Blanche de Namur", "ブロンシュ･ドゥ･ナミュール", "https://ohtsuki-saketen.com/beer/Brasserie_du_Bocq/Blanche_de_Namur_330ml.html", "1iG4lUkNGeVHGUKWTHB5p0YIlVda7ZgqS", "ホワイト", 4.5, "デュ・ボック醸造所", "Brasserie du Bocq", "ナミュール州", ["#ホワイト"], "世界一のホワイトビールに選ばれたこともある逸品。", "取扱各社", "麦芽、小麦、スパイス", "伝統的ベルジャンホワイトの製法。", "滑らかでフルーティーな口当たり。", "ナミュール王女にちなんで名付けられた。"],
-  [9, "Bons Voeux", "ボン ヴー", "https://www.belgianbeer.co.jp/products/detail.php?product_id=124", "1MTqMDxlaFaYRuO3cNlGbKSC-KUlFCNJU", "セゾン", 9.5, "デュポン醸造所", "Brasserie Dupont", "エノー州", ["#ゴールデン", "#ハイアルコール"], "元々は新年の贈り物として造られた特別ビール。", "取扱各社", "麦芽、ホップ", "セゾン酵母を用いた長期熟成・瓶内二次発酵。", "柑橘系の香りとスパイシーさ、力強いアルコール感。", "名前は「良いお年を（Best Wishes）」を意味する。"],
-  [10, "Boon Geuze Mariage Parfait", "ブーン・グーズ・マリアージュ・パルフェ", "https://www.belgianbeer.co.jp/products/detail.php?product_id=1416", "10kFeA312vumwDI8b18iAhb_3-GmoBMew", "ランビック", 8.0, "ブーン醸造所", "Brouwerij Boon", "フラームス・ブラバント州", ["#ランビック", "#ブレタノマイセス"], "「完璧な結婚」の意味。3年熟成の古いランビックを95％ブレンド。", "小西酒造", "麦芽、小麦、古いホップ", "3年熟成95％、若いランビック5％のブレンド。", "非常に複雑で奥深い酸味とオーク樽の香り。", "特別な年にのみ造られる至高のグーズ。"],
-  [11, "Boon Gueuze", "ブーン・グーズ", "https://www.belgianbeer.co.jp/products/detail.php?product_id=105", "1m8IKngqPk44sTPqFFamVWxwDWkCsfQF1", "ランビック", 7.0, "ブーン醸造所", "Brouwerij Boon", "フラームス・ブラバント州", ["#ランビック", "#ブレタノマイセス"], "1〜3年寝かせたランビックをブレンド。フレッシュな酸味。", "小西酒造", "麦芽、小麦、古いホップ", "オーク樽で熟成させた異なる年代をブレンド。", "レモンや青りんごのような爽やかな酸味。", "古いホップは防腐効果のために使用される。"],
-  [12, "Boskeun", "ボスクン", "https://www.beeradvocate.com/beer/profile/201/634/", "1r88IiHdNnBocIZ44Epe8japXlj5PZ1Ge", "ペールエール", 9.0, "ドゥ・ドール醸造所", "De Dolle Brouwers", "西フランデレン州", ["#ゴールデン", "#ハイアルコール"], "イースター（復活祭）の時期に造られる特別なビール。", "取扱各社", "麦芽、ホップ", "イースター向けに特別に醸造される。", "フルーティーでホップの苦味とアルコールの甘みが調和。", "ウサギ（イースターバニー）のラベル。クリス・ヘルテレール作。"],
-  [13, "Boudelo Triple", "ブーデロ・トリプル", "https://asahiya-beer.com/item/1063/", "1YpClHrwTGA4bpUBCkVjgME4RSbeP1P83", "トリプル", 7.8, "ムスケティールス醸造所", "Brouwerij The Musketeers", "東フランデレン州", ["#トリプル", "#ゴールデン"], "バランスの取れたトリプルエール。", "取扱各社", "麦芽、ホップ", "プルーフ醸造所などでの委託醸造を経て現在は自社醸造。", "フルーティーな香りとスパイシーな余韻。", "かつての修道院に由来する名前。"],
-  [14, "Blanche de bruges", "ブロンシュ・ドゥ・ブリュッグス", "https://www.blanchedebruges.be/en", "15vJDBQfvtF4yAYqUwGpQlnQBEPtXl-Vl", "ホワイト", 5.0, "デ・ハルヴ・マーン醸造所", "Brouwerij De Halve Maan", "西フランデレン州", ["#ホワイト"], "ブルージュを代表する伝統的なホワイトビール。", "取扱各社", "麦芽、小麦、スパイス", "ブルージュの伝統的なホワイトエール製法。", "爽快でスパイシーな小麦の味わい。", "かつてブルージュで広く飲まれていたスタイルを復刻。"],
-  [15, "Brugse Zot", "ブルッグス ゾット", "https://www.belgianbeer.co.jp/products/detail.php?product_id=120", "1ALp2-ispV8_pgyU8eJDVzcOFD2OsfddS", "ブロンド", 6.0, "デ・ハルヴ・マーン醸造所", "Brouwerij De Halve Maan", "西フランデレン州", ["#ゴールデン"], "「ブルージュの馬鹿」という名を持つ街のシンボル的ビール。", "取扱各社", "麦芽、ホップ", "ブルージュ旧市街の醸造所で造られる上面発酵。", "フルーティーな香りとモルトの甘み、爽やかな苦味。", "市民が皇帝から「馬鹿」と呼ばれた故事に由来。地下パイプラインで有名。"],
-  [16, "Bush Caractere Ambree", "ブッシュ・カラクテール・アンバー", "https://www.belgianbeer.co.jp/products/detail.php?product_id=2150", "1XmS8LpZEiajvG5elQbSt-LKfGP_f3UNw", "アンバー", 12.0, "デュブイソン醸造所", "Brasserie Dubuisson", "エノー州", ["#アンバー", "#ハイアルコール"], "ベルギー屈指の高アルコールビール。濃厚なアンバーエール。", "取扱各社", "麦芽、ホップ、糖類", "長期間の熟成による高アルコール醸造。", "カラメルやナッツの香りと重厚な甘み、強いアルコール感。", "1997年米輸出用にScaldisを採用したが、2012年Bushに再統一。"],
-  [17, "Canaster", "カナスター", "https://ohtsuki-saketen.com/beer/BVBA_Kleinbrouwerij_Glazen_Toren/Canaster_750ml.html", "1MKi1VLREj90Q3SEnuVwrl8TuWG4Uu09W", "スコッチエール", 8.7, "デ・フラーゼン・トーレン醸造所", "Brouwerij De Glazen Toren", "東フランデレン州", ["#ダーク", "#ブラウン"], "冬に楽しむ濃厚なスコッチエール・ウィンタービール。", "取扱各社", "麦芽、ホップ", "伝統的なウィンターエールの製法。", "モルトの甘みとロースト香、スパイシーな余韻。", "特徴的な紙包装のボトルで販売される。"],
-  [18, "Cantillon Gueuze", "カンティヨン・グーズ", "https://www.belgianbeer.co.jp/products/detail.php?product_id=30", "1J2NfivTXx1YeHsYEHGBnT1vAg5UO51F7", "ランビック", 5.0, "カンティヨン醸造所", "Brasserie Cantillon", "ブリュッセル首都圏地域", ["#ランビック", "#ブレタノマイセス"], "ブリュッセルに現存する伝統的ランビック。強い酸味。", "ブラッセルズ", "麦芽、小麦、酸化ホップ", "クールシップで野生酵母を取り込み樽熟成・ブレンド。", "強烈でシャープな酸味と野性的なファンキーなアロマ。", "醸造所は「ブリュッセル・グーズ博物館」として公開。"],
-  [19, "Celis White", "セリス・ホワイト", "https://draftbeer.jp/beerlist/51387/", "1XKzzE6raFTIn1VWw2M1EF3ffD8rd50Us", "ホワイト", 5.0, "セリス醸造所", "Celis Brewery", "海外", ["#ホワイト"], "ピエール・セリス氏の伝説的レシピ。オート麦やコリアンダーを使用。", "取扱各社", "麦芽、小麦、オート麦、スパイス", "ヒューガルデン生みの親によるオリジナルレシピ。", "オレンジピールとコリアンダーの爽やかな酸味とクリーミーな泡。", "2017年テキサス州で娘と孫により再興された。"],
-  [20, "Cervesia", "セルベシア", "https://www.belgianbeer.co.jp/products/detail.php?product_id=69", "1fspnPutSLMjsqtZmaRYPYfjZfMcWCb4L", "セゾン", 8.0, "デュポン醸造所", "Brasserie Dupont", "エノー州", ["#ゴールデン"], "古代のビールをイメージして造られたスパイシーなエール。", "取扱各社", "麦芽、ホップ、スパイス", "多数のスパイスを用いた特別な醸造。", "ハーブやスパイスの複雑な香りとドライな後味。", "ガロ・ローマ時代のビール（Cervesia）を再現。"],
-  [21, "Chapeau Banana", "シャポー・バナナ", "https://www.belgianbeer.co.jp/products/detail.php?product_id=586", "1tT5MlgQkZ_9hLnXFp55AdedCsTPydCVj", "フルーツ", 3.5, "デ・トロック醸造所", "Brouwerij De Troch", "フラームス・ブラバント州", ["#フルーツ", "#ランビック"], "バナナ果汁を加えた甘くフルーティーなランビック。", "取扱各社", "麦芽、小麦、バナナ果汁", "ランビックにバナナ果汁やシロップをブレンド。", "バナナの強い甘い香りとほのかな酸味。", "ビールの苦味が苦手な人でもジュース感覚で飲める。"],
-  [22, "Chimay Bleue", "シメイ・ブルー", "https://www.belgianbeer.co.jp/products/detail.php?product_id=53", "1ErXXougEeHDByYJsmScog483oXXciyZU", "トラピスト", 9.0, "スクールモン修道院(シメイ)", "Abbaye de Scourmont", "エノー州", ["#トラピスト", "#修道院", "#ダーク", "#ハイアルコール"], "ヴィンテージが記される長期熟成向けのダークエール。", "三井食品", "麦芽、ホップ、糖類", "修道院内の井戸水を使用し長期熟成。", "ロースト麦芽のカラメル感、濃厚なドライフルーツの香り。", "1948年にクリスマス用として造られたシメイの最高峰。"],
-  [23, "Chimay Green", "シメイ・グリーン", "https://www.belgianbeer.co.jp/products/detail.php?product_id=1589", "13MVmxgZ9vj_6onv7rYEOMvkxxTfSVGoB", "トラピスト", 10.0, "スクールモン修道院(シメイ)", "Abbaye de Scourmont", "エノー州", ["#トラピスト", "#修道院", "#ゴールデン", "#ハイアルコール"], "創建150周年を記念して造られた力強いストロングエール。", "三井食品", "麦芽、ホップ", "シメイ独自の酵母を用いた力強い醸造。", "スパイシーさと豊かなモルトの甘み、力強いアルコール感。", "元々は150周年記念の「サンクサン」としてリリースされた。"],
-  [24, "Chimay Triple", "シメイ・ホワイト", "https://www.belgianbeer.co.jp/products/detail.php?product_id=55", "1Wnq1wmk-R8wb3H070tT0BAchDm2Dy1O2", "トラピスト", 8.0, "スクールモン修道院(シメイ)", "Abbaye de Scourmont", "エノー州", ["#トラピスト", "#修道院", "#トリプル", "#ゴールデン"], "ホップの苦味が効いたドライでスパイシーなトリプル。", "三井食品", "麦芽、ホップ", "ホップを効かせたドライな仕上がり。", "マスカットやレーズンのようなフルーティーさと強いホップの苦味。", "シメイの中で最もドライでホッピーな味わい。"],
-  [25, "Corsendonk Agnus", "コルセンドンク・アグヌス", "https://www.belgianbeer.co.jp/products/detail.php?product_id=740", "1Hb1yWK68U1pO4v4ol5v0NqtQlxNJhrC9", "トリプル", 7.5, "コルセンドンク", "Corsendonk", "ナミュール州", ["#アビイ", "#トリプル", "#ゴールデン"], "美しい黄金色をしたフルーティーなアビイビール。", "取扱各社", "麦芽、ホップ", "デュ・ボック醸造所で委託醸造される上面発酵エール。", "リンゴや洋梨の香りとスパイシーなホップの余韻。", "ラベルのないプリント瓶が特徴的。修道院レシピの復刻。"],
-  [26, "Cuvee de Ranke", "キュベ･ドゥ･ランク", "https://ohtsuki-saketen.com/beer/Brouwerij_De_Ranke/Cuvee_de_Ranke_750ml.html", "1zR-ApWLfTenyj2ZEe1lj6IuT6e9GtZmM", "サワー", 7.0, "デ・ランク醸造所", "Brouwerij De Ranke", "エノー州", ["#サワー", "#ブレタノマイセス"], "ランビックとサワーエールをブレンドした傑作。", "取扱各社", "麦芽、ホップ", "自社のサワーエールとジラルダン等のランビックをブレンド。", "強い酸味とオーク樽の香り、複雑な野性味。", "Nino BacelleとGuido Devosが手掛けるこだわりのブレンド。"],
-  [27, "Cuvée Jeun'homme", "キュヴェ ジェンノーム", "https://www.jbja.jp/archives/6131", "1VD5MtwsZ2wSr4Dvjnvy-O0aqcjE1ZYA8", "サワー", 6.5, "デ・ライト醸造所", "De Leite Brouwerij", "西フランデレン州", ["#サワー"], "ホップの苦味と乳酸の酸味が融合したユニークなビール。", "取扱各社", "麦芽、ホップ", "オーク樽での熟成と乳酸発酵。", "シトラスのような酸味とホップの爽快な苦味。", "醸造所の若いスタッフ(Jeun'homme)にちなんで命名。"],
-  [28, "Cuvee Soeur’ise", "キュベ・スーリーズ(ソウィジ)", "https://www.belgianbeer.co.jp/ct/blog/new-item/11318/", "1p65Qhamy7j1tIOQvNClv_3_xEeGt0Pil", "フルーツ", 8.5, "デ・ライト醸造所", "De Leite Brouwerij", "西フランデレン州", ["#フルーツ", "#レッド", "#サワー"], "チェリーを漬け込んだオーク樽熟成のレッドサワー。", "取扱各社", "麦芽、ホップ、チェリー", "オーク樽で数ヶ月チェリーと共に熟成。", "強烈なチェリーの香りとバルサミコのような酸味。", "「Soeur'ise」は修道女とチェリー(Cerise)をかけた言葉遊び。"],
-  [29, "De Cam Geuze", "ドゥ・カム・グーズ", "https://www.belgianbeer.co.jp/products/detail.php?product_id=1645", "10bN3XOqcVXqylKqr3gOG2MawX3CpT9oS", "ランビック", 6.0, "ドゥ・カム", "Geuzestekerij De Cam", "フラームス・ブラバント州", ["#ランビック", "#ブレタノマイセス"], "伝統的な手法でブレンドされる希少なグーズ。", "取扱各社", "麦芽、小麦、古いホップ", "自社では醸造せず、他社のランビック原酒を購入し木樽でブレンド。", "柔らかな酸味とグレープフルーツのようなシトラス香。", "非常に小規模で手作りにこだわるブレンド所。"],
-  [30, "De Dochter van de Korenaar L’Ensemble", "ドクトル ヴァン ドゥ コールナール", "https://www.dedochtervandekorenaar.be/en/core-range/lensemble/", "1Y939o0K_8SWq0LtMNRq604URN_Zk_GLx", "バーレイワイン", 13.0, "デ・ドクトル・ヴァン・ドゥ・コールナール", "Brouwerij De Dochter van de Korenaar", "アントウェルペン州", ["#ダーク", "#ハイアルコール"], "極めてアルコール度数の高い濃厚なバーレイワイン。", "取扱各社", "麦芽、ホップ", "大量のモルトを使用し長期発酵・熟成。", "ポートワインやレーズンのような濃厚な甘みと重厚感。", "オランダとの国境近くにある評価の高いクラフト醸造所。"],
-  [31, "De Koninck", "デ・コーニンク", "https://www.dekoninck.be/en/beers/bolleke", "1N36rbV74Kr7pFXWJQCOv-ml4mLtOpLSK", "アンバー", 5.2, "デ・コーニンク醸造所", "Brouwerij De Koninck", "アントウェルペン州", ["#アンバー"], "アントワープを代表するアンバーエール。", "取扱各社", "麦芽、ホップ", "サーズホップを使用した伝統的上面発酵。", "ビスケットのような香ばしさと穏やかな苦味。飲み疲れしない。", "専用の丸いグラス「Bolleke」で親しまれる。デュベルに買収された。"],
-  [32, "De Moare Triple", "デ・モアレ トリプル", "https://www.belgenbier.be/bieren/beschrijvingbier.php?idbieren=15978", "1EEaZ14JwL8yt-_UxsSRq52ldRr0Tql3P", "トリプル", 8.0, "Belgian Brewery", "Belgian Brewery", "西フランデレン州", ["#トリプル", "#ゴールデン"], "しっかりとしたボディを持つ地元のトリプルエール。", "取扱各社", "麦芽、ホップ", "上面発酵、瓶内二次発酵", "フルーティーなエステル香とモルトの甘み。", "地元の限られた地域で愛飲されている銘柄。"],
-  [33, "Delirium Tremens", "デリリウム・トレメンス", "https://www.belgianbeer.co.jp/products/detail.php?product_id=82", "1yBIgom81DwVUescQ5XffA-paXwmTmpBq", "ゴールデン", 8.5, "ヒューグ醸造所", "Brouwerij Huyghe", "東フランデレン州", ["#ゴールデン", "#ハイアルコール"], "ピンクの象で有名なストロング・ゴールデンエール。", "取扱各社", "麦芽、ホップ", "3種類の異なる酵母を使用して醸造。", "リンゴや洋梨のようなフルーティーさとピリッとしたスパイス感。", "名前は「アルコール中毒による幻覚症状」を意味する。"],
-  [34, "Deus", "デウス", "https://bier.jp/itemdetail/Bx631", "1gsP91qom_TAatK_cQoPKmDWkddMv7GAX", "シャンパンビール", 11.5, "ボスティールス醸造所", "Brouwerij Bosteels", "東フランデレン州", ["#ゴールデン", "#ハイアルコール"], "シャンパーニュ地方で仕上げられる高級シャンパンビール。", "取扱各社", "麦芽、ホップ", "ベルギーで醸造後、フランスに運びシャンパンと同じ瓶内二次発酵・動瓶・澱引き。", "きめ細かい泡、マスカットやハーブの華やかな香りと辛口の味わい。", "2016年にAB InBevが買収した。"],
-  [35, "Drie Fonteinen", "ドリー･フォンティネン", "https://www.arome.jp/products/detail/2150", "1oKC1whpk8nRN1oVckoqXCW4RpMjJaeQK", "ランビック", 6.0, "ドリー・フォンティネン", "Brouwerij 3 Fonteinen", "フラームス・ブラバント州", ["#ランビック", "#ブレタノマイセス"], "世界最高峰と称されるグーズの作り手。", "取扱各社", "麦芽、小麦、古いホップ", "自社醸造のランビックと他社原酒をブレンドし木樽熟成。", "非常にバランスの取れた酸味、リンゴやオークの複雑な香り。", "「3つの泉」を意味し、ランビック愛好家から絶大な支持を得る。"],
-  [36, "Duchesse de Bourgougne", "ドゥシャス デ ブルゴーニュ", "https://www.belgianbeer.co.jp/products/detail.php?product_id=84", "1p1s6RNwMRcPwp_FRxOGwDgb2elAPYKXO", "サワー", 6.2, "ヴェルハーゲ醸造所", "Brouwerij Verhaeghe", "西フランデレン州", ["#レッド", "#オーク樽"], "バルサミコ酢のような酸味。ラベルの女性はマリー・ド・ブルゴーニュ。", "小西酒造", "麦芽、ホップ", "オーク樽で18ヶ月熟成の古酒と8ヶ月の若いビールをブレンド。", "ブラックチェリーやパッションフルーツの香りと上品な酸味と甘み。", "ラベルの女性は1477年にマクシミリアン1世と結婚したブルゴーニュ公国最後の君主。"],
-  [37, "Dulle Teve", "デュールテーブ", "https://www.beeradvocate.com/beer/profile/201/1116/", "1V56xFW6d3ykd76zGg1pxEuVzb9R0VTuF", "トリプル", 10.0, "ドゥ・ドール醸造所", "De Dolle Brouwers", "西フランデレン州", ["#トリプル", "#ゴールデン", "#ハイアルコール"], "「狂った女性」の名を持つストロングなトリプル。", "取扱各社", "麦芽、ホップ", "大量のモルトとキャンディシュガーを用いた長期熟成。", "洋梨やバナナのような甘い香りと強いアルコールの刺激。", "Dulle Teveはフラマン語で「狂った(気性の荒い)おっかない妻」の意味。"],
-  [38, "Duvel", "デュベル", "https://www.belgianbeer.co.jp/products/detail.php?product_id=75", "1UHMIdya8vmIWPCOdIPrrOD9mROdbVazx", "ゴールデン", 8.5, "デュベルモルトガット醸造所", "Duvel Moortgat", "アントウェルペン州", ["#ゴールデン", "#ハイアルコール"], "「悪魔」という名を持つ世界を代表するストロング・ゴールデン。", "小西酒造", "麦芽、ホップ、糖類", "約90日もの時間をかけ、低温熟成と瓶内二次発酵を行う。", "クリーミーな泡、洋梨の華やかなアロマ、魔性的な飲みやすさ。", "元「ビクトリーエール」。試飲会での「まさに悪魔だ」の一言で改名。"],
-  [39, "Gauloise Amber", "ゴロワーズ・アンバー", "https://sugaya-beer.com/item-detail/1906179", "1bnwz96ZTf8I23oAJYpjRXdkJXEo0UTB9", "アンバー", 5.5, "デュ・ボック醸造所", "Brasserie du Bocq", "ナミュール州", ["#アンバー"], "ナミュール地方の伝統的なアンバーエール。", "取扱各社", "麦芽、ホップ", "厳選されたローストモルトを使用した上面発酵。", "カラメルのような香ばしさとスッキリしたホップの苦味。", "ガリア人（Gauloise）をモチーフにしたデュ・ボックの看板商品。"],
-  [40, "Girardin Gueuze 1882", "ジラルダン・グーズ", "https://www.beeradvocate.com/beer/profile/2541/6317/", "1ZSF8kiQprNj5jXM-AA4H7rTzCuw0GWKF", "ランビック", 5.0, "ジラルダン醸造所", "Brouwerij Girardin", "フラームス・ブラバント州", ["#ランビック", "#ブレタノマイセス"], "極めて伝統的な製法を守る秘密主義のグーズ。", "取扱各社", "大麦麦芽、小麦、古いホップ", "自社農園の小麦を使用し、フィルターをかけないブラックラベル。", "オーク樽の豊かな香りと洗練された鋭い酸味。クリアな味わい。", "メディアへの露出や過度なマーケティングを好まない完全家族経営。"],
-  [41, "Gordon Scotch Ale", "ゴードン・スコッチ・エール", "https://www.belgianbeer.co.jp/products/detail.php?product_id=2215", "1-uBumntKfDrsQGdosQqLUrTxlpxK0qOv", "スコッチエール", 8.0, "ジョン・マーティン社", "John Martin", "フラームス・ブラバント州", ["#ダーク", "#ブラウン"], "スコットランド由来の濃厚なダークエール。", "取扱各社", "麦芽、ホップ", "ローストモルトを多用し、ベルギーの醸造所で委託生産。", "コーヒーやチョコレートの濃厚な香りと強いモルトの甘み。", "アザミの花がシンボル。英国向けのスタイルをベルギーで醸造。"],
-  [42, "Gouden Carolus Christmas", "グーデン カロルス・クリスマス", "https://www.belgianbeer.co.jp/products/detail.php?product_id=586", "1NiiJFjYXCDCimLPphGb5B6olZGorUzTK", "ダーク", 10.5, "ヘット・アンケル醸造所", "Brouwerij Het Anker", "アントウェルペン州", ["#ダーク", "#ブラウン", "#ハイアルコール"], "6種類のスパイスを用いた濃厚なクリスマスビール。", "取扱各社", "麦芽、ホップ、スパイス", "8月に醸造を開始し数ヶ月間熟成させて冬に出荷。", "アニスやリコリスなど複雑なスパイスの香りと濃厚な果実味。", "皇帝カール5世にちなんだブランド「カロルス」の冬季限定品。"],
-  [43, "Gouden Carolus Tripel", "グーデン カロルス・トリプル", "https://www.beeradvocate.com/beer/profile/1534/5423/", "15NftYiu6mV9gybtIcW0SMbENfbcsNEAx", "トリプル", 9.0, "ヘット・アンケル醸造所", "Brouwerij Het Anker", "アントウェルペン州", ["#トリプル", "#ゴールデン", "#ハイアルコール"], "皇帝カール5世に捧げられた伝統のトリプル。", "取扱各社", "麦芽、ホップ", "ベルギー産のペールモルトのみを使用し醸造。", "クリーンなモルトの甘みとコリアンダーのようなスパイシーさ。", "かつてメヘレンの騎士のために醸造された歴史的レシピ。"],
-  [44, "Gregorius", "グレゴリアス", "https://www.nipponbeer.jp/lineup/gregorius/", "1TkO9czykOkcuGOaWGuyvEEo5h6jLyMne", "トラピスト", 10.5, "エンゲルスツェル修道院", "Stift Engelszell", "海外", ["#トラピスト", "#ダーク", "#ハイアルコール"], "オーストリア唯一のトラピストビール。", "日本ビール", "麦芽、ホップ、はちみつ", "地元産のはちみつやワイン酵母を使用して醸造。", "チョコレートやリコリスの濃厚な香りと強いアルコール感。", "ベルギー外のトラピスト。修道院長グレゴリウスにちなむ。"],
-  [45, "Grimbergen Triple", "グリムベルゲン・トリプル", "https://www.grimbergen.com/our-brews/triple-dabbaye/", "1jPRSx7Bk5sRRbDLLgKhSRPw-RllNFl8b", "アビイ", 9.0, "アルケン・マース醸造所", "Alken-Maes", "フラームス・ブラバント州", ["#アビイ", "#トリプル", "#ゴールデン"], "不死鳥をシンボルとする伝統的アビイビール。", "取扱各社", "麦芽、ホップ", "修道院の伝統的レシピに基づき大手醸造所が生産。", "スパイシーなコリアンダーの香りと力強いモルトの甘み。", "「火で焼かれても蘇る」不死鳥の紋章が特徴。"],
-  [46, "Grisette Blanche", "グリゼット・ブロンシュ", "https://belgianbrasseriecourt.jp/drink/grisette-blanche/", "1eU5nc8JRFY6ql7TzcvHM0vU9TIcOO2D6", "ホワイト", 5.5, "サン・フーヤン醸造所", "Brasserie St-Feuillien", "エノー州", ["#ホワイト"], "爽やかで軽快なオーガニック・ホワイトエール。", "取扱各社", "大麦麦芽、小麦、スパイス", "オーガニック原料を使用した伝統的ホワイト製法。", "オレンジピールやコリアンダーの爽快な香りと心地よい酸味。", "かつて炭鉱労働者が喉の渇きを癒すために飲んだとされる。"],
-  [47, "Grotten Sante", "グロッテン サンテ", "https://www.beeradvocate.com/beer/profile/35253/167299/", "1zdHs94DiFYLa3TgTSsLo-YDJq5pIVKyF", "ブラウン", 6.5, "カゼマッテン醸造所", "Brouwerij Kazematten", "西フランデレン州", ["#ブラウン", "#ダーク"], "洞窟で熟成されるユニークなブラウンエール。", "取扱各社", "麦芽、ホップ、スパイス", "一定温度に保たれた地下の要塞（洞窟）跡で熟成される。", "ハーブやスパイスの複雑な香りとマイルドなロースト感。", "元々はセント・ベルナルデュスで造られていたピエール・セリスのレシピ。"],
-  [48, "Gulden Draak", "ギュルデン･ドラーク", "https://www.belgianbeer.co.jp/products/detail.php?product_id=2106", "130w3nnfCrhGKlw5qlvwqaiHH21G8EMSw", "ダーク", 10.5, "ヴァン・スティーンベルグ醸造所", "Brouwerij Van Steenberge", "東フランデレン州", ["#ダーク", "#ブラウン", "#ハイアルコール"], "「金色の竜」の名を持つ濃厚なダーク・トリプル。", "取扱各社", "麦芽、ホップ", "ワイン酵母を使用した特異な瓶内二次発酵。", "チョコレートやポートワインのような重厚な香りと強いアルコール。", "ゲントの鐘楼の頂上に立つ「黄金のドラゴン」像に由来。白いボトルが特徴。"],
-  [49, "Guldenberg", "ギュルデンベルク", "https://www.belgianbeer.co.jp/products/detail.php?product_id=1688", "1_6ZNcBCQ2PJYb9BVEVQdooioHZSRExMN", "トリプル", 8.0, "デ・ランク醸造所", "Brouwerij De Ranke", "エノー州", ["#トリプル", "#アビイ", "#ゴールデン"], "デ・ランクが誇る苦味の効いたトリプルエール。", "取扱各社", "麦芽、ホールホップ", "ペレットではなく地元産のホールホップを贅沢に使用。ドライホッピング。", "強烈なホップの苦味とフローラルな香り、しっかりしたモルト感。", "かつて存在したギュルデンベルク修道院にちなんで命名。"],
-  [50, "Hanssens Artisanaal / Oude Gueuze", "ハンセンス・アルティザナル・オード・グーズ", "https://beervolta.com/?pid=167051374", "1lqGH8YIYu8PAN2y4HzssKZ8CzXy17Jsq", "ランビック", 6.0, "ハンセンス", "Hanssens Artisanaal", "フラームス・ブラバント州", ["#ランビック", "#ブレタノマイセス"], "自ら醸造せずブレンドに特化した職人のオード・グーズ。", "取扱各社", "麦芽、小麦、古いホップ", "他社の麦汁を購入し、自社のオーク樽で独自に自然発酵・熟成・ブレンド。", "強烈で野性的な酸味、リンゴ酢や古い木樽の複雑なアロマ。", "ベルギーでも数少ない「グーズステケライ（ブレンド専門業者）」。"],
-  [51, "Hoegaarden White", "ヒューガルデン・ホワイト", "https://www.belgianbeer.co.jp/products/detail.php?product_id=97", "1_fY5tqriRuTOYLFyj73DE_BZ2Hzu295Z", "ホワイト", 4.9, "ヒューガルデン醸造所", "Brouwerij Hoegaarden", "フラームス・ブラバント州", ["#ホワイト"], "世界で最も有名なベルジャン・ホワイトの代名詞。", "取扱各社", "大麦麦芽、小麦、コリアンダー、オレンジピール", "生の小麦とスパイスによる伝統製法。AB InBev傘下。", "爽やかなオレンジピールの香りとコリアンダーのスパイス感、優しい酸味。", "ピエール・セリスが消滅の危機にあったホワイトビールを1966年に復活させた。"],
-  [52, "HOMMEL BIER", "ホメルビール", "https://www.belgianbeer.co.jp/products/detail.php?product_id=2108", "1r16SKTBsBC_iQWGlEJPHn39wocAZhOC5", "IPA", 7.5, "ルロワ醸造所(ヴァン・エーケ)", "Leroy Breweries", "西フランデレン州", ["#IPA", "#ゴールデン"], "ホップの産地ポペリンゲを代表するホッピーなエール。", "取扱各社", "麦芽、ホップ", "地元ポペリンゲ産の良質なホップを大量に使用し醸造。", "青草やハーブのような強いホップのアロマと、ピリッとした苦味。", "「ホメル」とは地元の方言でホップのこと。ホップ収穫祭のために造られた。"],
-  [53, "ICHTEGEM’S GRAND CRU", "イヒテヘムズ・グランクリュ", "https://bier.jp/itemdetail/Bx409", "1_O7xS5j-8kBUU-NlQQC3XtCDL3XGw9UP", "サワー", 6.5, "ストルッベ醸造所", "Brouwerij Strubbe", "西フランデレン州", ["#レッド", "#オーク樽"], "オーク樽で熟成された伝統的フランダース・レッド。", "取扱各社", "麦芽、ホップ", "オーク樽で2年間熟成させた古酒と若いビールをブレンド。", "バルサミコ酢やプラムのようなフルーティーな酸味とオークの香り。", "西フランダース地方に古くから伝わる伝統的なサワーエール製法。"],
-  [54, "Jambe de bois", "ジャンブ ドゥ ボア", "https://ohtsuki-saketen.com/beer/Brasserie_de_la_Senne/jambe_de_bois_330ml.html", "1OHBojEPphOdZ2rLTSqGHwSLKmm6fbGJK", "トリプル", 8.0, "ラ・センヌ醸造所", "Brasserie de la Senne", "ブリュッセル首都圏地域", ["#トリプル", "#ゴールデン"], "ブリュッセルの新進気鋭醸造所が造るホッピーなトリプル。", "取扱各社", "麦芽、ホップ", "たっぷりのホップを使用した無ろ過・非加熱の上面発酵。", "バナナのような酵母のエステル香と、強烈で爽快なホップの苦味。", "名前は「木の脚」の意。ベルギー独立革命時の兵士に由来。"],
-  [55, "Jan de Lichte", "ヤン･ドゥ･リヒトゥ", "https://ohtsuki-saketen.com/beer/BVBA_Kleinbrouwerij_Glazen_Toren/Jan_de_Lichte_750ml.html", "1oSJMRsjUJ3xEyWr17X2uGi-wEj4so5z8", "ホワイト", 7.0, "デ・フラーゼン・トーレン醸造所", "Brouwerij De Glazen Toren", "東フランデレン州", ["#ホワイト", "#ダブル"], "アルコール度数の高い「インペリアル・ホワイト」。", "取扱各社", "麦芽、小麦、スパイス", "通常のホワイトエールより大量の麦芽を使用し度数を高める。", "コリアンダーのスパイス感と小麦の酸味に、強いボディ感が加わる。", "名前は18世紀のフランドル地方に実在した義賊に由来する。"],
-  [56, "Kapittel Prior", "カピテル・プリオール", "https://ohtsuki-saketen.com/beer/Brouwerij_Van_Eecke/Kapittel_Prior_330ml.html", "1rEHluqshNp42Qdn6kznnPKDJyAyscrHP", "アビイ", 9.0, "ルロワ醸造所(ヴァン・エーケ)", "Leroy Breweries", "西フランデレン州", ["#アビイ", "#ダーク", "#ブラウン", "#ハイアルコール"], "修道院の伝統を受け継ぐダークな高アルコールビール。", "取扱各社", "麦芽、ホップ", "ローストモルトを使用した伝統的アビイビール製法。", "カラメルやレーズン、チョコレートのような濃厚な甘みとロースト香。", "「プリオール」は修道院長の意。修道院で高位の者のために造られた。"],
-  [57, "Kasteel Donker", "キャスティール・ドンケル", "https://europe-beer.online/kasteel/", "16XxrI00RkBEpSCe_9H6MBoPNKu1M3FwN", "ダーク", 11.0, "ヴァンホンセブルック醸造所", "Brouwerij Vanhonsebrouck", "西フランデレン州", ["#ダーク", "#ブラウン", "#ハイアルコール"], "城の名を冠した極めて濃厚なダークエール。", "取扱各社", "麦芽、ホップ、糖類", "長期間の熟成による高アルコールで重厚な醸造。", "ポートワインやチョコレート、コーヒーの重厚な香りと強い甘み。", "インゲルムンステール城の地下セラーで熟成されていたことに由来。"],
-  [58, "Kasteel Tripel", "キャスティール・トリプル", "https://asahiya-beer.com/item/1450/", "1nturlSDqVhwOIw3kXbolOlmYmCU6Bieh", "トリプル", 11.0, "ヴァンホンセブルック醸造所", "Brouwerij Vanhonsebrouck", "西フランデレン州", ["#トリプル", "#ゴールデン", "#ハイアルコール"], "度数11%を誇るパワフルなトリプルエール。", "取扱各社", "麦芽、ホップ", "大量のペールモルトを使用したストロングな上面発酵。", "熟したバナナやハチミツの香りと、力強いアルコールの温かみ。", "城（Kasteel）シリーズのブロンド・高アルコール版。"],
-  [59, "Kriek de Ranke", "クリーク･ドゥ･ランク", "https://ohtsuki-saketen.com/beer/Brouwerij_De_Ranke/Kriek_de_Ranke_750ml.html", "1bjz_29ErwWtnx_dkaNcQx1Z-WdUBz72d", "フルーツ", 7.0, "デ・ランク醸造所", "Brouwerij De Ranke", "エノー州", ["#フルーツ", "#サワー", "#ランビック"], "本物のサワーチェリーを漬け込んだ酸味際立つクリーク。", "取扱各社", "麦芽、ホップ、サワーチェリー", "自社のサワーエールとジラルダンのランビックに、チェリーを半年間漬け込む。", "強烈なチェリーの酸味と、オーク樽由来の複雑な野性味。甘みは極めて少ない。", "デ・ランクならではの妥協のないドライで本格的なフルーツサワー。"],
-  [60, "La CHOUFFE", "ラ・シュフ", "https://beershop.jp/SHOP/83349.html", "1yVyafGe5DTo7m4rK8Ymk4xsjwO-UeZCN", "ブロンド", 8.0, "ブラッスリー・ダシュフ醸造所", "Brasserie d'Achouffe", "リュクサンブール州", ["#ゴールデン"], "小人の妖精がラベルに描かれたスパイシーなブロンド。", "取扱各社", "麦芽、ホップ、コリアンダー", "コリアンダーを隠し味に使用した瓶内二次発酵。", "フルーティーな酵母の香りとコリアンダーのスパイス感、ほのかな甘み。", "アルデンヌ地方の森に住む妖精（シュフ）がモチーフ。"],
-  [61, "La Corne Triple", "ラ・コルヌ・トリプル", "https://ohtsuki-saketen.com/beer/Brouwerij_d_Ebly/La_Corne_triple_330ml.html", "1Q6iHk7UQk-zisbD5m-IOjuREnFdyUxGH", "トリプル", 10.0, "エブリ醸造所", "Brasserie d'Ebly", "リュクサンブール州", ["#トリプル", "#ゴールデン", "#ハイアルコール"], "角（つの）型の専用グラスで有名なストロングエール。", "取扱各社", "麦芽、ホップ", "無ろ過・非加熱で瓶内二次発酵を行う。", "リンゴや柑橘系のフルーティーな香りと力強いアルコール感。", "絞首刑になった伝説の醸造家のエピソードに由来するグラス。"],
-  [62, "La Guillotine", "ギロチン", "https://www.belgianbeer.co.jp/products/detail.php?product_id=157", "1uK_3VWinQTX0_KgsTt6GLjA4Su1qg-2I", "ゴールデン", 8.5, "ヒューグ醸造所", "Brouwerij Huyghe", "東フランデレン州", ["#ゴールデン", "#ハイアルコール"], "「断頭台（ギロチン）」の恐ろしい名を持つビール。", "取扱各社", "麦芽、ホップ", "3種類の異なる酵母と数種のホップを使用。", "柑橘系の爽やかな香りとスパイシーな苦味、アルコールのパンチ力。", "フランス革命200年を記念して醸造された。デリリウムの姉妹品。"],
-  [63, "La Trappe Quadrupel", "ラトラップ・クアドルプル", "https://beeronline.jp/products/la-trappe-quadrupel-330ml", "13NthxiViRWsnxjNcJR7yxq6zSWlWfrq9", "トラピスト", 10.0, "デ・コーニングスホーヴェン修道院", "Brouwerij de Koningshoeven", "海外", ["#トラピスト", "#修道院", "#ダーク", "#ハイアルコール"], "「クアドルペル」というスタイルを確立したオランダのトラピスト。", "取扱各社", "麦芽、ホップ、糖類", "オーク樽熟成バージョンも存在する重厚な上面発酵。", "バナナやアーモンド、バニラのような極めて濃厚な甘みと香り。", "オランダに位置する修道院。ベルギー国外のトラピストとして有名。"],
-  [64, "Leffe Tripel", "レフ・トリプル", "https://ohtsuki-saketen.com/beer/Brouwerij_Hoegaarden/Leffe_Tripel_330ml.html", "1L05rewC5yuP7l-dgOlQkOoQ-298NUMJ4", "アビイ", 8.5, "レフ修道院", "Abbaye de Leffe", "ナミュール州", ["#修道院", "#トリプル", "#ゴールデン"], "修道院ビールの代表格。フルーティーさとスパイシーさのバランス。", "取扱各社", "麦芽、ホップ", "修道院のレシピに基づきAB InBevの大規模設備で醸造。", "オレンジやコリアンダーのようなスパイシーな香りとモルトの甘み。", "現在醸造所はアンハイザー・ブッシュ インベヴ傘下になっている。"],
-  [65, "Lindemans Gueuze Lambic Cuvee Rene", "リンデマンス･キュベ･ルネ", "https://ohtsuki-saketen.com/beer/Brouwerij_Lindemans/Lindemans_Gueuze_Lambic_Cuvee_Rene_750ml.html", "1c93pQyUAmIATQNBObc5NQY67ok9SELsg", "ランビック", 5.5, "リンデマンス醸造所", "Brouwerij Lindemans", "フラームス・ブラバント州", ["#ランビック", "#ブレタノマイセス"], "甘みを添加しないリンデマンスの伝統的無糖グーズ。", "取扱各社", "麦芽、小麦、古いホップ", "野生酵母で自然発酵後、樽で熟成した数年分の原酒をブレンド。", "ドライでシャープな酸味と、青りんごやレモンのような香り。", "「キュベ・ルネ」は先代当主ルネ・リンデマンスへのオマージュ。"],
-  [66, "Lupulus", "ルプルス", "https://www.belgianbeer.co.jp/products/detail.php?product_id=1228", "1PZwDCmxd6u1BOHi9XueYev7r1eiBoNWA", "トリプル", 8.5, "レ・トロワ・フルケ醸造所", "Brasserie Lupulus", "リュクサンブール州", ["#トリプル", "#ゴールデン"], "狼のラベルが特徴的なホッピーなブロンドエール。", "取扱各社", "麦芽、ホップ", "瓶詰め時に少量の酵母と糖を加えて二次発酵。", "フレッシュなホップの爽快な苦味とフローラルな香り。", "「ルプルス」はラテン語でホップ（小さな狼）を意味する。"],
-  [67, "Malheur 10", "マルール10", "https://www.belgianbeer.co.jp/products/detail.php?product_id=1340", "18aW-wjJ3khXVo1JuvRx8V7d6BodTDMvk", "ゴールデン", 10.0, "デ・ランツヘール醸造所", "Brouwerij De Landtsheer", "東フランデレン州", ["#ゴールデン", "#ハイアルコール"], "フルーティーで芳醇なストロングエール。", "取扱各社", "麦芽、ホップ", "伝統的な上面発酵と長期間の熟成。", "桃や柑橘系のアロマにスパイシーな刺激と強いアルコール感。", "「不幸・災難(Malheur)」という自虐的な名前を持つ。"],
-  [68, "Malheur 8", "マルール8", "https://www.belgianbeer.co.jp/products/detail.php?product_id=1568", "1iel7VODTjRz8gy8y7YXd6e-tKu0m9n5G", "ブロンド", 8.0, "デ・ランツヘール醸造所", "Brouwerij De Landtsheer", "東フランデレン州", ["#ゴールデン"], "バランスの良い爽快なブロンドエール。", "取扱各社", "麦芽、ホップ", "上面発酵、瓶内二次発酵。", "シトラスやスパイスの爽やかな香りとスッキリした苦味。", "マルールシリーズのベーシックモデル。"],
-  [69, "Malheur 12", "マルール12", "https://www.belgianbeer.co.jp/products/detail.php?product_id=127", "1XDv9K1ijYOjpskttvY-eCIq-aWWwkDzf", "ダーク", 12.0, "デ・ランツヘール醸造所", "Brouwerij De Landtsheer", "東フランデレン州", ["#ダーク", "#ブラウン", "#ハイアルコール"], "シリーズ最強のアルコール度数を誇る重厚なダーク。", "取扱各社", "麦芽、ホップ、糖類", "長期熟成によるアルコール度数12%の強烈なボディ。", "チョコレートやレーズン、ポートワインの重厚な甘み。", "世界的なビールコンテストで数々の賞を受賞した傑作。"],
-  [70, "Malheur Biere Brut", "マルール・ブリュット", "https://www.belgianbeer.co.jp/products/detail.php?product_id=503", "1Gdl8lHPKp_l7tjxnYJ4OEjtjh7mi7bZG", "シャンパンビール", 11.0, "デ・ランツヘール醸造所", "Brouwerij De Landtsheer", "東フランデレン州", ["#ゴールデン", "#ハイアルコール"], "シャンパンと同じ製法で造られる極上の発泡酒。", "取扱各社", "麦芽、ホップ", "シャンパーニュ地方の技術（動瓶・澱引き）を取り入れた製法。", "きめ細かい泡とドライな口当たり、フルーティーな華やかさ。", "お祝いの席など特別な日に開けられる最高級ビール。"],
-  [71, "Maredsous Blond", "マレッツ・ブロンド", "https://konishi.be/beer/maredsous/maredsous_blond_330.html", "1aT5ZZbZg1uCMkyIFHKOPIPSqmIW5ll_x", "アビイ", 6.0, "マレッツ修道院(デュベルモルトガット)", "Abbaye de Maredsous", "ナミュール州", ["#修道院", "#アビイ", "#ゴールデン"], "修道士たちが日常的に飲んでいた軽快なブロンド。", "小西酒造", "麦芽、ホップ", "修道院の許可を得てデュベルモルトガットが醸造。", "フルーティーな香りとモルトの優しい甘み、すっきりした苦味。", "マレッツ修道院への訪問客にも振る舞われるスタンダード品。"],
-  [72, "Mc Chouffe", "マック・シュフ", "https://www.belgianbeer.co.jp/products/detail.php?product_id=493", "1LCs22e8ExzuxsaLwNDpTcyU7ctxUMo_s", "ブラウン", 8.0, "ブラッスリー・ダシュフ醸造所", "Brasserie d'Achouffe", "リュクサンブール州", ["#ブラウン", "#ダーク"], "スコッチエールを意識して造られたダークエール。", "取扱各社", "麦芽、ホップ", "ローストモルトを使用した深い褐色の上面発酵ビール。", "カラメルや黒糖のような甘い香りと、アニスのようなスパイス感。", "ラベルの妖精（シュフ）がスコットランドのキルトを着ている。"],
-  [73, "Mort Subite Oude Gueuze", "モート･シュビットゥ・オード・グーズ", "https://ohtsuki-saketen.com/beer/Brouwerij_De_Keersmaeker/Mort_Subite_Oude_Gueuze_375ml.html", "1-dO_nsbbPDBMDouYNupetzpuWlPgh3Zs", "ランビック", 7.0, "モー・シュビット醸造所", "Brouwerij Mort Subite", "フラームス・ブラバント州", ["#ランビック", "#ブレタノマイセス"], "「突然死」という強烈な名を持つ伝統的グーズ。", "取扱各社", "麦芽、小麦、古いホップ", "オーク樽で熟成された年代の異なるランビックをブレンド。", "しっかりとした酸味と青りんごのようなフルーティーさ、オーク香。", "ブリュッセルのカフェで流行したサイコロゲーム「突然死」に由来。"],
-  [74, "N'Ice Chouffe", "ナイス シュフ", "https://belgianstyleales.com/products/n-ice-chouffe-winter-beer-11-oz", "19ylraZzRtlDo5y0usnBGqqiIQEmqaSgE", "ダーク", 10.0, "ブラッスリー・ダシュフ醸造所", "Brasserie d'Achouffe", "リュクサンブール州", ["#ダーク", "#ブラウン", "#ハイアルコール"], "タイムとキュラソーを効かせた冬季限定ビール。", "取扱各社", "麦芽、ホップ、タイム、キュラソー", "冬季向けにスパイスを配合し、度数を高めたレシピ。", "ハーブの複雑な香りとローストモルトの甘み、強い温かみ。", "ラベルの妖精が雪の中で暖をとっている冬の風物詩。"],
-  [75, "NELLO'S BLOND", "ネロズ ブロンド", "https://www.ikemitsu.co.jp/product/nellos/", "14CEXe4966Njt_lixgpwjcu1AT0nkpEzp", "ブロンド", 7.0, "プルーフ醸造所", "De Proefbrouwerij", "東フランデレン州", ["#ゴールデン"], "フランダースの犬の主人公を冠したビール。", "取扱各社", "麦芽、ホップ", "優れた設備と技術を持つプルーフ醸造所で造られている。", "フローラルなホップの香りとクリーンなモルトの甘み。", "日本でも有名なアニメの舞台アントワープ郊外にちなむ。"],
-  [76, "Newton", "ニュートン", "https://www.belgianbeer.co.jp/products/detail.php?product_id=87", "1lvLhW8NEOKNMwAXF2DSPWJ0OHRb-h2G0", "フルーツ", 3.5, "ルフェーブル醸造所", "Brasserie Lefebvre", "ワロン・ブラバント州", ["#フルーツ", "#ホワイト"], "青りんご果汁を加えた爽やかなホワイトビール。", "取扱各社", "麦芽、小麦、青リンゴ果汁", "ホワイトビールをベースに青リンゴ果汁をブレンド。", "青りんごの爽やかな酸味と甘み。ジュースのように飲みやすい。", "万有引力のアイザック・ニュートンにちなんだ名前とリンゴ。"],
-  [77, "Noir de Dottignies", "ノワール・ドゥ・ドティニー", "https://www.belgianbeer.co.jp/products/detail.php?product_id=2210", "1MrBCI-xIC-YdaU2gE17mHD9T54PK6DtS", "ブラウン", 8.5, "デ・ランク醸造所", "Brouwerij De Ranke", "エノー州", ["#ブラウン", "#ダーク", "#ハイアルコール"], "ポペリンゲ産ホールホップを採用。濃厚なロースト香。", "取扱各社", "麦芽（7種類）、ホールホップ", "7種のモルトをブレンド、ポペリンゲ産の生のホップ花を使用。", "ダークチョコやナッツの芳醇な香り、しっかりした苦味。", "1994年、Nino Bacelleが設備を借りて醸造開始。Guido Devosと共同経営。"],
-  [78, "Oerbier", "ウールビール", "https://www.beeradvocate.com/beer/profile/201/813/", "146u1giEAYO23Gm3rzR9r__NVU0GhEiIT", "ダーク", 9.0, "ドゥ・ドール醸造所", "De Dolle Brouwers", "西フランデレン州", ["#ダーク", "#ブラウン", "#ハイアルコール"], "「オリジナル」を意味するドゥ・ドール醸造所の原点。", "取扱各社", "麦芽、ホップ", "乳酸菌によるほのかな酸味を纏う独自の上面発酵。", "ローストモルトの甘みに、ワインのような複雑な酸味が絡む。", "クリス・ヘルテレールが手掛ける個性的でファンが多い銘柄。"],
-  [79, "Ondineke Oilsjtersen Tripel", "オンディネク･トリプゥ", "https://www.beeradvocate.com/beer/profile/10557/21112/", "1FWWfcs6FIgBn2jfoqCkMuJs-MJQg7-6G", "トリプル", 8.5, "デ・フラーゼン・トーレン醸造所", "Brouwerij De Glazen Toren", "東フランデレン州", ["#トリプル", "#ゴールデン"], "アルスト地方の伝統を表現した無ろ過のトリプル。", "取扱各社", "麦芽、ホップ", "無ろ過・非加熱、伝統的な紙に包まれたボトル。", "スパイシーな酵母の香りと強めのホップの苦味。", "アールスト市の象徴的な銅像「オンディネク」に由来。"],
-  [80, "Orval", "オルヴァル", "https://www.belgianbeer.co.jp/products/detail.php?product_id=27", "1-m2yzzXPGlDBgPEkINlTMtBmEi_OI4c7", "トラピスト", 6.2, "オルヴァル醸造所", "Brasserie d'Orval", "リュクサンブール州", ["#トラピスト", "#修道院", "#ブレタノマイセス"], "ドライホッピング製法と野生酵母による唯一無二のトラピスト。", "小西酒造", "麦芽、ホップ、糖類、酵母", "発酵終盤に生ホップを投入。瓶詰時に野生酵母を添加。", "強いホップの苦味とファンキーな酸味。熟成により味が劇的に変化。", "ラベルや王冠の魚は、修道院の泉に伝わる「指輪をくわえて戻した鱒」の伝説。"],
-  [81, "Oud Beersel Oude Gueuze", "オード ベールセル・オード グーズ", "https://oudbeersel.com/nl/beers/oud-geuze-oud-beersel/", "1nyTmhqep2b2jhEzrwUyRCkNFCpaWcg0C", "ランビック", 6.0, "オード・ベールセル", "Brouwerij Oud Beersel", "フラームス・ブラバント州", ["#ランビック", "#ブレタノマイセス"], "一度閉鎖されながらも有志により復活した名門グーズ。", "取扱各社", "麦芽、小麦、古いホップ", "各社から麦汁を購入し、オーク樽で熟成・ブレンド。", "非常にバランスの良いレモンのような酸味と、丸みのあるオークの香り。", "創業者のピエール・ティルカンは複数の有名ランビック醸造所で修行を積んだ。"],
-  [82, "Owa", "欧和", "https://world-beer.jp/detail/Belgium/owa.html", "1ZfdsaDN1sYc-lHMHP5jDtmIz5miiX_jd", "アンバー", 5.5, "欧和醸造所", "Owa Brewery", "ブリュッセル首都圏地域", ["#アンバー"], "日本人醸造家がベルギーで造る「和食に合う」ビール。", "取扱各社", "麦芽、ホップ", "日本人の味覚と和食とのペアリングを計算した醸造設計。", "カラメルモルトの香ばしさと控えめな苦味、繊細なバランス。", "醸造家・今井礼欧（Leo Imai）氏がベルギーで立ち上げたブランド。"],
-  [83, "Pater Lieven Triple", "パーテル リーヴェン・トリプル", "https://www.belgianbrewed.com/4/product/pater-lieven-triple-33cl", "1nRaa__tockCWQxF7hnhCqBzcqBOUXdmx", "トリプル", 8.0, "ヴァン・デン・ボッシュ醸造所", "Brouwerij Van Den Bossche", "東フランデレン州", ["#アビイ", "#トリプル", "#ゴールデン"], "聖職者の名を持つ、フルーティーなトリプルエール。", "取扱各社", "麦芽、ホップ", "伝統的なアビイスタイルに基づく上面発酵。", "バナナやアプリコットの香りと、モルトのふくよかな甘み。", "地元の守護聖人や修道院にまつわる伝説にインスパイアされている。"],
-  [84, "PATRASCHE", "パトラッシュ", "https://belgianbrasseriecourt.jp/drink/patrasche/", "1UIypI_3KqQkKuEqvOBCPdNWc37YImxcC", "ブラウン", 8.0, "プルーフ醸造所", "De Proefbrouwerij", "東フランデレン州", ["#ブラウン", "#ダーク"], "フランダースの犬の愛犬をモチーフにしたブラウンエール。", "取扱各社", "麦芽、ホップ", "委託醸造のプロフェッショナル、プルーフ醸造所にて生産。", "ローストモルトの香ばしさとカラメルの甘み、マイルドな口当たり。", "ネロズブロンドと対をなす、日本人に親しみ深いネーミング。"],
-  [85, "Pauwel Kwak", "パウエル クワック", "https://www.belgianbeer.co.jp/products/detail.php?product_id=92", "1YbSNlirjwWZMHz30pTqos0cRR84B66Qo", "アンバー", 8.4, "ボスティールス醸造所", "Brouwerij Bosteels", "東フランデレン州", ["#アンバー", "#ハイアルコール"], "馬車の御者専用の木製スタンド付きグラスで有名なアンバー。", "取扱各社", "麦芽、ホップ、糖類", "3種類のモルトをブレンドした伝統的製法。", "ヌガーやカラメルのような濃厚な甘みと、スパイシーな余韻。", "御者が馬車に乗ったまま飲めるよう底が丸いグラスが考案された。"],
-  [86, "Pere Noel", "ペールノエル", "https://ohtsuki-saketen.com/beer/Brouwerij_De_Ranke/Pere_Noel_330ml.html", "1nwipjk-0VEJ6_gIN12p30NPbbjAIPFIJ", "アンバー", 7.0, "デ・ランク醸造所", "Brouwerij De Ranke", "エノー州", ["#アンバー"], "デ・ランクが造る、苦味の効いた異色のクリスマスビール。", "取扱各社", "麦芽、ホールホップ、リコリス", "一般的な甘い冬ビールと異なり、多量のホップと少量のスパイスを使用。", "強いホップの苦味にリコリスの爽やかな香りが混ざる、ドライな冬ビール。", "名前は「サンタクロース」の意味。甘くないクリスマスエールの代表。"],
-  [87, "Prearis", "プレアリス", "https://www.skibeerusa.com/prearis", "1XzwETZuMCVLUa6kDdyYyc8iVLMix3TUw", "クアドルペル", 10.0, "プルーフ醸造所", "De Proefbrouwerij", "東フランデレン州", ["#ブラウン", "#ダーク", "#ハイアルコール"], "品評会で優勝したレシピを持つ濃厚なダークエール。", "取扱各社", "麦芽、ホップ", "優れたホームブリューワーのレシピをプルーフ醸造所で委託生産。", "コーヒーやチョコレート、ドライフルーツの複雑でリッチな香り。", "元々はベルギーのホームブリュー大会で優勝したレシピの商品化。"],
-  [88, "Queue de Charrue", "クー・デ・シャルル", "https://www.vandb.fr/eshop/biere/queue-de-charrue-blonde-33cl", "1kprgGc0dVTmkqslMn8lOg2jBS5-0Zqf4", "ブロンド", 6.6, "ヴァヌクセン醸造所", "Brasserie Vanuxeem", "エノー州", ["#ゴールデン"], "「鋤の柄」という名を持つ伝統的なブロンドエール。", "取扱各社", "麦芽、ホップ", "複数スタイルのビールを展開するブランドの代表的ブロンド。", "フローラルな香りとすっきりとしたモルトの甘み、柔らかな苦味。", "西フランダース地方にある農家の道具「鋤の柄」が名前の由来。"],
-  [89, "Reinaert Tripel", "レイナート・トリプル", "https://ohtsuki-saketen.com/beer/De_Proefbrouwerij/Reinaert_Tripel_330ml.html", "1rmLJCI-a3y2pjP_OS2dzkYuqI5LQMvCA", "トリプル", 9.0, "プルーフ醸造所", "De Proefbrouwerij", "東フランデレン州", ["#トリプル", "#ゴールデン", "#ハイアルコール"], "狐のラベルが特徴。プルーフ醸造所が手掛ける高品質トリプル。", "取扱各社", "麦芽、ホップ", "プルーフ醸造所の高度な技術による委託生産。", "熟したフルーツの香りと、トリプルらしい力強いアルコール感。", "Reinaert(レイナールト)はオランダ語で「狐」や中世寓話の狐の名。"],
-  [90, "Rochefort10", "ロシュフォール10", "https://www.belgianbeer.co.jp/products/detail.php?product_id=146", "1lvpPML0dsLH31oQjoOZJVg97rO-EQ53k", "トラピスト", 11.3, "ロシュフォール修道院", "Abbaye de Rochefort", "ナミュール州", ["#トラピスト", "#修道院", "#ダーク", "#ハイアルコール"], "ロシュフォールの最高峰。11%を超える重厚なトラピスト。", "小西酒造", "麦芽、ホップ、糖類、酵母", "修道院内の厳格な製法。濃色モルトとキャンディシュガーを使用。", "イチジクやプラム、チョコレートのような極めて濃厚で複雑な味わい。", "数あるトラピストの中でも特に重厚で「ビールというよりワイン」と評される。"],
-  [91, "Rochefort8", "ロシュフォール8", "https://www.belgianbeer.co.jp/products/detail.php?product_id=148", "1Q9Ujzt7C-mPdjI7Jm1RFXKDnemOU3mOW", "トラピスト", 9.2, "ロシュフォール修道院", "Abbaye de Rochefort", "ナミュール州", ["#トラピスト", "#修道院", "#ダーク", "#ハイアルコール"], "バランスの良さで一番人気を誇るロシュフォールの中核。", "小西酒造", "麦芽、ホップ、糖類、酵母", "ロシュフォール独自の酵母がもたらす豊かなエステル香。", "カラメルの甘みとフルーティーな酸味、アルコールの温かみの絶妙な調和。", "元々は年末年始用だったが、あまりの美味しさに通年醸造となった。"],
-  [92, "Rodenbach Alexander", "ローデンバッハ・アレキサンダー", "https://x.gd/wWV39", "1yWsgtzO15eyMmiPk7juELQaeaS8TtzEl", "サワー", 5.6, "ローデンバッハ醸造所", "Brouwerij Rodenbach", "西フランデレン州", ["#レッド", "#フルーツ", "#オーク樽"], "サワーチェリーを漬け込んだ、奇跡の復活を遂げた伝説のレッド。", "小西酒造", "麦芽、ホップ、サワーチェリー", "オーク樽熟成のレッドエールにサワーチェリーを浸漬して醸造。", "アーモンドやチェリーの濃厚な香りと、乳酸発酵による上品な甘酸っぱさ。", "創業者の名を冠し、一度終売したのち世界中のファンの声で復活した。"],
-  [93, "Rodenbach classic", "ローデンバッハ・クラシック", "https://x.gd/8qXFS", "1RV9Kv-fftN64atcT5NfQkzB2h3hLpqQh", "サワー", 5.2, "ローデンバッハ醸造所", "Brouwerij Rodenbach", "西フランデレン州", ["#レッド", "#オーク樽"], "フランダースレッドエールの傑作。2年熟成古酒と若いビールをブレンド。", "小西酒造", "麦芽、ホップ", "2年熟成の古酒を25%、6週間寝かせた若いビールを75％ブレンド。", "赤い果実のアロマ、乳酸由来の爽快な酸味と若いビールの甘みが調和。", "ローデンバッハ一族は1836年に醸造所を購入。レッドエールの世界的基準。"],
-  [94, "Rodenbach Grand Cru", "ローデンバッハ・グラン・クリュ", "https://ohtsuki-saketen.com/beer/Brouwerij_Rodenbach/Rodenbach_Grand_Cru_330ml.html", "1xs-XEgKPLsKehG9abt1GjzjJC9qVSPna", "サワー", 6.0, "ローデンバッハ醸造所", "Brouwerij Rodenbach", "西フランデレン州", ["#レッド", "#オーク樽"], "古酒の比率を高め、より奥深く複雑な酸味を持つ上位品。", "小西酒造", "麦芽、ホップ", "木桶で2年以上寝かせた古酒2/3と、若いビール1/3をブレンド。", "バルサミコ酢やプラム、オーク樽の強い香りと、非常にシャープな酸味。", "クラシックよりも長期熟成原酒の比率が高く、よりワインに近い味わい。"],
-  [95, "Saison d’Erpe-Mere", "セゾン デ ルポ メール", "https://ohtsuki-saketen.com/beer/BVBA_Kleinbrouwerij_Glazen_Toren/Saison_d_Erpe-Mere_750ml.html", "1y8P7oe2fKFpOSgAPYjSz82SK-5J_2l8P", "セゾン", 6.5, "デ・フラーゼン・トーレン醸造所", "Brouwerij De Glazen Toren", "東フランデレン州", ["#ゴールデン"], "爽快なホップの香りとドライな後味が特徴の農家風セゾン。", "取扱各社", "麦芽、ホップ", "無ろ過・非加熱、伝統的な瓶内二次発酵。", "レモンやハーブのような爽やかな香りと、農家風ビールらしいキレの良さ。", "農民が夏の農作業中に喉を潤すために造った伝統的スタイルを現代に継承。"],
-  [96, "Saison de Dottignies", "セゾン ドゥ ドティニー", "https://www.belgianbeer.co.jp/products/detail.php?product_id=2162", "1aKV6v8_Lo8fXlozIy_OUN2w6nOUruRZC", "セゾン", 5.5, "デ・ランク醸造所", "Brouwerij De Ranke", "エノー州", ["#ゴールデン"], "デ・ランクが得意とするホップの苦味を活かしたセゾン。", "取扱各社", "麦芽、ホールホップ", "ポペリンゲ産の良質なホールホップをふんだんに使用。", "セゾン特有のフルーティーなエステル香と、強烈で爽快なホップの苦味。", "ホップの鮮度にこだわるデ・ランクらしい、ドライで苦味の強い仕上がり。"],
-  [97, "Saison Dupont", "セゾン・デュポン", "https://www.belgianbeer.co.jp/products/detail.php?product_id=66", "1J8lkpRukbUaifQOMsmvvk4wvQkaeETZi", "セゾン", 6.5, "デュポン醸造所", "Brasserie Dupont", "エノー州", ["#ゴールデン"], "世界中のブリュワーがお手本にする「セゾンビールの世界的基準」。", "取扱各社", "麦芽、ホップ", "デュポン独自のセゾン酵母を用いた高温発酵。", "強烈なコショウのようなスパイス感、柑橘の香りと極めてドライな後味。", "農民が冬に仕込み夏に飲む伝統スタイルを世界に広めた名作。"],
-  [98, "Satan", "サタン", "https://www.nipponbeer.jp/lineup/satan-red/", "1YYoZNg7by9hVa2roqr8YhITGU6KcnaJK", "レッド", 8.0, "デ・ブロック醸造所", "Brouwerij De Block", "フラームス・ブラバント州", ["#レッド", "#ハイアルコール"], "「悪魔」の名を持つ、美しい赤褐色をしたストロングエール。", "日本ビール", "麦芽、ホップ", "ローストモルトを使用した上面発酵・長期熟成。", "カラメルやポートワインのような甘みの中に、ピリッとしたスパイス感。", "パッケージに描かれた悪魔のキャラクターが印象的なベルギーの定番ダーク。"],
-  [99, "Saxo", "サクソー", "https://bier.jp/itemdetail/Bx635", "1hUPK6u5K2vy6ma-Muq82E612BtmLEJ4r", "ブロンド", 7.5, "カラコル醸造所", "Brasserie Caracole", "ナミュール州", ["#ゴールデン"], "サックスの発明者アドルフ・サックスにちなんだ名称。", "取扱各社", "麦芽、ホップ", "薪を使って麦汁を煮沸する、非常に古典的な設備で醸造。", "ホップの爽やかな苦味と、薪火由来のほのかなスモーク香が隠し味。", "「カラコル（カタツムリ）」の名の通り、ゆっくりとした手作業の醸造所。"],
-  [100, "Silly Blanche", "シリィ・ブランシュ", "https://bier.jp/itemdetail/Ax245", "1EcN7gbTpLjXuwPX1K_TOba7hUUds-vEV", "ホワイト", 5.0, "シリィ醸造所", "Brasserie de Silly", "エノー州", ["#ホワイト"], "コリアンダーとオレンジピールが香る王道ホワイト。", "取扱各社", "大麦麦芽、小麦、スパイス", "19世紀から続くシリィ村の醸造所による伝統的ホワイト製法。", "クリーミーな泡立ちと、オレンジピールの爽やかな酸味。", "「Silly」は英語の「愚か」ではなく、ベルギー南部の村の名前に由来。"],
-  [101, "Silly Scotch", "シリィ・スコッチ", "https://belgianbeer.site/products/silly-scotch", "1kZLDo3bQ9wz35k7R-1uTD1rKoLgq20xa", "スコッチエール", 8.0, "シリィ醸造所", "Brasserie de Silly", "エノー州", ["#ダーク", "#ブラウン"], "第一次世界大戦中にスコットランド兵に伝えられたレシピ。", "取扱各社", "麦芽、ホップ、糖類", "イギリス産ケント・ホップを使用し、ベルギー風にアレンジ。", "チョコレートやコーヒーの香ばしさと、キャンディシュガーの深い甘み。", "駐留していたスコットランド部隊の要望で造り始めた歴史を持つ。"],
-  [102, "Ⅸ Echt Kriek", "Ⅸ エヒテ・クリーク", "https://www.belgianbeer.co.jp/products/detail.php?product_id=1806", "19JXOAMVvko-fpiQwBHj4ymGo6qzuxwo5", "フルーツ", 6.8, "ザ・ブリュー・ソサエティ醸造所", "The Brew Society", "西フランデレン州", ["#フルーツ", "#サワー", "#レッド"], "チェリーを用いた甘酸っぱいビール。SOSABブランド。", "取扱各社", "麦芽、ホップ、サワーチェリー", "西フランダースのサワーエールに本物のチェリーを浸漬。", "強烈なチェリーの酸味と果実味。甘味料無添加の本格派。", "SOSAB (Science of Sour Ale Brewing)というブランド名で展開。"],
-  [103, "XX Pale Grand Cru", "XX ペール・グラン・クリュ", "https://www.belgianbeer.co.jp/products/detail.php?product_id=1809", "1PTpJfIuh3tUquvlOuVQU4wv4mQLyj_vi", "ペールエール", 6.0, "ザ・ブリュー・ソサエティ醸造所", "The Brew Society", "西フランデレン州", ["#ゴールデン"], "SOSABブランドで製品化された、洗練されたペールエール。", "取扱各社", "麦芽、ホップ", "厳選されたアロマホップをドライホッピング技術で添加。", "洗練されたホップの爽やかな香りと、シャープでキレのある苦味。", "サワーエールを得意とするSOSABが手掛ける、非サワー系の意欲作。"],
-  [104, "Special Extra Export Stout", "スペシャル・エクストラ・エクスポート・スタウト", "https://www.jbja.jp/archives/7753", "1e5LZKZElflGNzNFvs-Y3aTIQi2oWib5v", "スタウト", 9.0, "ドゥ・ドール醸造所", "De Dolle Brouwers", "西フランデレン州", ["#ダーク", "#ハイアルコール"], "ベルギーで造られる、濃厚で強烈なエクスポートスタウト。", "取扱各社", "麦芽、ホップ", "大量のローストモルトを使用し、独自の酵母で高発酵させる。", "エスプレッソやカカオの強烈なロースト香と、ワインのような酸味のニュアンス。", "クリス・ヘルテレール氏が英国スタウトにインスパイアされ完成させた。"],
-  [105, "St Bernardus Abt 12", "シント･ベルナルデュス・アプト12", "https://www.belgianbeer.co.jp/products/detail.php?product_id=782", "1Kx6R3reqJWYpUV_PnfbY-YWsC7ObK_zR", "アビイ", 10.0, "セント・ベルナルデュス醸造所", "Brouwerij St. Bernardus", "西フランデレン州", ["#アビイ", "#ダーク", "#ハイアルコール"], "かつてウェストフレテレンを委託醸造していた醸造所の最高峰。", "取扱各社", "麦芽、ホップ、キャンディシュガー", "ウェストフレテレンと同じ門外不出のオリジナル酵母を長年使用していた歴史を持つ。", "プラムやレーズン、カラメルのような極めて濃厚な甘みとフルーティーな香り。", "「幻のビール」ウェストフレテレン12に最も近い味わいと言われ、世界中で大人気。"],
-  [106, "St.Feuillien Grand Cru", "サン・フーヤン・グラン・クリュ", "https://belgianbrasseriecourt.jp/drink/st-feuillien-grand-cru/", "1rerTlpOl7Z8Pcc29DLnEePx7iuvVxxBI", "ゴールデン", 9.5, "サン・フーヤン醸造所", "Brasserie St-Feuillien", "エノー州", ["#アビイ", "#ゴールデン", "#ハイアルコール"], "サン・フーヤンの技術の結晶。気品あるストロング・ブロンド。", "取扱各社", "麦芽、ホップ", "厳選されたホップを使用し、独自の酵母で長期熟成・瓶内二次発酵。", "白ワインやマスカットのような上品なエステル香。アルコール感を感じさせない洗練さ。", "アビイビールの名門が、スパイスを一切使わずにホップと酵母だけで複雑な香りを表現。"],
-  [107, "Steenuilke", "スティーンウルク", "https://brouwerijderyck.be/en/beers/steenuilke/?legal", "1zIdbB4M7inBKEAp1bCESeIZjvGX1wpk5", "ブロンド", 6.5, "デ・ライク醸造所", "Brouwerij De Ryck", "東フランデレン州", ["#ゴールデン"], "地元の自然保護活動から生まれた、ハーブ香るブロンド。", "取扱各社", "麦芽、ホップ、ハーブ", "フランダース地方の伝統的なハーブを3種類使用して醸造。", "野の花やハーブの爽やかな香りと、クリーンな麦芽の甘み。", "フクロウ（コキンメフクロウ）の保護プロジェクトを支援するために誕生した。"],
-  [108, "Stella Artois", "ステラ・アルトワ", "https://www.belgianbeer.co.jp/products/detail.php?product_id=62", "1OqEXZKgGAL92uOR5dejWQwAZQJpgCJcF", "ピルスナー", 5.0, "ステラ・アルトワ", "Stella Artois", "フラームス・ブラバント州", ["#ピルスナー"], "ベルギーを代表する、世界で最も飲まれているピルスナー。", "AB InBev", "麦芽、ホップ、コーン", "チェコ産のサザーツホップを使用した下面発酵ピルスナー。", "クリアな黄金色、爽快なのどごしと上品なホップの苦味。", "元々はルーヴェンにある醸造所のクリスマスビールとして「Stella(星)」と名付けられた。"],
-  [109, "Stille Nacht", "スティル・ナハトゥ", "https://www.dedollebrouwers.be/en/beers/stille-nacht", "1WaLrslXNnXtshKpkLBQDFVvdmchen2rW", "ストロングエール", 12.0, "ドゥ・ドール醸造所", "De Dolle Brouwers", "西フランデレン州", ["#ゴールデン", "#ハイアルコール"], "ベルギー最強クラスの度数を誇る、熱狂的ファンを持つクリスマスビール。", "取扱各社", "麦芽、ホップ、キャンディシュガー", "通常比重計の限界までモルトを煮詰めて造る超高比重の麦汁を使用。", "桃やアプリコットの強烈なエステル香。極めて重厚な甘みとアルコールの温かみ。", "名前は「きよしこの夜」の意味。数年寝かせてヴィンテージを楽しむ愛好家が多い。"],
-  [110, "Straffe Hendrik Quadrupel", "ストラッフェ ヘンドリック・クワドルプル", "https://www.belgianbeer.co.jp/products/detail.php?product_id=65", "1NBek34LBa47h7G4lzBr3517-TKPlc1Ea", "ダーク", 11.0, "デ・ハルヴ・マーン醸造所", "Brouwerij De Halve Maan", "西フランデレン州", ["#ダーク", "#ブラウン", "#ハイアルコール"], "ブルージュ旧市街の醸造所が誇る最強のダークエール。", "取扱各社", "麦芽、ホップ", "複数種のローストモルトをブレンドし、長期の熟成を行う。", "ダークチョコレート、イチジク、ポートワインのような極めてリッチで重厚なアロマ。", "「強いアンリ（歴代当主の名）」という名の通り、力強さと気品を兼ね備える。"],
-  [111, "Taras boulba", "タラス ブルバ", "https://ohtsuki-saketen.com/beer/Brasserie_de_la_Senne/taras_boulba_330ml.html", "1ubMek7gZu2E7_UadfMpTNdUdtk3BmoAq", "ブロンド", 4.5, "ラ・センヌ醸造所", "Brasserie de la Senne", "ブリュッセル首都圏地域", ["#ゴールデン"], "度数は低く、苦味は強烈。ブリュッセルの新定番セッションエール。", "取扱各社", "麦芽、ホップ", "ノーブルホップを大量に使用し、度数を4.5%に抑えつつドライに仕上げる。", "レモンやグレープフルーツの香りと、爽快でキレのある強い苦味。ゴクゴク飲める。", "ラベルにはフラマン語とフランス語の言語対立を風刺した親子の喧嘩が描かれている。"],
-  [112, "Tilquin Oude Geuze", "オード・グーズ・ティルカン", "https://bier.jp/itemdetail/Bx560", "1ufOnERJ43Xj23tzL0ZWMg8qa2hVJ8Ay0", "ランビック", 7.0, "ティルカン・グーズステケライ", "Gueuzerie Tilquin", "ワロン・ブラバント州", ["#ランビック", "#ブレタノマイセス"], "ワロン地方で唯一のランビック・ブレンド所が造る秀作。", "取扱各社", "麦芽、小麦、古いホップ", "各社から麦汁を購入し、オーク樽で熟成・ブレンド。", "非常にバランスの良いレモンのような酸味と、丸みのあるオークの香り。", "創業者のピエール・ティルカンは複数の有名ランビック醸造所で修行を積んだ。"],
-  [113, "Timmermans Blanche", "ティママン・ブランシュ", "https://www.ikemitsu.co.jp/product/timmerman-b/", "1H5HJi7wosRIS3CgjDqXR5In8iSY8Dz6Z", "ランビック", 4.5, "ティママン醸造所", "Brouwerij Timmermans", "フラームス・ブラバント州", ["#ホワイト", "#ランビック"], "ランビックをベースにスパイスを加えた珍しいホワイトビール。", "取扱各社", "麦芽、小麦、コリアンダー、オレンジピール", "自然発酵のランビックに、ホワイトビール特有のスパイスを添加。", "ランビックのほのかな酸味と、オレンジピールのフルーティーさが融合。", "世界最古のランビック醸造所の一つとして知られるティママンの意欲作。"],
-  [114, "Timmermans Gueuze", "ティママン・グーズ", "https://ohtsuki-saketen.com/beer/Timmermans/Timmermans_Oude_Gueuze_750ml.html", "14pom5F_9O9kpJrHSeLiWkfGqTZHe9f60", "ランビック", 5.5, "ティママン醸造所", "Brouwerij Timmermans", "フラームス・ブラバント州", ["#ランビック", "#ブレタノマイセス"], "300年以上の歴史を持つティママンの伝統的なグーズ。", "取扱各社", "麦芽、小麦、古いホップ", "オーク樽で数年寝かせたランビックをブレンドして瓶内二次発酵。", "リンゴや柑橘類を思わせる鋭い酸味と、古い木樽のウッディなアロマ。", "創業1702年。ジョン・マーティン社の傘下に入った後も伝統的製法を守る。"],
-  [115, "Tripel Karmeliet", "トリプゥ･カルメリート", "https://www.belgianbeer.co.jp/products/detail.php?product_id=1054", "17mBJwlYp3klXFCdAFV3ooipbx1I8inRo", "トリプル", 8.4, "ボスティールス醸造所", "Brouwerij Bosteels", "東フランデレン州", ["#修道院", "#トリプル", "#ゴールデン", "#ハイアルコール"], "大麦、小麦、オーツ麦を用いた1679年のカルメル修道院レシピ。", "取扱各社", "大麦麦芽、小麦、オーツ麦、スパイス", "3種類の穀物（生と麦芽化）を使用する特殊な製法。瓶内二次発酵。", "バニラや柑橘の非常に華やかなアロマ。オーツ麦由来のシルクのような滑らかさ。", "2016年にAB InBevが買収。世界的なビールコンテストで数多くの金賞を受賞。"],
-  [116, "Troubadour MAGMA", "トルバドゥールマグマ", "https://www.belgianbeer.co.jp/products/detail.php?product_id=769", "1e-3JpUEFBzAJOYgMMuLCpvEbC5RXEnWE", "IPA", 9.0, "ムスケティールス醸造所", "Brouwerij The Musketeers", "東フランデレン州", ["#IPA", "#ハイアルコール"], "ホップの爆発的な香りとベルジャン酵母の融合。ベルジャンIPAの代表。", "取扱各社", "麦芽、ホップ", "アメリカンホップの大量使用と、ベルギー特有の酵母による発酵。", "マンゴーやパッションフルーツの強烈なホップ香と、強い苦味、アルコールの甘み。", "かつてはプルーフ醸造所に委託して醸造されていたが、現在は自社工場を設立。"],
-  [117, "Troubadour Westkust", "トルバドゥール ウエストクスト", "https://x.gd/pcuZu", "15F9tJxXReToXnK2PHCYOJOzsI5t-Vj9F", "ダークIPA", 8.5, "ムスケティールス醸造所", "Brouwerij The Musketeers", "東フランデレン州", ["#IPA", "#ダーク"], "ブラックIPAと呼ばれる、ローストモルトとホップが共演する異端児。", "取扱各社", "麦芽、ホップ", "ダークモルトを使用しつつ、大量のホップでドライホッピング。", "コーヒーやチョコのロースト香と、ホップの青々しい苦味が同時に押し寄せる。", "ベルギー西海岸（Westkust）の厳しい自然をイメージした力強い味わい。"],
-  [118, "Troublette", "トルーブレットゥ", "https://bier.jp/itemdetail/Bx636", "1Nze4UnLP0DrRhkHlOfxkaoU0dL713G7N", "ホワイト", 5.5, "カラコル醸造所", "Brasserie Caracole", "ナミュール州", ["#ホワイト"], "薪火で麦汁を煮沸するカラコル醸造所の素朴なホワイト。", "取扱各社", "麦芽、小麦、スパイス", "古典的な薪火設備での醸造。無ろ過・非加熱。", "コリアンダーのスパイシーさと、ほのかに感じる薪火由来の素朴な香り。", "「Trouble（濁り）」から名付けられた、無ろ過ならではの深い味わい。"],
-  [119, "Tynt Meadow", "ティント・メドー", "https://www.nipponbeer.jp/lineup/tynt-meadow-trappist-ale/", "1_eKgOTi5O59tgLM5P1_XG_iG1niK-De1", "トラピスト", 7.4, "マウント・セント・バーナード修道院", "Mount St Bernard Abbey", "海外", ["#トラピスト", "#修道院", "#ダーク"], "イギリス初のトラピストビール。英国風のイングリッシュ・ダークエール。", "日本ビール", "麦芽、ホップ", "イギリス産の麦芽とホップを使用し、修道院内で上面発酵。", "チョコレートや黒蜜、イチジクの甘い香りと、イングリッシュエール特有の落ち着いた苦味。", "ベルギー外のトラピスト。英国レスターシャー州の修道院で2018年に誕生。"],
-  [120, "Vedet Extra", "ヴェデット・エクストラ", "https://www.belgianbeer.co.jp/products/detail.php?product_id=23", "1davqgdCZ4mkN1loKVR-wIcPcWoXyOwvh", "ホワイト", 4.7, "デュベルモルトガット醸造所", "Duvel Moortgat", "アントウェルペン州", ["#ホワイト"], "シロクマのラベルでお馴染み、爽快でポップなホワイトエール。", "小西酒造", "麦芽、小麦、コリアンダー、オレンジピール", "厳選された自然原料を使用した伝統的ベルジャンホワイト製法。", "オレンジピールの爽やかな香りと、スッキリとした酸味。非常に飲みやすい。", "裏ラベルに消費者の顔写真がプリントされるユニークなキャンペーンで有名。"],
-  [121, "Watou's Witbier", "ワトゥー･ウィットビール", "https://sugaya-beer.com/item-detail/1183691", "1SHES-5amhshqp0BTgN4IjHhHBsfm5o7V", "ホワイト", 5.0, "セント・ベルナルデュス醸造所", "Brouwerij St. Bernardus", "西フランデレン州", ["#ホワイト"], "名門セント・ベルナルデュスが造る、まろやかなホワイト。", "取扱各社", "大麦麦芽、小麦、スパイス", "ピエール・セリス氏の協力を得て開発された本格ホワイトエール。", "クリーミーな泡、コリアンダーのスパイシーさと柔らかな小麦の甘み。", "ホップの産地ワトゥー村の名前を冠した、地元に愛される小麦ビール。"],
-  [122, "Westmalle Dubbel", "ウエストマール・ダブル", "https://www.belgianbeer.co.jp/products/detail.php?product_id=21", "1azuCUvxr4Lk_uDxl0tbrKf39jnRMH1Zk", "トラピスト", 7.0, "ウェストマール修道院", "Abdij der Trappisten van Westmalle", "アントウェルペン州", ["#トラピスト", "#修道院", "#ダブル", "#ダーク"], "世界の「ダブル」スタイルの原点となった歴史的トラピスト。", "小西酒造", "麦芽、ホップ、糖類、酵母", "濃色キャンディシュガーを使用し、修道院内で厳格に醸造。瓶内二次発酵。", "カラメルやバナナ、チョコレートの複雑な香りと、深いモルトの甘み。", "1856年に修道士たちが初めて醸造した濃色ビールが現在のダブルの元祖。"],
-  [123, "Westmalle Triple", "ウエストマール・トリプル", "https://www.belgianbeer.co.jp/products/detail.php?product_id=22", "1vSaBZi3q2VpMTCu8Fbewe0Ja83Ptjoz3", "トラピスト", 9.5, "ウェストマール修道院", "Abdij der Trappisten van Westmalle", "アントウェルペン州", ["#トラピスト", "#修道院", "#トリプル", "#ゴールデン", "#ハイアルコール"], "「トリプルの母」と呼ばれる、世界のトリプルビールの最高傑作。", "小西酒造", "麦芽、ホップ、糖類、酵母", "淡色麦芽を大量に使用し、長期間の熟成と瓶内二次発酵を行う。", "熟したバナナの強烈なエステル香と、しっかりとしたホップの苦味、極めてドライな後味。", "1934年に誕生。世界中の醸造家がこのビールを目標にトリプルを造る。"],
-  [124, "Westvleteren12", "ウェストフレテレン12", "https://www.trappistwestvleteren.be/en/our-beers/trappist-westvleteren-12", "1ss3XQB-HQXKSn66kaf3hABapCvBITTBf", "トラピスト", 10.2, "シント・シクステュス修道院", "Sint-Sixtusabdij Westvleteren", "西フランデレン州", ["#トラピスト", "#修道院", "#ダーク", "#ハイアルコール"], "世界一のビールと幾度も称賛された「幻のトラピスト」。", "正規輸入なし(直売)", "麦芽、ホップ、糖類、酵母", "修道院の生活費を稼ぐ分だけしか醸造せず、商業的な卸売りを行わない。", "プラムやイチジクの極めて濃厚な果実味と、絹のような滑らかな口当たり。", "ラベルが無く王冠のみに情報が記載される。修道院の門前でのみ予約購入可能。"],
-  [125, "Winterbinkske Grand cru", "ウィンテルコニンクスケ・グラン・クリュ", "https://www.belgianbeer.co.jp/products/detail.php?product_id=1911", "1dkcdzeMzhH4lBBfZ-dLcnKMtW8zI4bhj", "ダーク", 13.0, "ケルコム醸造所", "Brouwerij Kerkom", "リンブルフ州", ["#ダーク", "#ハイアルコール"], "アルコール度数13%を誇る、極寒の冬を乗り切るためのグラン・クリュ。", "取扱各社", "麦芽、ホップ", "大量のローストモルトを使用し限界まで発酵度を高める。", "エスプレッソやポートワインのような圧倒的な重厚感とアルコールの熱。", "「冬の王様」を意味するウィンテルコニンクスケの最上級キュヴェ。"],
-  [126, "Witkap Tripel", "ウィトカップ･トリプゥ", "https://ohtsuki-saketen.com/beer/Brouwerij_Slaghmuylder/Witkap_Tripel_330ml.html", "1clVhS6XDLiVwrjf9F6mh8RV1BFuA3SJm", "トリプル", 7.5, "スラフムルダー醸造所", "Brouwerij Slaghmuylder", "東フランデレン州", ["#トリプル", "#アビイ", "#ゴールデン"], "修道士の白い頭巾（ウィトカップ）の名を持つ修道院風ビール。", "取扱各社", "麦芽、ホップ", "伝統的なアビイビールの製法を遵守した上面発酵。", "フルーティーなエステル香と、心地よいホップの苦味がバランス良く調和。", "トラピスト修道士の白い頭巾に由来する歴史あるブランド。"],
-  [127, "XX Bitter", "イクス･イクス･ビター", "https://ohtsuki-saketen.com/beer/Brouwerij_De_Ranke/XX_Bitter_750ml.html", "1cZ9-8g-COt9qXn7xp-wMp_rSet1kn1-m", "ペールエール", 6.0, "デ・ランク醸造所", "Brouwerij De Ranke", "エノー州", ["#ゴールデン"], "ベルギービールにおけるホップ革命の先駆者。強烈な苦味。", "取扱各社", "麦芽、ホールホップ", "ペレットではなく地元ポペリンゲ産のホールホップを煮沸釜に大量投入。", "グレープフルーツの皮のような強烈で鮮烈な苦味と、豊かな草花の香り。", "甘いビールが主流だった時代に強烈な苦味を打ち出し、熱狂的ファンを獲得した。"]
-];
+      const FILTER_OPTIONS = {
+        style: ['すべて', 'ランビック', 'トラピスト', 'アビイ', 'トリプル', 'ダブル', 'セゾン', 'サワー', 'ホワイト', 'アンバー', 'ブラウン', 'ピルスナー', 'IPA', 'フルーツ'],
+        term: ['#ランビック', '#トラピスト', '#アビイ', '#ブレタノマイセス', '#修道院', '#レッド', '#ゴールデン', '#ダーク', '#ダブル', '#ハイアルコール'],
+        abv: ['4.9%以下', '5.0%〜6.9%', '7.0%〜8.9%', '9.0%以上'],
+        region: ['西フランデレン州', '東フランデレン州', 'フラームス・ブラバント州', 'アントウェルペン州', 'リンブルフ州', 'ワロン・ブラバント州', 'ナミュール州', 'エノー州', 'リエージュ州', 'リュクサンブール州']
+      };
 
-const beers = rawData.map(x => ({
-    id: x[0], name: x[1], reading: x[2], url: x[3], driveId: x[4], category: x[5], abv: x[6],
-    brewery: x[7], breweryLocal: x[8], region: x[9], tags: x[10], desc: x[11],
-    importer: x[12], ingredients: x[13], process: x[14], taste: x[15], history: x[16]
-}));
+      const DRAWER_TITLES = {
+        style: 'ビール分類を選択（選択すると自動で閉じます）',
+        brewery: '醸造所を選択（選択すると自動で閉じます）',
+        region: '地域を選択（選択すると自動で閉じます）',
+        term: '用語を選択（選択すると自動で閉じます）',
+        abv: 'アルコール度数を選択（選択すると自動で閉じます）'
+      };
 
-let favorites = [];
-let memos = {};
-try {
-    favorites = JSON.parse(localStorage.getItem('belgianBeerFavs')) || [];
-    memos = JSON.parse(localStorage.getItem('belgianBeerMemos')) || {};
-} catch(e) { console.warn("ローカルストレージにアクセスできません。"); }
+      let beers = [];
+      if (typeof BEER_DATA !== 'undefined' && Array.isArray(BEER_DATA)) {
+        beers = BEER_DATA;
+      } else if (Array.isArray(window.BEER_DATA)) {
+        beers = window.BEER_DATA;
+      }
 
-let showFavoritesOnly = false;
-let currentFilteredBeers = [...beers];
+      let favorites = loadJson(STORAGE_KEYS.FAVORITES, []);
+      let memos = loadJson(STORAGE_KEYS.MEMOS, {});
+      let currentFilter = { type: 'all', value: 'all' };
+      let activeDrawer = null;
+      let currentDetailBeer = null;
 
-function openSettings() { document.getElementById('settingsModal').classList.add('active'); }
-function exportData() {
-    const data = { favorites, memos };
-    const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url; a.download = "belgian_beer_backup.json"; a.click();
-    URL.revokeObjectURL(url);
-}
-function importData(event) {
-    const file = event.target.files[0];
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = function(e) {
+      const beerGrid = document.getElementById('beerGrid');
+      const resultCount = document.getElementById('resultCount');
+      const activeFilterBadge = document.getElementById('activeFilterBadge');
+      const searchInput = document.getElementById('searchInput');
+      const sortSelect = document.getElementById('sortSelect');
+      const subfilterDrawer = document.getElementById('subfilterDrawer');
+      const subfilterTitle = document.getElementById('subfilterTitle');
+      const subfilterGrid = document.getElementById('subfilterGrid');
+      const detailModal = document.getElementById('detailModal');
+      const settingsModal = document.getElementById('settingsModal');
+      const toastEl = document.getElementById('toast');
+
+      function loadJson(key, fallback) {
         try {
-            const data = JSON.parse(e.target.result);
-            if(data.favorites) favorites = data.favorites;
-            if(data.memos) memos = data.memos;
-            localStorage.setItem('belgianBeerFavs', JSON.stringify(favorites));
-            localStorage.setItem('belgianBeerMemos', JSON.stringify(memos));
-            alert("データを復元しました。");
-            closeModal('settingsModal'); filterAndSort();
-        } catch(err) { alert("ファイルの読み込みに失敗しました。"); }
-    };
-    reader.readAsText(file);
-    event.target.value = "";
-}
-
-function showRandomBeer() {
-    if(currentFilteredBeers.length === 0) return alert('表示できるビールがありません。');
-    const rnd = currentFilteredBeers[Math.floor(Math.random() * currentFilteredBeers.length)];
-    openModal(rnd.id);
-}
-
-function applySingleFilter(type, val, event) {
-    if (event) event.stopPropagation();
-    currentFilters = { category: null, tag: null, abv: null, region: null, brewery: null };
-    document.getElementById("searchInput").value = "";
-    showFavoritesOnly = false;
-    document.getElementById('favFilterBtn').classList.remove('active');
-
-    if (val !== "すべて") currentFilters[type] = val;
-
-    currentL1 = null; 
-    document.querySelectorAll('.btn-l1').forEach(btn => btn.classList.remove('active'));
-    document.getElementById('level2Container').classList.remove('active');
-
-    closeModal('beerModal'); filterAndSort();
-    document.getElementById('controlsWrapper').scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-function toggleFavorite(id, e) {
-    if (e) e.stopPropagation();
-    const index = favorites.indexOf(id);
-    if (index > -1) favorites.splice(index, 1);
-    else favorites.push(id);
-    
-    try { localStorage.setItem('belgianBeerFavs', JSON.stringify(favorites)); } catch(e){}
-    
-    const modalStar = document.getElementById('modalStar');
-    if (modalStar && parseInt(modalStar.dataset.id) === id) {
-        modalStar.classList.toggle('active', favorites.includes(id));
-    }
-    filterAndSort();
-}
-
-function toggleFavoritesFilter() {
-    const isFavActive = !showFavoritesOnly;
-    currentFilters = { category: null, tag: null, abv: null, region: null, brewery: null };
-    document.getElementById("searchInput").value = "";
-    currentL1 = null;
-    document.querySelectorAll('.btn-l1').forEach(b => b.classList.remove('active'));
-    document.getElementById('level2Container').classList.remove('active');
-    
-    showFavoritesOnly = isFavActive;
-    document.getElementById('favFilterBtn').classList.toggle('active', showFavoritesOnly);
-    filterAndSort();
-}
-
-function saveMemo(id, event) {
-    if (event) event.stopPropagation();
-    const dateVal = document.getElementById('memoDate').value;
-    const textVal = document.getElementById('memoText').value;
-    memos[id] = { date: dateVal, text: textVal };
-    
-    try { localStorage.setItem('belgianBeerMemos', JSON.stringify(memos)); } catch(e){}
-    
-    const msg = document.getElementById('memoSavedMsg');
-    msg.classList.add('show');
-    setTimeout(() => { msg.classList.remove('show'); }, 2000);
-    filterAndSort(); // メモ検索対象化の更新
-}
-
-function shareToEvernote(id, event) {
-    if (event) event.stopPropagation();
-    const b = beers.find(beer => beer.id === id);
-    if (!b) return;
-    const currentMemoText = document.getElementById('memoText').value;
-    const memoDate = document.getElementById('memoDate').value;
-    let memoStr = currentMemoText ? `\n\n【テイスティングメモ】 (${memoDate})\n${currentMemoText}` : '';
-    const shareText = `【${b.name}】\n醸造所: ${b.brewery}\n分類: ${b.category} | ABV: ${b.abv.toFixed(1)}%\n\n■ 特徴・味わい\n${b.taste}\n\n■ 歴史・豆知識\n${b.history}${memoStr}\n\nURL: ${b.url}`;
-
-    if (navigator.share) {
-        navigator.share({ title: b.name, text: shareText }).catch(err => { console.log('共有キャンセル:', err); });
-    } else {
-        navigator.clipboard.writeText(shareText).then(() => {
-            alert("テキストをクリップボードにコピーしました。\nEvernoteやメモ帳などのアプリに貼り付けて保存してください。");
-        }).catch(err => { alert("コピーに失敗しました。"); });
-    }
-}
-
-function escapeHTML(str) {
-    if (!str) return '';
-    return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
-}
-
-function openLightbox(src, event) {
-    if (event) event.stopPropagation();
-    document.getElementById("lightboxImg").src = src;
-    document.getElementById("lightbox").classList.add("active");
-}
-function closeLightbox(e) {
-    if (e) e.stopPropagation();
-    document.getElementById("lightbox").classList.remove("active");
-}
-
-const filterData = {
-    category: ["すべて", "ランビック", "トラピスト", "アビイ", "トリプル", "ダブル", "セゾン", "サワー", "ホワイト", "アンバー", "ブラウン", "ピルスナー", "IPA", "フルーツ"],
-    tag: ["#ランビック", "#トラピスト", "#アビイ", "#ブレタノマイセス", "#修道院", "#レッド", "#ゴールデン", "#ダーク", "#ダブル", "#ハイアルコール"],
-    abv: ["4.9%以下", "5.0%〜6.9%", "7.0%〜8.9%", "9.0%以上"],
-    region: ["西フランデレン州", "東フランデレン州", "フラームス・ブラバント州", "アントウェルペン州", "リンブルフ州", "ワロン・ブラバント州", "ナミュール州", "エノー州", "リエージュ州", "リュクサンブール州", "海外"],
-    brewery: [...new Set(beers.map(b => b.brewery))].sort((a, b) => a.localeCompare(b, 'ja'))
-};
-
-let currentL1 = null; 
-let currentFilters = { category: null, tag: null, abv: null, region: null, brewery: null };
-
-const getImageUrl = (driveId) => `https://drive.google.com/thumbnail?id=${driveId}&sz=w600`;
-const getMapUrl = (localName) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(localName)}`;
-
-const grid = document.getElementById("beerGrid");
-const level2Container = document.getElementById("level2Container");
-const level2Buttons = document.getElementById("level2Buttons");
-const hitCountDisplay = document.getElementById("hitCountDisplay");
-
-function createCard(b) {
-    const tags = b.tags ? b.tags.map(t => `<span class="clickable-link tag-link" onclick="applySingleFilter('tag', '${t}', event)">${t}</span>`).join(" ") : "";
-    const isFav = favorites.includes(b.id);
-    const starClass = isFav ? 'star-btn active' : 'star-btn';
-
-    return `
-        <div class="beer-card" onclick="openModal(${b.id})">
-            <div class="card-top">
-                <img src="${getImageUrl(b.driveId)}" alt="${b.name}" class="beer-img" loading="lazy">
-                <div class="beer-info">
-                    <div class="beer-title-row">
-                        <h3 class="beer-name"><a href="${b.url}" target="_blank" onclick="event.stopPropagation()">${b.name}</a></h3>
-                        <button class="${starClass}" onclick="toggleFavorite(${b.id}, event)" title="お気に入り登録">★</button>
-                    </div>
-                    <span class="beer-reading">${b.reading}</span>
-                    <div class="meta-line">醸造所: <span class="clickable-link" onclick="applySingleFilter('brewery', '${b.brewery}', event)">${b.brewery}</span> <a href="${getMapUrl(b.breweryLocal)}" target="_blank" class="map-link" onclick="event.stopPropagation()">Map</a></div>
-                    <div class="meta-line">分類: <span class="clickable-link" onclick="applySingleFilter('category', '${b.category}', event)">${b.category}</span> | 地域: <span class="clickable-link" onclick="applySingleFilter('region', '${b.region}', event)">${b.region}</span></div>
-                    <div class="meta-line">ABV: <strong>${b.abv.toFixed(1)}%</strong></div>
-                    <div class="tag-list">${tags}</div>
-                </div>
-            </div>
-            <div class="beer-desc">${b.desc}</div>
-        </div>
-    `;
-}
-
-function render(data) {
-    grid.innerHTML = data.length ? data.map(createCard).join("") : "<p style='grid-column: 1/-1;'>該当するビールが見つかりませんでした。</p>";
-    
-    let activeFilterText = [];
-    if (showFavoritesOnly) activeFilterText.push("★お気に入り");
-    if (currentFilters.category) activeFilterText.push(currentFilters.category);
-    if (currentFilters.brewery) activeFilterText.push(currentFilters.brewery);
-    if (currentFilters.tag) activeFilterText.push(currentFilters.tag);
-    if (currentFilters.region) activeFilterText.push(currentFilters.region);
-    if (currentFilters.abv) activeFilterText.push(currentFilters.abv);
-    
-    let filterStr = activeFilterText.length > 0 ? ` (絞り込み: ${activeFilterText.join(", ")})` : "";
-    hitCountDisplay.innerText = `全 ${beers.length} 件中 ${data.length} 件 を表示${filterStr}`;
-}
-
-function toggleLevel1(type) {
-    document.querySelectorAll('.btn-l1').forEach(b => b.classList.remove('active'));
-    if (currentL1 === type) {
-        currentL1 = null; level2Container.classList.remove('active');
-    } else {
-        currentL1 = type; event.target.classList.add('active');
-        renderLevel2(type); level2Container.classList.add('active');
-    }
-}
-
-function renderLevel2(type) {
-    let html = '';
-    filterData[type].forEach(val => {
-        const isActive = currentFilters[type] === val ? 'active' : '';
-        html += `<button class="btn btn-l2 ${isActive}" onclick="applySingleFilter('${type}', '${val}', event)">${val}</button>`;
-    });
-    level2Buttons.innerHTML = html;
-}
-
-function resetFilters() {
-    currentFilters = { category: null, tag: null, abv: null, region: null, brewery: null };
-    document.getElementById("searchInput").value = "";
-    document.getElementById("sortSelect").value = "abv_desc";
-    showFavoritesOnly = false;
-    document.getElementById('favFilterBtn').classList.remove('active');
-    currentL1 = null;
-    document.querySelectorAll('.btn-l1').forEach(b => b.classList.remove('active'));
-    level2Container.classList.remove('active');
-    filterAndSort();
-}
-
-function filterAndSort() {
-    const text = document.getElementById("searchInput").value.toLowerCase();
-    
-    let result = beers.filter(b => {
-        if (showFavoritesOnly && !favorites.includes(b.id)) return false;
-        
-        const memoText = (memos[b.id] && memos[b.id].text) ? String(memos[b.id].text).toLowerCase() : "";
-        const matchText = b.name.toLowerCase().includes(text) || b.reading.includes(text) || b.brewery.includes(text) || 
-                          b.desc.includes(text) || (b.importer && String(b.importer).toLowerCase().includes(text)) || 
-                          (b.taste && String(b.taste).toLowerCase().includes(text)) || (b.history && String(b.history).toLowerCase().includes(text)) ||
-                          memoText.includes(text);
-        if (!matchText) return false;
-        
-        if (currentFilters.category && b.category !== currentFilters.category) return false;
-        if (currentFilters.tag && (!b.tags || !b.tags.includes(currentFilters.tag))) return false;
-        if (currentFilters.region && b.region !== currentFilters.region) return false;
-        if (currentFilters.brewery && b.brewery !== currentFilters.brewery) return false;
-        
-        if (currentFilters.abv) {
-            const v = currentFilters.abv;
-            if (v === "4.9%以下" && b.abv > 4.9) return false;
-            if (v === "5.0%〜6.9%" && (b.abv < 5.0 || b.abv > 6.9)) return false;
-            if (v === "7.0%〜8.9%" && (b.abv < 7.0 || b.abv > 8.9)) return false;
-            if (v === "9.0%以上" && b.abv < 9.0) return false;
+          const raw = localStorage.getItem(key);
+          return raw ? JSON.parse(raw) : fallback;
+        } catch (e) {
+          return fallback;
         }
-        return true;
-    });
+      }
 
-    const sortType = document.getElementById("sortSelect").value;
-    result.sort((a, b) => {
-        if (sortType === 'name') return a.reading.localeCompare(b.reading, 'ja');
-        if (sortType === 'category') return a.category.localeCompare(b.category, 'ja');
-        if (sortType === 'brewery') return a.brewery.localeCompare(b.brewery, 'ja');
-        if (sortType === 'region') return a.region.localeCompare(b.region, 'ja');
-        if (sortType === 'abv_asc') return a.abv - b.abv;
-        if (sortType === 'abv_desc') return b.abv - a.abv;
-        return 0;
-    });
+      function saveJson(key, value) {
+        try {
+          localStorage.setItem(key, JSON.stringify(value));
+        } catch (e) {
+          showToast('ブラウザの保存領域に書き込めませんでした。');
+        }
+      }
 
-    currentFilteredBeers = result;
-    render(result);
-}
+      // メモデータの正規化（従来の文字列形式と新しい {date, text} 形式の両方に対応）
+      function getMemoEntry(beerId) {
+        const raw = memos[beerId];
+        if (!raw) return { date: '', text: '' };
+        if (typeof raw === 'string') return { date: '', text: raw };
+        return { date: raw.date || '', text: raw.text || '' };
+      }
 
-const modal = document.getElementById("beerModal");
-const modalInner = document.getElementById("modalContentInner");
+      function setMemoEntry(beerId, dateVal, textVal) {
+        if (!dateVal && !textVal.trim()) {
+          delete memos[beerId];
+        } else {
+          memos[beerId] = { date: dateVal, text: textVal };
+        }
+        saveJson(STORAGE_KEYS.MEMOS, memos);
+      }
 
-function openModal(id) {
-    const b = beers.find(beer => beer.id === id);
-    if (!b) return;
-    const tags = b.tags ? b.tags.map(t => `<span class="clickable-link tag-link" onclick="applySingleFilter('tag', '${t}', event)">${t}</span>`).join(" ") : "";
-    const isFav = favorites.includes(b.id);
-    const starClass = isFav ? 'star-btn active' : 'star-btn';
-    const memo = memos[b.id] || { date: '', text: '' };
+      let toastTimer = null;
+      function showToast(msg) {
+        toastEl.textContent = msg;
+        toastEl.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toastEl.classList.remove('show'), 3600);
+      }
 
-    modalInner.innerHTML = `
-        <div class="modal-header">
-            <img src="${getImageUrl(b.driveId)}" alt="${b.name}" class="modal-img" onclick="openLightbox('${getImageUrl(b.driveId)}', event)" title="タップして拡大">
-            <div style="flex:1;">
-                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 5px;">
-                    <h2 class="modal-title" style="margin:0;"><a href="${b.url}" target="_blank">${b.name}</a></h2>
-                    <button id="modalStar" class="${starClass}" data-id="${b.id}" onclick="toggleFavorite(${b.id}, event)" style="font-size:30px; padding:0; margin-top:-5px;">★</button>
-                </div>
-                <div style="font-size: 13px; color: var(--text-sub); margin-bottom: 10px;">${b.reading}</div>
-                <div class="meta-line">醸造所: <span class="clickable-link" onclick="applySingleFilter('brewery', '${b.brewery}', event)">${b.brewery}</span> <a href="${getMapUrl(b.breweryLocal)}" target="_blank" class="map-link">Map</a></div>
-                <div class="meta-line">分類: <span class="clickable-link" onclick="applySingleFilter('category', '${b.category}', event)">${b.category}</span></div>
-                <div class="meta-line">地域: <span class="clickable-link" onclick="applySingleFilter('region', '${b.region}', event)">${b.region}</span></div>
-                <div class="meta-line">アルコール度数: <strong>${b.abv.toFixed(1)}%</strong></div>
-                <div class="tag-list" style="font-size: 13px; margin-top: 8px;">${tags}</div>
+      function getDriveImageUrls(driveUrl) {
+        if (!driveUrl) return { primary: '', fallback: '' };
+        const match = driveUrl.match(/\/d\/([a-zA-Z0-9_-]+)/) || driveUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+        if (match && match[1]) {
+          const id = match[1];
+          return {
+            primary: `https://lh3.googleusercontent.com/d/${id}=w600`,
+            fallback: `https://drive.google.com/thumbnail?id=${id}&sz=w600`
+          };
+        }
+        return { primary: driveUrl, fallback: '' };
+      }
+
+      const FALLBACK_BOTTLE_SVG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 120'%3E%3Crect width='80' height='120' rx='8' fill='%23ede7db'/%3E%3Cpath d='M34 14h12v14l8 14v58a6 6 0 0 1-6 6H32a6 6 0 0 1-6-6V42l8-14V14z' fill='%239a4d0e'/%3E%3Crect x='29' y='54' width='22' height='26' rx='2' fill='%23fbf9f4'/%3E%3C/svg%3E";
+
+      function createImageElement(driveUrl, altText, className) {
+        const img = document.createElement('img');
+        const urls = getDriveImageUrls(driveUrl);
+        img.alt = altText;
+        if (className) img.className = className;
+        img.loading = 'lazy';
+        img.referrerPolicy = 'no-referrer';
+        img.src = urls.primary || FALLBACK_BOTTLE_SVG;
+        img.onerror = function () {
+          if (urls.fallback && this.src !== urls.fallback) {
+            this.src = urls.fallback;
+          } else {
+            this.onerror = null;
+            this.src = FALLBACK_BOTTLE_SVG;
+          }
+        };
+        return img;
+      }
+
+      function initTheme() {
+        const saved = localStorage.getItem(STORAGE_KEYS.THEME);
+        const isDark = saved === 'dark';
+        document.documentElement.classList.toggle('dark', isDark);
+        updateThemeButton(isDark);
+      }
+
+      function updateThemeButton(isDark) {
+        const btn = document.getElementById('themeToggleBtn');
+        if (isDark) {
+          btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg><span>ライト</span>';
+        } else {
+          btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><span>ダーク</span>';
+        }
+      }
+
+      document.getElementById('themeToggleBtn').addEventListener('click', () => {
+        const isDark = !document.documentElement.classList.contains('dark');
+        document.documentElement.classList.toggle('dark', isDark);
+        localStorage.setItem(STORAGE_KEYS.THEME, isDark ? 'dark' : 'light');
+        updateThemeButton(isDark);
+      });
+
+      function applySingleCondition(type, value) {
+        searchInput.value = '';
+        if (value === 'すべて') {
+          currentFilter = { type: 'all', value: 'all' };
+        } else {
+          currentFilter = { type, value };
+        }
+        closeDrawer();
+        closeDetailModal();
+        updateFilterTabHighlights();
+        renderBeers();
+      }
+
+      function resetAllFilters() {
+        searchInput.value = '';
+        currentFilter = { type: 'all', value: 'all' };
+        closeDrawer();
+        updateFilterTabHighlights();
+        renderBeers();
+      }
+
+      function updateFilterTabHighlights() {
+        document.querySelectorAll('.filter-tab-btn[data-drawer]').forEach(btn => {
+          const drawerType = btn.getAttribute('data-drawer');
+          btn.classList.toggle('drawer-open', activeDrawer === drawerType);
+          btn.classList.toggle('active-filter', currentFilter.type === drawerType && currentFilter.value !== 'all');
+        });
+        document.getElementById('favFilterBtn').classList.toggle('active-filter', currentFilter.type === 'favorite');
+      }
+
+      function openDrawer(drawerType) {
+        if (activeDrawer === drawerType) {
+          closeDrawer();
+          return;
+        }
+        activeDrawer = drawerType;
+        subfilterTitle.textContent = DRAWER_TITLES[drawerType] || '選択してください';
+        subfilterGrid.innerHTML = '';
+
+        let items = [];
+        if (drawerType === 'brewery') {
+          const set = new Set(beers.map(b => b.brewery).filter(Boolean));
+          items = Array.from(set).sort((a, b) => a.localeCompare(b, 'ja'));
+        } else {
+          items = FILTER_OPTIONS[drawerType] || [];
+        }
+
+        items.forEach(item => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'sub-chip';
+          btn.textContent = item;
+          btn.addEventListener('click', () => {
+            applySingleCondition(drawerType, item);
+          });
+          subfilterGrid.appendChild(btn);
+        });
+
+        subfilterDrawer.classList.add('open');
+        updateFilterTabHighlights();
+      }
+
+      function closeDrawer() {
+        activeDrawer = null;
+        subfilterDrawer.classList.remove('open');
+        updateFilterTabHighlights();
+      }
+
+      function getFilteredBeers() {
+        const keyword = searchInput.value.trim().toLowerCase();
+
+        return beers.filter(beer => {
+          if (keyword) {
+            const entry = getMemoEntry(beer.id);
+            const haystack = [
+              beer.name,
+              beer.reading,
+              beer.brewery,
+              beer.style,
+              beer.region,
+              beer.summary,
+              beer.importer,
+              beer.ingredients,
+              beer.brewingMethod,
+              beer.flavorProfile,
+              beer.history,
+              (beer.terms || []).join(' '),
+              entry.date,
+              entry.text
+            ].join(' ').toLowerCase();
+            return haystack.includes(keyword);
+          }
+
+          const { type, value } = currentFilter;
+          if (type === 'all' || value === 'all') return true;
+
+          if (type === 'favorite') {
+            return favorites.includes(beer.id);
+          }
+          if (type === 'style') {
+            if (value === 'ダブル') {
+              return beer.style === 'ダブル' || (beer.terms || []).includes('#ダブル');
+            }
+            return beer.style === value;
+          }
+          if (type === 'brewery') {
+            return beer.brewery === value;
+          }
+          if (type === 'region') {
+            return beer.region === value;
+          }
+          if (type === 'term') {
+            const terms = beer.terms || [];
+            if (value === '#ダブル') {
+              return terms.includes('#ダブル') || beer.style === 'ダブル';
+            }
+            if (value === '#ゴールデン' || value === '#ゴールデ') {
+              return terms.includes('#ゴールデン') || terms.includes('#ゴールデ');
+            }
+            return terms.includes(value);
+          }
+          if (type === 'abv') {
+            const abv = Number(beer.abv);
+            if (value === '4.9%以下') return abv <= 4.9;
+            if (value === '5.0%〜6.9%') return abv >= 5.0 && abv <= 6.9;
+            if (value === '7.0%〜8.9%') return abv >= 7.0 && abv <= 8.9;
+            if (value === '9.0%以上') return abv >= 9.0;
+          }
+          return true;
+        });
+      }
+
+      function sortBeers(list) {
+        const mode = sortSelect.value;
+        const copy = list.slice();
+
+        copy.sort((a, b) => {
+          if (mode === 'abv-desc') {
+            return (Number(b.abv) - Number(a.abv)) || a.reading.localeCompare(b.reading, 'ja');
+          }
+          if (mode === 'abv-asc') {
+            return (Number(a.abv) - Number(b.abv)) || a.reading.localeCompare(b.reading, 'ja');
+          }
+          if (mode === 'name-ja') {
+            return a.reading.localeCompare(b.reading, 'ja');
+          }
+          if (mode === 'style') {
+            return a.style.localeCompare(b.style, 'ja') || (Number(b.abv) - Number(a.abv));
+          }
+          if (mode === 'brewery') {
+            return a.brewery.localeCompare(b.brewery, 'ja') || a.reading.localeCompare(b.reading, 'ja');
+          }
+          if (mode === 'region') {
+            return a.region.localeCompare(b.region, 'ja') || a.brewery.localeCompare(b.brewery, 'ja');
+          }
+          return 0;
+        });
+
+        return copy;
+      }
+
+      function renderBeers() {
+        if (beers.length === 0) {
+          resultCount.innerHTML = '該当件数: <span>0</span> 件（データ未読込）';
+          beerGrid.innerHTML = `
+            <div class="empty-state">
+              <div class="error-box">
+                <p style="font-weight:800; color:var(--danger); margin:0 0 8px;">データファイル（beers.js）が読み込まれていません</p>
+                <ul style="margin:0; padding-left:18px; line-height:1.7;">
+                  <li><code>index.html</code> と <code>beers.js</code> が<strong>同じフォルダ内</strong>に保存されているか確認してください。</li>
+                  <li>ファイル名が <code>beers.js.txt</code> のように後ろに <code>.txt</code> が付いていないか確認してください。</li>
+                  <li><code>beers.js</code> の中身に貼り付け漏れがないか確認してください。</li>
+                </ul>
+              </div>
             </div>
-        </div>
-        <div class="modal-body">
-            <div class="detail-section"><h4>🚢 輸入元 (Importer)</h4><p>${b.importer}</p></div>
-            <div class="detail-section"><h4>🌾 原材料 (Ingredients)</h4><p>${b.ingredients}</p></div>
-            <div class="detail-section"><h4>⚗️ 製法・醸造の特徴</h4><p>${b.process}</p></div>
-            <div class="detail-section"><h4>🍺 特徴・アロマ・味わい</h4><p>${b.taste}</p></div>
-            <div class="detail-section"><h4>📖 歴史・醸造所エピソード・豆知識</h4><p>${b.history}</p></div>
-            
-            <div class="memo-section">
-                <h4>📝 テイスティングメモ</h4>
-                <div style="margin-bottom: 8px;">
-                    <label style="font-size: 12px; color: var(--text-sub);">飲んだ日: </label>
-                    <input type="date" id="memoDate" class="memo-input" value="${escapeHTML(memo.date)}" style="width: 150px; padding: 4px;">
-                </div>
-                <textarea id="memoText" class="memo-input" style="height: 80px; resize: vertical;" placeholder="色、香り、味わいなどの記録を自由に記入してください...">${escapeHTML(memo.text)}</textarea>
-                
-                <div style="display:flex; justify-content:flex-end; align-items:center; gap:10px; margin-top:12px; flex-wrap:wrap;">
-                    <button class="btn-evernote" onclick="shareToEvernote(${b.id}, event)">🐘 Evernote等へ送る</button>
-                    <span style="flex:1;"></span>
-                    <span id="memoSavedMsg" class="memo-saved-msg">✓ 保存しました</span>
-                    <button class="btn-save-memo" onclick="saveMemo(${b.id}, event)">💾 保存する</button>
-                </div>
-            </div>
-        </div>
-    `;
-    document.getElementById("beerModal").classList.add("active");
-    document.body.style.overflow = "hidden";
-}
+          `;
+          return;
+        }
 
-function closeModal(modalId, e) {
-    if (e) {
-        e.stopPropagation();
-        if (e.target.closest('.modal-content') && !e.target.closest('.modal-close')) return;
-    }
-    document.getElementById(modalId).classList.remove("active");
-    document.body.style.overflow = "auto";
-}
+        const filtered = sortBeers(getFilteredBeers());
+        resultCount.innerHTML = `該当件数: <span>${filtered.length}</span> 件 / 全 ${beers.length} 件`;
 
-function initApp() {
-    document.getElementById("searchInput").value = "";
-    document.getElementById("sortSelect").value = "abv_desc";
-    document.getElementById("searchInput").addEventListener("input", filterAndSort);
-    document.getElementById("sortSelect").addEventListener("change", filterAndSort);
-    resetFilters();
-}
+        const keyword = searchInput.value.trim();
+        if (keyword) {
+          activeFilterBadge.style.display = 'inline-flex';
+          activeFilterBadge.textContent = `検索語: 「${keyword}」`;
+        } else if (currentFilter.type !== 'all') {
+          const labels = {
+            style: '分類',
+            brewery: '醸造所',
+            region: '地域',
+            term: '用語',
+            abv: '度数',
+            favorite: 'お気に入り'
+          };
+          activeFilterBadge.style.display = 'inline-flex';
+          activeFilterBadge.textContent = currentFilter.type === 'favorite'
+            ? '絞り込み: お気に入り'
+            : `${labels[currentFilter.type]}: ${currentFilter.value}`;
+        } else {
+          activeFilterBadge.style.display = 'none';
+        }
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initApp);
-} else {
-    initApp();
-}
+        beerGrid.innerHTML = '';
 
-</script>
+        if (filtered.length === 0) {
+          const empty = document.createElement('div');
+          empty.className = 'empty-state';
+          empty.innerHTML = '<p style="font-weight:700; margin-bottom:10px;">条件に一致するビールが見つかりませんでした。</p>';
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'action-btn primary';
+          btn.textContent = '条件をリセットする';
+          btn.addEventListener('click', resetAllFilters);
+          empty.appendChild(btn);
+          beerGrid.appendChild(empty);
+          return;
+        }
+
+        const fragment = document.createDocumentFragment();
+
+        filtered.forEach(beer => {
+          const card = document.createElement('article');
+          card.className = 'beer-card';
+          card.addEventListener('click', () => openDetailModal(beer));
+
+          const top = document.createElement('div');
+          top.className = 'card-top';
+
+          const thumbWrap = document.createElement('div');
+          thumbWrap.className = 'card-thumb-wrap';
+          thumbWrap.appendChild(createImageElement(beer.imageUrl, beer.name, 'card-thumb'));
+
+          const info = document.createElement('div');
+          info.className = 'card-info';
+
+          const titleRow = document.createElement('div');
+          titleRow.className = 'card-title-row';
+
+          const nameLink = document.createElement('a');
+          nameLink.className = 'beer-name-link';
+          nameLink.href = beer.productUrl;
+          nameLink.target = '_blank';
+          nameLink.rel = 'noopener noreferrer';
+          nameLink.textContent = beer.name;
+          nameLink.title = '個別商品ページを新しいタブで開く';
+          nameLink.addEventListener('click', e => e.stopPropagation());
+          titleRow.appendChild(nameLink);
+
+          if (favorites.includes(beer.id)) {
+            const favIcon = document.createElement('span');
+            favIcon.className = 'fav-indicator';
+            favIcon.title = 'お気に入り登録済み';
+            favIcon.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+            titleRow.appendChild(favIcon);
+          }
+
+          const reading = document.createElement('div');
+          reading.className = 'beer-reading';
+          reading.textContent = beer.reading;
+
+          const metaList = document.createElement('div');
+          metaList.className = 'card-meta-list';
+
+          const brewRow = document.createElement('div');
+          brewRow.className = 'meta-row';
+          const brewBtn = document.createElement('button');
+          brewBtn.type = 'button';
+          brewBtn.className = 'inline-link';
+          brewBtn.textContent = beer.brewery;
+          brewBtn.addEventListener('click', e => {
+            e.stopPropagation();
+            applySingleCondition('brewery', beer.brewery);
+          });
+          brewRow.appendChild(brewBtn);
+
+          const badgeRow = document.createElement('div');
+          badgeRow.className = 'meta-row';
+
+          const styleBtn = document.createElement('button');
+          styleBtn.type = 'button';
+          styleBtn.className = 'style-badge';
+          styleBtn.textContent = beer.style;
+          styleBtn.addEventListener('click', e => {
+            e.stopPropagation();
+            applySingleCondition('style', beer.style);
+          });
+
+          const abvSpan = document.createElement('span');
+          abvSpan.className = 'abv-badge';
+          abvSpan.textContent = `ABV ${Number(beer.abv).toFixed(1)}%`;
+
+          const regionBtn = document.createElement('button');
+          regionBtn.type = 'button';
+          regionBtn.className = 'inline-link';
+          regionBtn.style.fontSize = '0.78rem';
+          regionBtn.textContent = beer.region;
+          regionBtn.addEventListener('click', e => {
+            e.stopPropagation();
+            applySingleCondition('region', beer.region);
+          });
+
+          badgeRow.append(styleBtn, abvSpan, regionBtn);
+          metaList.append(brewRow, badgeRow);
+          info.append(titleRow, reading, metaList);
+          top.append(thumbWrap, info);
+
+          const body = document.createElement('div');
+          body.className = 'card-body';
+          const summary = document.createElement('p');
+          summary.className = 'card-summary';
+          summary.textContent = beer.summary;
+          body.appendChild(summary);
+
+          const footer = document.createElement('div');
+          footer.className = 'card-footer';
+
+          const tagsWrap = document.createElement('div');
+          tagsWrap.className = 'card-tags';
+          (beer.terms || []).forEach(term => {
+            const tBtn = document.createElement('button');
+            tBtn.type = 'button';
+            tBtn.className = 'tag-link';
+            tBtn.textContent = term;
+            tBtn.addEventListener('click', e => {
+              e.stopPropagation();
+              applySingleCondition('term', term);
+            });
+            tagsWrap.appendChild(tBtn);
+          });
+
+          const mapLink = document.createElement('a');
+          mapLink.className = 'map-btn';
+          mapLink.href = beer.mapUrl;
+          mapLink.target = '_blank';
+          mapLink.rel = 'noopener noreferrer';
+          mapLink.title = '醸造所をGoogleマップで開く（現地語検索）';
+          mapLink.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>Map</span>';
+          mapLink.addEventListener('click', e => e.stopPropagation());
+
+          footer.append(tagsWrap, mapLink);
+          card.append(top, body, footer);
+          fragment.appendChild(card);
+        });
+
+        beerGrid.appendChild(fragment);
+      }
+
+      function openDetailModal(beer) {
+        currentDetailBeer = beer;
+        const titleEl = document.getElementById('modalBeerTitle');
+        titleEl.innerHTML = '';
+        const link = document.createElement('a');
+        link.href = beer.productUrl;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = beer.name;
+        titleEl.appendChild(link);
+
+        document.getElementById('modalBeerReading').textContent = beer.reading;
+
+        const body = document.getElementById('modalBody');
+        body.innerHTML = '';
+
+        const hero = document.createElement('div');
+        hero.className = 'detail-hero';
+
+        const imgBox = document.createElement('div');
+        imgBox.className = 'detail-img-box';
+        imgBox.appendChild(createImageElement(beer.imageUrl, beer.name, ''));
+
+        const specs = document.createElement('div');
+        specs.className = 'detail-specs';
+
+        const brewSpec = document.createElement('div');
+        brewSpec.className = 'spec-item';
+        brewSpec.innerHTML = '<span class="spec-label">醸造所:</span>';
+        const brewLink = document.createElement('button');
+        brewLink.type = 'button';
+        brewLink.className = 'inline-link';
+        brewLink.style.fontSize = '0.92rem';
+        brewLink.textContent = beer.brewery;
+        brewLink.addEventListener('click', () => applySingleCondition('brewery', beer.brewery));
+        brewSpec.appendChild(brewLink);
+
+        const styleSpec = document.createElement('div');
+        styleSpec.className = 'spec-item';
+        styleSpec.innerHTML = '<span class="spec-label">分類 / 度数:</span>';
+        const styleLink = document.createElement('button');
+        styleLink.type = 'button';
+        styleLink.className = 'style-badge';
+        styleLink.textContent = beer.style;
+        styleLink.addEventListener('click', () => applySingleCondition('style', beer.style));
+        const abvVal = document.createElement('span');
+        abvVal.className = 'abv-badge';
+        abvVal.textContent = `ABV ${Number(beer.abv).toFixed(1)}%`;
+        styleSpec.append(styleLink, abvVal);
+
+        const regionSpec = document.createElement('div');
+        regionSpec.className = 'spec-item';
+        regionSpec.innerHTML = '<span class="spec-label">地域 / 地図:</span>';
+        const regLink = document.createElement('button');
+        regLink.type = 'button';
+        regLink.className = 'inline-link';
+        regLink.textContent = beer.region;
+        regLink.addEventListener('click', () => applySingleCondition('region', beer.region));
+        const mapBtn = document.createElement('a');
+        mapBtn.className = 'map-btn';
+        mapBtn.href = beer.mapUrl;
+        mapBtn.target = '_blank';
+        mapBtn.rel = 'noopener noreferrer';
+        mapBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>Google Map（現地語）</span>';
+        regionSpec.append(regLink, mapBtn);
+
+        const termSpec = document.createElement('div');
+        termSpec.className = 'spec-item';
+        termSpec.innerHTML = '<span class="spec-label">関連用語:</span>';
+        (beer.terms || []).forEach(t => {
+          const tBtn = document.createElement('button');
+          tBtn.type = 'button';
+          tBtn.className = 'tag-link';
+          tBtn.textContent = t;
+          tBtn.addEventListener('click', () => applySingleCondition('term', t));
+          termSpec.appendChild(tBtn);
+        });
+
+        specs.append(brewSpec, styleSpec, regionSpec, termSpec);
+        hero.append(imgBox, specs);
+        body.appendChild(hero);
+
+        const sections = [
+          { title: '輸入元 (Importer)', text: beer.importer },
+          { title: '原材料 (Ingredients)', text: beer.ingredients },
+          { title: '製法・醸造の特徴', text: beer.brewingMethod },
+          { title: '特徴・アロマ・味わい', text: beer.flavorProfile },
+          { title: '歴史・醸造所エピソード・豆知識', text: beer.history }
+        ];
+
+        sections.forEach(sec => {
+          const div = document.createElement('div');
+          div.className = 'detail-section';
+          const h3 = document.createElement('h3');
+          h3.textContent = sec.title;
+          const p = document.createElement('p');
+          p.textContent = sec.text || '情報なし';
+          div.append(h3, p);
+          body.appendChild(div);
+        });
+
+        // テイスティングメモ欄（カレンダー日付選択＋テキストメモ）
+        const memoDiv = document.createElement('div');
+        memoDiv.className = 'detail-section';
+        const memoH3 = document.createElement('h3');
+        memoH3.textContent = 'テイスティングメモ';
+
+        const currentEntry = getMemoEntry(beer.id);
+
+        const dateRow = document.createElement('div');
+        dateRow.className = 'memo-date-row';
+        const dateLabel = document.createElement('label');
+        dateLabel.setAttribute('for', 'memoDateInput');
+        dateLabel.textContent = '記録日:';
+
+        const dateInput = document.createElement('input');
+        dateInput.type = 'date';
+        dateInput.id = 'memoDateInput';
+        dateInput.className = 'memo-date-input';
+        dateInput.value = currentEntry.date;
+
+        const todayBtn = document.createElement('button');
+        todayBtn.type = 'button';
+        todayBtn.className = 'memo-today-btn';
+        todayBtn.textContent = '今日の日付';
+
+        dateRow.append(dateLabel, dateInput, todayBtn);
+
+        const textarea = document.createElement('textarea');
+        textarea.className = 'memo-box';
+        textarea.placeholder = '飲んだ感想やお店、ペアリングなどを自由に記録できます（日付・メモとも自動保存され、検索窓からも検索できます）';
+        textarea.value = currentEntry.text;
+
+        const syncMemo = () => {
+          setMemoEntry(beer.id, dateInput.value, textarea.value);
+        };
+
+        dateInput.addEventListener('change', syncMemo);
+        textarea.addEventListener('input', syncMemo);
+        todayBtn.addEventListener('click', () => {
+          const now = new Date();
+          const yyyy = now.getFullYear();
+          const mm = String(now.getMonth() + 1).padStart(2, '0');
+          const dd = String(now.getDate()).padStart(2, '0');
+          dateInput.value = `${yyyy}-${mm}-${dd}`;
+          syncMemo();
+        });
+
+        const hint = document.createElement('div');
+        hint.className = 'memo-hint';
+        hint.textContent = '※日付とメモはブラウザに自動保存され、「Evernoteへ送る」ボタンでEvernoteにも転記できます。';
+
+        memoDiv.append(memoH3, dateRow, textarea, hint);
+        body.appendChild(memoDiv);
+
+        updateModalFavButton();
+        detailModal.classList.add('open');
+        body.scrollTop = 0;
+      }
+
+      function closeDetailModal() {
+        detailModal.classList.remove('open');
+        currentDetailBeer = null;
+      }
+
+      function updateModalFavButton() {
+        if (!currentDetailBeer) return;
+        const btn = document.getElementById('modalFavBtn');
+        const isFav = favorites.includes(currentDetailBeer.id);
+        btn.classList.toggle('is-fav', isFav);
+        btn.innerHTML = isFav
+          ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span>お気に入り登録済み（解除する）</span>'
+          : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span>お気に入りに追加</span>';
+      }
+
+      document.getElementById('modalFavBtn').addEventListener('click', () => {
+        if (!currentDetailBeer) return;
+        const id = currentDetailBeer.id;
+        if (favorites.includes(id)) {
+          favorites = favorites.filter(f => f !== id);
+          showToast('お気に入りから解除しました。');
+        } else {
+          favorites.push(id);
+          showToast('お気に入りに追加しました。');
+        }
+        saveJson(STORAGE_KEYS.FAVORITES, favorites);
+        updateModalFavButton();
+        renderBeers();
+      });
+
+      document.getElementById('evernoteBtn').addEventListener('click', async () => {
+        if (!currentDetailBeer) return;
+        const b = currentDetailBeer;
+        const entry = getMemoEntry(b.id);
+        let userMemoBlock = '';
+        if (entry.date || entry.text.trim()) {
+          const dateHeader = entry.date ? `（記録日: ${entry.date}）` : '';
+          userMemoBlock = `\n【テイスティングメモ${dateHeader}】\n${entry.text}\n`;
+        }
+
+        const noteText = [
+          `■ ${b.name}（${b.reading}）`,
+          `醸造所: ${b.brewery}（${b.region}）`,
+          `分類: ${b.style} / アルコール度数: ${Number(b.abv).toFixed(1)}%`,
+          `輸入元: ${b.importer}`,
+          `商品ページ: ${b.productUrl}`,
+          `Google Map: ${b.mapUrl}`,
+          ``,
+          `【原材料】${b.ingredients}`,
+          `【製法・醸造の特徴】${b.brewingMethod}`,
+          `【特徴・アロマ・味わい】${b.flavorProfile}`,
+          `【歴史・豆知識】${b.history}`,
+          userMemoBlock
+        ].join('\n');
+
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(noteText);
+          }
+        } catch (e) {}
+
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile && navigator.share) {
+          try {
+            await navigator.share({
+              title: `${b.name} - Belgian Beer Navigator`,
+              text: noteText
+            });
+            return;
+          } catch (e) {}
+        }
+
+        window.open('https://www.evernote.com/client/web', '_blank', 'noopener,noreferrer');
+        showToast('ノート内容をクリップボードにコピーしました。Evernoteの新規ノートに貼り付けて保存できます。');
+      });
+
+      document.getElementById('resetBtn').addEventListener('click', resetAllFilters);
+
+      document.querySelectorAll('.filter-tab-btn[data-drawer]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          openDrawer(btn.getAttribute('data-drawer'));
+        });
+      });
+
+      document.getElementById('closeDrawerBtn').addEventListener('click', closeDrawer);
+
+      document.getElementById('favFilterBtn').addEventListener('click', () => {
+        applySingleCondition('favorite', 'true');
+      });
+
+      searchInput.addEventListener('input', () => {
+        if (currentFilter.type !== 'all') {
+          currentFilter = { type: 'all', value: 'all' };
+          updateFilterTabHighlights();
+        }
+        closeDrawer();
+        renderBeers();
+      });
+
+      sortSelect.addEventListener('change', renderBeers);
+
+      document.getElementById('randomBtn').addEventListener('click', () => {
+        const candidates = getFilteredBeers();
+        if (candidates.length === 0) {
+          showToast('該当するビールがありません。条件をリセットしてください。');
+          return;
+        }
+        const chosen = candidates[Math.floor(Math.random() * candidates.length)];
+        openDetailModal(chosen);
+      });
+
+      document.getElementById('closeDetailBtn').addEventListener('click', closeDetailModal);
+      detailModal.addEventListener('click', e => {
+        if (e.target === detailModal) closeDetailModal();
+      });
+
+      document.getElementById('settingsBtn').addEventListener('click', () => {
+        settingsModal.classList.add('open');
+      });
+      document.getElementById('closeSettingsBtn').addEventListener('click', () => {
+        settingsModal.classList.remove('open');
+      });
+      settingsModal.addEventListener('click', e => {
+        if (e.target === settingsModal) settingsModal.classList.remove('open');
+      });
+
+      document.getElementById('exportJsonBtn').addEventListener('click', () => {
+        const payload = {
+          app: 'Belgian Beer Navigator',
+          exportedAt: new Date().toISOString(),
+          registeredBeerCount: beers.length,
+          favorites,
+          memos
+        };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        const dateStr = new Date().toISOString().slice(0, 10);
+        a.href = url;
+        a.download = `belgian-beer-navigator-backup-${dateStr}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('お気に入り・メモのバックアップJSONをダウンロードしました。');
+      });
+
+      document.getElementById('importJsonInput').addEventListener('change', e => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function (evt) {
+          try {
+            const parsed = JSON.parse(evt.target.result);
+            if (Array.isArray(parsed.favorites)) {
+              favorites = parsed.favorites;
+              saveJson(STORAGE_KEYS.FAVORITES, favorites);
+            }
+            if (parsed.memos && typeof parsed.memos === 'object') {
+              memos = parsed.memos;
+              saveJson(STORAGE_KEYS.MEMOS, memos);
+            }
+            renderBeers();
+            settingsModal.classList.remove('open');
+            showToast('バックアップデータを復元しました。');
+          } catch (err) {
+            showToast('JSONファイルの読み込みに失敗しました。形式を確認してください。');
+          }
+          e.target.value = '';
+        };
+        reader.readAsText(file);
+      });
+
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+          if (detailModal.classList.contains('open')) closeDetailModal();
+          if (settingsModal.classList.contains('open')) settingsModal.classList.remove('open');
+        }
+      });
+
+      initTheme();
+      renderBeers();
+    })();
+  </script>
 </body>
 </html>
