@@ -15,19 +15,26 @@
   <link id="manifestLink" rel="manifest" href="">
   <style>
     :root {
-      --bg-page: #f3efe6;
-      --bg-surface: #fbf9f4;
-      --bg-elevated: #ede7db;
-      --bg-chip: #e6dfd1;
-      --bg-chip-hover: #d8cebc;
+      /* ページ全体背景：目に優しい落ち着いたウォームサンド色（白すぎず暗すぎない明度） */
+      --bg-page: #e6decb;
+      /* 検索パネル・モーダル背景 */
+      --bg-surface: #f7f3ea;
+      --bg-elevated: #ebe3d3;
+      /* ビールカード専用背景・枠線・影（ページ背景からくっきり浮き上がるコントラスト） */
+      --bg-card: #fffdf9;
+      --bg-card-footer: #efe8d8;
+      --card-border: #c5b8a3;
+      --card-shadow: 0 3px 10px rgba(45, 36, 26, 0.13);
+      --bg-chip: #e4dccb;
+      --bg-chip-hover: #d5cab5;
       --text-primary: #241f1c;
-      --text-secondary: #574f49;
-      --text-muted: #786e66;
+      --text-secondary: #524a44;
+      --text-muted: #736961;
       --accent: #9a4d0e;
       --accent-hover: #7c3c09;
       --accent-soft: #f5e6d3;
-      --border: #dcd3c4;
-      --shadow: 0 2px 8px rgba(36, 31, 28, 0.08);
+      --border: #cfc4b0;
+      --shadow: 0 2px 8px rgba(36, 31, 28, 0.09);
       --danger: #dc2626;
       --danger-hover: #b91c1c;
       --purple: #7c3aed;
@@ -47,9 +54,14 @@
     }
 
     html.dark {
-      --bg-page: #181615;
-      --bg-surface: #23201e;
-      --bg-elevated: #2e2a27;
+      /* ダークモード：ページ背景とカード背景の明度差を広げ、暗所でもカードを明確に判別可能に */
+      --bg-page: #121110;
+      --bg-surface: #1e1c1a;
+      --bg-elevated: #2a2623;
+      --bg-card: #282421;
+      --bg-card-footer: #332e2a;
+      --card-border: #4f4740;
+      --card-shadow: 0 4px 14px rgba(0, 0, 0, 0.48);
       --bg-chip: #35302c;
       --bg-chip-hover: #453e39;
       --text-primary: #f2ede6;
@@ -226,7 +238,7 @@
       padding: 8px 10px 8px 34px;
       border: 1px solid var(--border);
       border-radius: 8px;
-      background: var(--bg-page);
+      background: var(--bg-card);
       color: var(--text-primary);
       font-size: 16px;
     }
@@ -430,7 +442,7 @@
       padding: 6px 11px;
       border-radius: 999px;
       border: 1px solid var(--border);
-      background: var(--bg-surface);
+      background: var(--bg-card);
       color: var(--text-primary);
       font-size: 0.84rem;
       font-weight: 600;
@@ -450,7 +462,7 @@
       margin: 10px 0 6px;
       padding: 11px 14px;
       border-radius: 10px;
-      background: var(--bg-surface);
+      background: var(--bg-card);
       border: 1px solid var(--sort-border);
       border-left: 5px solid #4d7c0f;
       box-shadow: var(--shadow);
@@ -543,24 +555,26 @@
     .beer-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 14px;
+      gap: 16px;
     }
 
+    /* ビールカード：背景色・枠線・影のコントラストを高め、ページ背景から明確に判別可能に */
     .beer-card {
       display: flex;
       flex-direction: column;
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
+      background: var(--bg-card);
+      border: 1.5px solid var(--card-border);
       border-radius: 12px;
       overflow: hidden;
-      box-shadow: var(--shadow);
+      box-shadow: var(--card-shadow);
       cursor: pointer;
-      transition: transform 0.15s, border-color 0.15s;
+      transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
     }
 
     .beer-card:hover {
       transform: translateY(-2px);
       border-color: var(--accent);
+      box-shadow: 0 6px 16px rgba(36, 31, 28, 0.18);
     }
 
     .card-top {
@@ -751,7 +765,7 @@
       align-items: center;
       gap: 8px;
       padding: 8px 12px;
-      background: var(--bg-elevated);
+      background: var(--bg-card-footer);
       border-top: 1px solid var(--border);
     }
 
@@ -763,7 +777,7 @@
     }
 
     .tag-link {
-      background: var(--bg-surface);
+      background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 4px;
       padding: 1px 6px;
@@ -844,8 +858,8 @@
       width: 100%;
       max-width: 560px;
       max-height: 100%;
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
+      background: var(--bg-card);
+      border: 1px solid var(--card-border);
       border-radius: 14px;
       overflow: hidden;
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
@@ -877,12 +891,12 @@
       width: 100%;
       max-width: 760px;
       max-height: 100%;
-      background: var(--bg-surface);
+      background: var(--bg-card);
       color: var(--text-primary);
-      border: 1px solid var(--border);
+      border: 1.5px solid var(--card-border);
       border-radius: 14px;
       margin: 0;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
       overflow: hidden;
     }
 
@@ -893,7 +907,7 @@
       align-items: flex-start;
       gap: 12px;
       padding: 12px 16px;
-      background: var(--bg-elevated);
+      background: var(--bg-card-footer);
       border-bottom: 1px solid var(--border);
     }
 
@@ -933,7 +947,7 @@
       padding: 7px 12px;
       border-radius: 8px;
       border: 1px solid var(--border);
-      background: var(--bg-surface);
+      background: var(--bg-card);
       color: var(--text-primary);
       font-size: 0.85rem;
       font-weight: 700;
@@ -1055,7 +1069,7 @@
       padding: 6px 10px;
       border-radius: 8px;
       border: 1px solid var(--border);
-      background: var(--bg-page);
+      background: var(--bg-surface);
       color: var(--text-primary);
       font-family: inherit;
       font-size: 16px;
@@ -1090,7 +1104,7 @@
       padding: 9px 11px;
       border-radius: 8px;
       border: 1px solid var(--border);
-      background: var(--bg-page);
+      background: var(--bg-surface);
       color: var(--text-primary);
       font-family: inherit;
       font-size: 16px;
@@ -1165,7 +1179,7 @@
       padding: 8px 10px;
       border-radius: 8px;
       border: 1px solid var(--border);
-      background: var(--bg-page);
+      background: var(--bg-surface);
       color: var(--text-primary);
       font-size: 16px;
       margin-bottom: 10px;
@@ -1252,7 +1266,7 @@
       align-items: center;
       gap: 8px;
       padding: 10px 16px;
-      background: var(--bg-elevated);
+      background: var(--bg-card-footer);
       border-top: 1px solid var(--border);
     }
 
@@ -1270,7 +1284,7 @@
       padding: 9px 12px;
       border-radius: 8px;
       border: 1px solid var(--border);
-      background: var(--bg-surface);
+      background: var(--bg-card);
       color: var(--text-primary);
       font-size: 0.85rem;
       font-weight: 700;
@@ -1364,8 +1378,8 @@
       grid-column: 1 / -1;
       text-align: center;
       padding: 36px 18px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
+      background: var(--bg-card);
+      border: 1.5px solid var(--card-border);
       border-radius: 12px;
       color: var(--text-secondary);
     }
@@ -1399,6 +1413,7 @@
       }
       .beer-grid {
         grid-template-columns: 1fr;
+        gap: 14px;
       }
       .modal-backdrop {
         padding: calc(6px + env(safe-area-inset-top, 0px)) 8px calc(6px + env(safe-area-inset-bottom, 0px));
@@ -1772,7 +1787,7 @@
             description: 'ベルギービール検索・テイスティングノートアプリ',
             start_url: './index.html',
             display: 'standalone',
-            background_color: '#f3efe6',
+            background_color: '#e6decb',
             theme_color: '#18181b',
             icons: []
           };
@@ -1867,7 +1882,6 @@
         ['musketeers', 'ムスケティールス']
       ];
 
-      // 英字アクセント記号マップ（日本語文字は破壊しない）
       const ACCENT_CHAR_MAP = {
         'à': 'a', 'á': 'a', 'â': 'a', 'ã': 'a', 'ä': 'a', 'å': 'a',
         'ç': 'c',
@@ -1887,14 +1901,12 @@
         return s;
       }
 
-      // 中黒・ハイフン・空白・括弧・委託などを除去した圧縮文字列（表記ゆれ吸収用）
       function compactForSearch(str) {
         return normalizeForSearch(str)
           .replace(/委託醸造|委託生産|委託/g, '')
           .replace(/[\s・･\-‐－—/／()（）【】\[\].,、。!！?？:：]/g, '');
       }
 
-      // 醸造所名から「委託」接尾語を除去して整形
       function stripContractSuffix(breweryStr) {
         if (!breweryStr) return '';
         return String(breweryStr)
@@ -1904,7 +1916,6 @@
           .trim();
       }
 
-      // 1つのビールが紐づく正規化醸造所名リストを取得（メイン醸造所＋併記・委託先醸造所）
       function getBeerBreweries(beer) {
         const result = [];
         const addUnique = name => {
@@ -1917,17 +1928,14 @@
         const rawBrewery = beer.brewery || '';
         const normBrewery = normalizeForSearch(rawBrewery);
 
-        // 1. 既知の正規化ルールにマッチする醸造所をすべて抽出（併記や委託も吸収）
         CANONICAL_BREWERY_RULES.forEach(rule => {
           if (rule.patterns.some(p => normBrewery.includes(normalizeForSearch(p)))) {
             addUnique(rule.canonical);
           }
         });
 
-        // 2. 「/」で複数併記されている場合（例: White Pony Microbrewery / De Graal（ホワイト・ポニー / デ・グラーレ醸造所委託））
         if (rawBrewery.includes('/')) {
           const cleaned = stripContractSuffix(rawBrewery);
-          // 既にルールで1つ以上抽出できていれば、重複した長い併記文字列は増やさずブランド側のみ補助抽出
           const mainPart = cleaned.split('（')[0].split('(')[0].trim();
           const subParts = mainPart.split('/').map(p => p.trim()).filter(Boolean);
           subParts.forEach(part => {
@@ -1943,12 +1951,10 @@
           });
         }
 
-        // 3. ルール未登録の一般醸造所は「委託」等の文字だけ除去した名前を登録
         if (result.length === 0 && rawBrewery) {
           addUnique(rawBrewery);
         }
 
-        // 4. 解説文（製法・歴史）にプルーフ醸造所等の委託生産が明記されている場合も関連付け
         const detailText = normalizeForSearch(`${beer.brewingMethod || ''} ${beer.history || ''}`);
         if (detailText.includes('委託')) {
           CANONICAL_BREWERY_RULES.forEach(rule => {
@@ -1961,7 +1967,6 @@
         return result;
       }
 
-      // カードや詳細モーダルの醸造所リンクを押した際に使う代表正規化醸造所名
       function getPrimaryCanonicalBrewery(beer) {
         const list = getBeerBreweries(beer);
         return list.length > 0 ? list[0] : stripContractSuffix(beer.brewery || '');
@@ -2373,7 +2378,6 @@
         updateFilterTabHighlights();
       }
 
-      // フリーワード検索の一致判定（表記ゆれ・同義語・委託・複数キーワードAND検索対応）
       function matchesSearchKeyword(beer, rawKeyword) {
         const effectiveTerms = getEffectiveTerms(beer);
         const canonicalBreweries = getBeerBreweries(beer);
@@ -2404,7 +2408,6 @@
         const normHaystack = normalizeForSearch(rawHaystack);
         const compactHaystack = compactForSearch(rawHaystack);
 
-        // スペース（全角・半角）で分割してすべて一致するAND検索
         const tokens = rawKeyword.trim().split(/[\s\u3000]+/).filter(Boolean);
         if (tokens.length === 0) return true;
 
@@ -2416,7 +2419,6 @@
           if (normHaystack.includes(normToken)) return true;
           if (compactToken && compactHaystack.includes(compactToken)) return true;
 
-          // 同義語グループによる照合（Geuze/Gueuze、トリプル/トリプゥ、ウィット/ホワイト 等）
           for (let i = 0; i < SEARCH_SYNONYM_GROUPS.length; i++) {
             const group = SEARCH_SYNONYM_GROUPS[i];
             const matchedInGroup = group.some(word => {
