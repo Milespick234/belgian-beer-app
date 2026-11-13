@@ -1313,7 +1313,7 @@ window.BEER_DATA.push(
     region: "東フランデレン州",
     abv: 12.0,
     terms: ["#ダーク", "#ハイアルコール"],
-    imageUrl: "https://drive.google.com/file/d/1XDv9K1ijYOjpskttvY-eCIq-aWWwkDzf/view?usp=drive_link",
+    imageUrl: "https://drive.google.com/file/d/1hXmbsHliblVBqeMBI2NIaKxVgQI5J6Zk/view?usp=drive_link",
     productUrl: "https://www.belgianbeer.co.jp/products/detail.php?product_id=127",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Brouwerij+De+Landtsheer+Buggenhout+Belgium",
     summary: "度数12.0%を誇る、マルールシリーズの最高峰ダーク・クアドルプル。ローストモルトの深いコクとドライフルーツ、ポートワインを思わせる濃密で気品ある味わいです。",
