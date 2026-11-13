@@ -3717,6 +3717,47 @@ window.BEER_DATA.push(
     brewingMethod: "厳選された大麦麦芽とデ・ランク醸造所こだわりのホールホップ（球花）を使用し、無濾過・無殺菌・瓶内二次発酵で丁寧に熟成させる限定醸造製法。",
     flavorProfile: "美しいディープゴールド〜ライトアンバーと純白の泡立ち。オレンジピールやハーブ、フローラルなホップアロマに、カラメルモルトの柔らかなコクと引き締まった苦味が心地よく響きます。",
     history: "ベルギーの伝統的なペールエール（スペシャル・ベルジュ）のスタイルに、デ・ランク醸造所ならではのホールホップの芸術性を掛け合わせた特別限定キュヴェ（Grand Cru）です。"
+  },
+// ==========================================
+// 修正データ（2銘柄：Malheur 10 / Malheur 8）
+// ==========================================
+  {
+    id: "malheur-10",
+    name: "Malheur 10",
+    reading: "マルール10",
+    brewery: "Brouwerij De Landtsheer（デ・ランツヘール醸造所）",
+    style: "トリプル",
+    region: "東フランデレン州",
+    abv: 10.0,
+    terms: ["#ゴールデン", "#ハイアルコール"],
+    imageUrl: "https://drive.google.com/file/d/15JKUgVldzUN3orEdyrRenL-rsiinb8_v/view?usp=drive_link",
+    productUrl: "https://www.belgianbeer.co.jp/products/detail.php?product_id=1340",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Brouwerij+De+Landtsheer+Buggenhout+Belgium",
+    summary: "アルコール度数10.0%を誇る、デ・ランツヘール醸造所のフラッグシップ・ゴールデンストロングエール。熟した果実の華やかなエステル香とスパイシーなホップ、重厚ながら洗練された飲み口が魅力です。",
+    importer: "有限会社木屋",
+    ingredients: "大麦麦芽、糖類、ホップ、酵母、水",
+    brewingMethod: "東フランデレン州ブッヘンハウトのデ・ランツヘール醸造所にて、厳選された淡色麦芽とアロマホップを使用し、高アルコールまで丁寧に発酵させたのち瓶内二次発酵で熟成させる製法。",
+    flavorProfile: "輝きのある濃い黄金色と濃密でクリーミーな純白の泡立ち。熟したバナナや洋ナシ、柑橘の皮、白コショウのようなスパイシーな芳香に、10.0%の豊かなモルトのコクと引き締まった苦味が調和します。",
+    history: "1997年にマニュ・デ・ランツヘール氏が再興した同醸造所を代表するストロング・ブロンドエールです。2014年のワールド・ビア・アワードで世界最高のストロング・ブロンドエールに輝くなど国際的に高い評価を受けています。"
+  },
+  {
+    id: "malheur-8",
+    name: "Malheur 8",
+    reading: "マルール8",
+    brewery: "Brouwerij De Landtsheer（デ・ランツヘール醸造所）",
+    style: "トリプル",
+    region: "東フランデレン州",
+    abv: 8.0,
+    terms: ["#ゴールデン", "#ハイアルコール"],
+    imageUrl: "https://drive.google.com/file/d/1yyvWjFcRwU2zb8ort8BCDvr9Trm9D7yD/view?usp=drive_link",
+    productUrl: "https://www.belgianbeer.co.jp/products/detail.php?product_id=1568",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Brouwerij+De+Landtsheer+Buggenhout+Belgium",
+    summary: "マルールシリーズの「6」と「10」の中間に位置する、度数8.0%の本格派ベルジャン・トリプル。華やかな果実香とホップの爽快な苦味、ドライでキレのある後味のバランスが絶妙な1本です。",
+    importer: "有限会社木屋",
+    ingredients: "大麦麦芽、糖類、ホップ、酵母、水",
+    brewingMethod: "厳選された淡色麦芽とノーブルホップを使用し、デ・ランツヘール醸造所独自の上面発酵酵母で発酵させたのち、瓶内二次発酵でじっくりと熟成させる伝統的トリプル製法。",
+    flavorProfile: "澄んだ黄金色と純白のきめ細かな泡立ち。青リンゴや柑橘、ハーブやスパイスの清涼感あるアロマが広がり、8.0%のしっかりした飲みごたえとドライで心地よい苦味が続きます。",
+    history: "デ・ランツヘール醸造所の数字シリーズ（6・8・10・12）における正統派トリプルとして位置づけられる銘柄です。10.0%のマルール10よりも軽快でキレがあり、幅広い料理と合わせやすい食中酒としても人気です。"
   }
 );
 
