@@ -15,12 +15,9 @@
   <link id="manifestLink" rel="manifest" href="">
   <style>
     :root {
-      /* ページ全体背景：目に優しい落ち着いたウォームサンド色（白すぎず暗すぎない明度） */
       --bg-page: #e6decb;
-      /* 検索パネル・モーダル背景 */
       --bg-surface: #f7f3ea;
       --bg-elevated: #ebe3d3;
-      /* ビールカード専用背景・枠線・影（ページ背景からくっきり浮き上がるコントラスト） */
       --bg-card: #fffdf9;
       --bg-card-footer: #efe8d8;
       --card-border: #c5b8a3;
@@ -54,7 +51,6 @@
     }
 
     html.dark {
-      /* ダークモード：ページ背景とカード背景の明度差を広げ、暗所でもカードを明確に判別可能に */
       --bg-page: #121110;
       --bg-surface: #1e1c1a;
       --bg-elevated: #2a2623;
@@ -90,9 +86,7 @@
       --share-btn-hover: #14b8a6;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     html, body {
       margin: 0;
@@ -107,9 +101,7 @@
       -webkit-text-size-adjust: 100%;
     }
 
-    body.modal-open {
-      overflow: hidden;
-    }
+    body.modal-open { overflow: hidden; }
 
     .container {
       max-width: 1200px;
@@ -127,12 +119,7 @@
       border-bottom: 1px solid var(--border);
     }
 
-    .brand-group {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      min-width: 0;
-    }
+    .brand-group { display: flex; align-items: center; gap: 9px; min-width: 0; }
 
     .brand-emblem {
       width: 34px;
@@ -143,13 +130,7 @@
       overflow: hidden;
     }
 
-    .brand-titles {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      gap: 7px;
-      min-width: 0;
-    }
+    .brand-titles { display: flex; flex-wrap: wrap; align-items: baseline; gap: 7px; min-width: 0; }
 
     .app-title {
       margin: 0;
@@ -173,12 +154,7 @@
       letter-spacing: 0.04em;
     }
 
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-shrink: 0;
-    }
+    .header-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
 
     .icon-btn {
       display: inline-flex;
@@ -196,10 +172,7 @@
       transition: background 0.15s, border-color 0.15s;
     }
 
-    .icon-btn:hover {
-      background: var(--bg-elevated);
-      border-color: var(--accent);
-    }
+    .icon-btn:hover { background: var(--bg-elevated); border-color: var(--accent); }
 
     .control-panel {
       background: var(--bg-surface);
@@ -210,12 +183,7 @@
       box-shadow: var(--shadow);
     }
 
-    .search-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      align-items: center;
-    }
+    .search-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 
     .search-input-wrap {
       position: relative;
@@ -232,7 +200,6 @@
       pointer-events: none;
     }
 
-    /* iOS Safari自動ズーム防止のため16px以上を指定 */
     .search-input {
       width: 100%;
       padding: 8px 10px 8px 34px;
@@ -243,10 +210,7 @@
       font-size: 16px;
     }
 
-    .search-input:focus {
-      outline: 2px solid var(--accent);
-      border-color: transparent;
-    }
+    .search-input:focus { outline: 2px solid var(--accent); border-color: transparent; }
 
     .action-btn {
       display: inline-flex;
@@ -265,31 +229,11 @@
       transition: all 0.15s;
     }
 
-    .action-btn:hover {
-      background: var(--bg-chip-hover);
-    }
-
-    .action-btn.primary {
-      background: var(--accent);
-      color: #ffffff;
-      border-color: var(--accent);
-    }
-
-    .action-btn.primary:hover {
-      background: var(--accent-hover);
-    }
-
-    /* 今日の1杯ボタン：紫色 */
-    .action-btn.purple-btn {
-      background: var(--purple);
-      color: #ffffff;
-      border-color: var(--purple);
-    }
-
-    .action-btn.purple-btn:hover {
-      background: var(--purple-hover);
-      border-color: var(--purple-hover);
-    }
+    .action-btn:hover { background: var(--bg-chip-hover); }
+    .action-btn.primary { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+    .action-btn.primary:hover { background: var(--accent-hover); }
+    .action-btn.purple-btn { background: var(--purple); color: #ffffff; border-color: var(--purple); }
+    .action-btn.purple-btn:hover { background: var(--purple-hover); border-color: var(--purple-hover); }
 
     .portal-row {
       display: flex;
@@ -302,11 +246,7 @@
       font-size: 0.8rem;
     }
 
-    .portal-label {
-      color: var(--text-muted);
-      font-weight: 700;
-      margin-right: 2px;
-    }
+    .portal-label { color: var(--text-muted); font-weight: 700; margin-right: 2px; }
 
     .portal-link {
       display: inline-flex;
@@ -322,10 +262,7 @@
       transition: border-color 0.15s, color 0.15s;
     }
 
-    .portal-link:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
+    .portal-link:hover { border-color: var(--accent); color: var(--accent); }
 
     .filter-bar {
       display: flex;
@@ -351,52 +288,14 @@
       transition: all 0.15s;
     }
 
-    .filter-tab-btn:hover {
-      background: var(--bg-chip-hover);
-    }
-
-    .filter-tab-btn.drawer-open {
-      background: var(--accent);
-      color: #ffffff;
-      border-color: var(--accent);
-    }
-
-    .filter-tab-btn.active-filter {
-      border-color: var(--accent);
-      box-shadow: inset 0 0 0 1px var(--accent);
-    }
-
-    /* リセットボタン：赤色 */
-    .filter-tab-btn.reset-btn {
-      background: var(--danger);
-      color: #ffffff;
-      border-color: var(--danger);
-    }
-
-    .filter-tab-btn.reset-btn:hover {
-      background: var(--danger-hover);
-      border-color: var(--danger-hover);
-    }
-
-    /* お気に入りボタン：黄色文字 */
-    .filter-tab-btn.fav-tab-btn {
-      background: #332b24;
-      color: #facc15;
-      border-color: #ca8a04;
-    }
-
-    .filter-tab-btn.fav-tab-btn:hover {
-      background: #453a30;
-      color: #fde047;
-      border-color: #eab308;
-    }
-
-    .filter-tab-btn.fav-tab-btn.active-filter {
-      background: #241e19;
-      color: #fde047;
-      border-color: #facc15;
-      box-shadow: 0 0 0 2px rgba(250, 204, 21, 0.45);
-    }
+    .filter-tab-btn:hover { background: var(--bg-chip-hover); }
+    .filter-tab-btn.drawer-open { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+    .filter-tab-btn.active-filter { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+    .filter-tab-btn.reset-btn { background: var(--danger); color: #ffffff; border-color: var(--danger); }
+    .filter-tab-btn.reset-btn:hover { background: var(--danger-hover); border-color: var(--danger-hover); }
+    .filter-tab-btn.fav-tab-btn { background: #332b24; color: #facc15; border-color: #ca8a04; }
+    .filter-tab-btn.fav-tab-btn:hover { background: #453a30; color: #fde047; border-color: #eab308; }
+    .filter-tab-btn.fav-tab-btn.active-filter { background: #241e19; color: #fde047; border-color: #facc15; box-shadow: 0 0 0 2px rgba(250, 204, 21, 0.45); }
 
     .subfilter-drawer {
       display: none;
@@ -408,9 +307,7 @@
       animation: fadeIn 0.15s ease-out;
     }
 
-    .subfilter-drawer.open {
-      display: block;
-    }
+    .subfilter-drawer.open { display: block; }
 
     .subfilter-header {
       display: flex;
@@ -432,11 +329,7 @@
       padding: 2px 6px;
     }
 
-    .subfilter-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
+    .subfilter-grid { display: flex; flex-wrap: wrap; gap: 6px; }
 
     .sub-chip {
       padding: 6px 11px;
@@ -450,13 +343,8 @@
       transition: all 0.15s;
     }
 
-    .sub-chip:hover {
-      background: var(--accent);
-      color: #ffffff;
-      border-color: var(--accent);
-    }
+    .sub-chip:hover { background: var(--accent); color: #ffffff; border-color: var(--accent); }
 
-    /* HORAL情報バナー（#HORAL選択時に表示） */
     .horal-banner {
       display: none;
       margin: 10px 0 6px;
@@ -469,22 +357,9 @@
       font-size: 0.85rem;
     }
 
-    .horal-banner.show {
-      display: block;
-    }
-
-    .horal-banner-title {
-      font-weight: 800;
-      color: var(--accent);
-      margin-bottom: 4px;
-      font-size: 0.92rem;
-    }
-
-    .horal-banner-text {
-      margin: 0;
-      color: var(--text-primary);
-      line-height: 1.6;
-    }
+    .horal-banner.show { display: block; }
+    .horal-banner-title { font-weight: 800; color: var(--accent); margin-bottom: 4px; font-size: 0.92rem; }
+    .horal-banner-text { margin: 0; color: var(--text-primary); line-height: 1.6; }
 
     .status-bar {
       display: flex;
@@ -495,23 +370,9 @@
       margin: 12px 2px 10px;
     }
 
-    .count-area {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .result-count {
-      font-size: 0.96rem;
-      font-weight: 800;
-      color: var(--text-primary);
-    }
-
-    .result-count span {
-      font-size: 1.2rem;
-      color: var(--accent);
-    }
+    .count-area { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+    .result-count { font-size: 0.96rem; font-weight: 800; color: var(--text-primary); }
+    .result-count span { font-size: 1.2rem; color: var(--accent); }
 
     .active-badge {
       display: inline-flex;
@@ -526,16 +387,8 @@
       font-weight: 700;
     }
 
-    .sort-area {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--text-secondary);
-    }
+    .sort-area { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 700; color: var(--text-secondary); }
 
-    /* 並び替えボタン（セレクトボックス）：背景色を薄い黄緑色＋iOSズーム防止のため16px */
     .sort-select {
       padding: 6px 10px;
       border-radius: 8px;
@@ -548,9 +401,7 @@
       transition: filter 0.15s;
     }
 
-    .sort-select:hover {
-      filter: brightness(0.96);
-    }
+    .sort-select:hover { filter: brightness(0.96); }
 
     .beer-grid {
       display: grid;
@@ -558,7 +409,6 @@
       gap: 16px;
     }
 
-    /* ビールカード：背景色・枠線・影のコントラストを高め、ページ背景から明確に判別可能に */
     .beer-card {
       display: flex;
       flex-direction: column;
@@ -577,12 +427,7 @@
       box-shadow: 0 6px 16px rgba(36, 31, 28, 0.18);
     }
 
-    .card-top {
-      display: flex;
-      gap: 12px;
-      padding: 12px;
-      align-items: flex-start;
-    }
+    .card-top { display: flex; gap: 12px; padding: 12px; align-items: flex-start; }
 
     .card-thumb-wrap {
       position: relative;
@@ -600,29 +445,10 @@
       transition: border-color 0.15s, transform 0.15s;
     }
 
-    .card-thumb-wrap:hover {
-      border-color: var(--accent);
-      transform: scale(1.03);
-    }
-
-    .card-thumb {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      padding: 3px;
-    }
-
-    .card-info {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .card-title-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 6px;
-    }
+    .card-thumb-wrap:hover { border-color: var(--accent); transform: scale(1.03); }
+    .card-thumb { width: 100%; height: 100%; object-fit: contain; padding: 3px; }
+    .card-info { flex: 1; min-width: 0; }
+    .card-title-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 6px; }
 
     .beer-name-link {
       font-size: 1.05rem;
@@ -633,17 +459,8 @@
       word-break: break-word;
     }
 
-    .beer-name-link:hover {
-      text-decoration: underline;
-    }
-
-    .beer-name-plain {
-      font-size: 1.05rem;
-      font-weight: 800;
-      color: var(--accent);
-      line-height: 1.3;
-      word-break: break-word;
-    }
+    .beer-name-link:hover { text-decoration: underline; }
+    .beer-name-plain { font-size: 1.05rem; font-weight: 800; color: var(--accent); line-height: 1.3; word-break: break-word; }
 
     .card-fav-btn {
       display: inline-flex;
@@ -662,38 +479,11 @@
       transition: all 0.15s;
     }
 
-    .card-fav-btn:hover {
-      border-color: var(--fav-color);
-      color: var(--text-primary);
-    }
-
-    .card-fav-btn.is-fav {
-      background: #332b24;
-      color: #facc15;
-      border-color: #ca8a04;
-    }
-
-    .beer-reading {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      font-weight: 600;
-      margin-top: 2px;
-    }
-
-    .card-meta-list {
-      margin-top: 6px;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-      font-size: 0.82rem;
-    }
-
-    .meta-row {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 5px;
-    }
+    .card-fav-btn:hover { border-color: var(--fav-color); color: var(--text-primary); }
+    .card-fav-btn.is-fav { background: #332b24; color: #facc15; border-color: #ca8a04; }
+    .beer-reading { font-size: 0.78rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
+    .card-meta-list { margin-top: 6px; display: flex; flex-direction: column; gap: 3px; font-size: 0.82rem; }
+    .meta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; }
 
     .inline-link {
       background: none;
@@ -710,10 +500,7 @@
       overflow-wrap: anywhere;
     }
 
-    .inline-link:hover {
-      color: var(--accent);
-      text-decoration-color: var(--accent);
-    }
+    .inline-link:hover { color: var(--accent); text-decoration-color: var(--accent); }
 
     .style-badge {
       display: inline-block;
@@ -727,9 +514,7 @@
       cursor: pointer;
     }
 
-    .style-badge:hover {
-      border-color: var(--accent);
-    }
+    .style-badge:hover { border-color: var(--accent); }
 
     .abv-badge {
       display: inline-block;
@@ -741,13 +526,7 @@
       font-weight: 800;
     }
 
-    .card-body {
-      padding: 0 12px 10px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
+    .card-body { padding: 0 12px 10px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
 
     .card-summary {
       margin: 0;
@@ -769,12 +548,7 @@
       border-top: 1px solid var(--border);
     }
 
-    .card-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      flex: 1;
-    }
+    .card-tags { display: flex; flex-wrap: wrap; gap: 4px; flex: 1; }
 
     .tag-link {
       background: var(--bg-card);
@@ -787,19 +561,9 @@
       cursor: pointer;
     }
 
-    .tag-link:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
+    .tag-link:hover { border-color: var(--accent); color: var(--accent); }
+    .tag-link.horal-tag { border-color: var(--sort-border); background: var(--sort-bg); color: var(--sort-text); font-weight: 700; }
 
-    .tag-link.horal-tag {
-      border-color: var(--sort-border);
-      background: var(--sort-bg);
-      color: var(--sort-text);
-      font-weight: 700;
-    }
-
-    /* Mapボタン：背景を水色に設定 */
     .map-btn {
       display: inline-flex;
       align-items: center;
@@ -816,17 +580,9 @@
       transition: all 0.15s;
     }
 
-    .map-btn:hover {
-      background: var(--map-bg-hover);
-      color: #ffffff;
-      border-color: var(--map-bg-hover);
-    }
+    .map-btn:hover { background: var(--map-bg-hover); color: #ffffff; border-color: var(--map-bg-hover); }
+    html.dark .map-btn:hover { color: #082f49; }
 
-    html.dark .map-btn:hover {
-      color: #082f49;
-    }
-
-    /* モーダル共通（100dvh固定＋単一スクロール構造で「閉じる」ボタンが絶対に消えない設計） */
     .modal-backdrop {
       display: none;
       position: fixed;
@@ -843,14 +599,8 @@
       justify-content: center;
     }
 
-    .modal-backdrop.open {
-      display: flex;
-    }
-
-    .image-lightbox {
-      z-index: 1500;
-      background: rgba(0, 0, 0, 0.84);
-    }
+    .modal-backdrop.open { display: flex; }
+    .image-lightbox { z-index: 1500; background: rgba(0, 0, 0, 0.84); }
 
     .lightbox-dialog {
       display: flex;
@@ -878,12 +628,7 @@
       -webkit-overflow-scrolling: touch;
     }
 
-    .lightbox-body img {
-      max-width: 100%;
-      max-height: 70dvh;
-      object-fit: contain;
-      border-radius: 6px;
-    }
+    .lightbox-body img { max-width: 100%; max-height: 70dvh; object-fit: contain; border-radius: 6px; }
 
     .modal-dialog {
       display: flex;
@@ -911,34 +656,11 @@
       border-bottom: 1px solid var(--border);
     }
 
-    .modal-title-group {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .modal-beer-title {
-      margin: 0;
-      font-size: 1.18rem;
-      font-weight: 800;
-      line-height: 1.3;
-      overflow-wrap: anywhere;
-    }
-
-    .modal-beer-title a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    .modal-beer-title a:hover {
-      text-decoration: underline;
-    }
-
-    .modal-reading {
-      font-size: 0.84rem;
-      color: var(--text-muted);
-      font-weight: 600;
-      margin-top: 2px;
-    }
+    .modal-title-group { flex: 1; min-width: 0; }
+    .modal-beer-title { margin: 0; font-size: 1.18rem; font-weight: 800; line-height: 1.3; overflow-wrap: anywhere; }
+    .modal-beer-title a { color: var(--accent); text-decoration: none; }
+    .modal-beer-title a:hover { text-decoration: underline; }
+    .modal-reading { font-size: 0.84rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
 
     .modal-close-btn {
       display: inline-flex;
@@ -955,13 +677,8 @@
       flex-shrink: 0;
     }
 
-    .modal-close-btn:hover {
-      background: var(--danger);
-      color: #ffffff;
-      border-color: var(--danger);
-    }
+    .modal-close-btn:hover { background: var(--danger); color: #ffffff; border-color: var(--danger); }
 
-    /* 中央の本文エリアだけをスムーズに上下スクロールさせる */
     .modal-body {
       flex: 1 1 auto;
       min-height: 0;
@@ -997,44 +714,12 @@
       transition: border-color 0.15s, transform 0.15s;
     }
 
-    .detail-img-box:hover {
-      border-color: var(--accent);
-      transform: scale(1.02);
-    }
-
-    .detail-img-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      padding: 6px;
-    }
-
-    .detail-specs {
-      flex: 1 1 220px;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-      font-size: 0.9rem;
-    }
-
-    .spec-item {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 6px;
-      min-width: 0;
-    }
-
-    .spec-label {
-      font-weight: 800;
-      color: var(--text-secondary);
-      min-width: 82px;
-    }
-
-    .detail-section {
-      margin-bottom: 14px;
-    }
+    .detail-img-box:hover { border-color: var(--accent); transform: scale(1.02); }
+    .detail-img-box img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
+    .detail-specs { flex: 1 1 220px; min-width: 0; display: flex; flex-direction: column; gap: 7px; font-size: 0.9rem; }
+    .spec-item { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-width: 0; }
+    .spec-label { font-weight: 800; color: var(--text-secondary); min-width: 82px; }
+    .detail-section { margin-bottom: 14px; }
 
     .detail-section h3 {
       margin: 0 0 5px;
@@ -1045,15 +730,8 @@
       padding-left: 8px;
     }
 
-    .detail-section p {
-      margin: 0;
-      font-size: 0.9rem;
-      color: var(--text-primary);
-      line-height: 1.65;
-      overflow-wrap: anywhere;
-    }
+    .detail-section p { margin: 0; font-size: 0.9rem; color: var(--text-primary); line-height: 1.65; overflow-wrap: anywhere; }
 
-    /* テイスティングメモ欄（保存ボタン付き・iOS自動ズーム防止16px） */
     .memo-date-row {
       display: flex;
       flex-wrap: wrap;
@@ -1077,9 +755,7 @@
       cursor: pointer;
     }
 
-    html.dark .memo-date-input {
-      color-scheme: dark;
-    }
+    html.dark .memo-date-input { color-scheme: dark; }
 
     .memo-today-btn {
       padding: 6px 10px;
@@ -1092,10 +768,7 @@
       cursor: pointer;
     }
 
-    .memo-today-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
+    .memo-today-btn:hover { border-color: var(--accent); color: var(--accent); }
 
     .memo-box {
       width: 100%;
@@ -1136,33 +809,12 @@
       transition: background 0.15s;
     }
 
-    .memo-save-btn:hover {
-      background: var(--save-btn-hover);
-    }
-
-    .memo-status {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--text-muted);
-    }
-
-    .memo-status.unsaved {
-      color: var(--danger);
-    }
-
-    .memo-status.saved {
-      color: #15803d;
-    }
-
-    html.dark .memo-status.saved {
-      color: #4ade80;
-    }
-
-    .memo-hint {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      margin-top: 5px;
-    }
+    .memo-save-btn:hover { background: var(--save-btn-hover); }
+    .memo-status { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); }
+    .memo-status.unsaved { color: var(--danger); }
+    .memo-status.saved { color: #15803d; }
+    html.dark .memo-status.saved { color: #4ade80; }
+    .memo-hint { font-size: 0.78rem; color: var(--text-muted); margin-top: 5px; }
 
     .settings-label {
       display: block;
@@ -1172,7 +824,6 @@
       margin: 8px 0 4px;
     }
 
-    /* iOS自動ズーム防止のため16px */
     .settings-input, .settings-select {
       width: 100%;
       max-width: 100%;
@@ -1195,15 +846,8 @@
       border: 1px solid var(--border);
     }
 
-    .icon-preview-box img {
-      width: 56px;
-      height: 56px;
-      border-radius: 13px;
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.28);
-      flex-shrink: 0;
-    }
+    .icon-preview-box img { width: 56px; height: 56px; border-radius: 13px; box-shadow: 0 3px 8px rgba(0, 0, 0, 0.28); flex-shrink: 0; }
 
-    /* PC・フォールバック用共有選択バー（LINE・メール等） */
     .share-picker-bar {
       flex-shrink: 0;
       display: none;
@@ -1217,16 +861,8 @@
       animation: fadeIn 0.15s ease-out;
     }
 
-    .share-picker-bar.open {
-      display: flex;
-    }
-
-    .share-picker-label {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--text-secondary);
-      margin-right: auto;
-    }
+    .share-picker-bar.open { display: flex; }
+    .share-picker-label { font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); margin-right: auto; }
 
     .share-option-btn {
       display: inline-flex;
@@ -1244,19 +880,9 @@
       transition: all 0.15s;
     }
 
-    .share-option-btn:hover {
-      border-color: var(--accent);
-    }
-
-    .share-option-btn.line-opt {
-      background: #06c755;
-      border-color: #06c755;
-      color: #ffffff;
-    }
-
-    .share-option-btn.line-opt:hover {
-      background: #05b34c;
-    }
+    .share-option-btn:hover { border-color: var(--accent); }
+    .share-option-btn.line-opt { background: #06c755; border-color: #06c755; color: #ffffff; }
+    .share-option-btn.line-opt:hover { background: #05b34c; }
 
     .modal-footer {
       flex-shrink: 0;
@@ -1270,12 +896,7 @@
       border-top: 1px solid var(--border);
     }
 
-    .modal-footer-actions {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 8px;
-    }
+    .modal-footer-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 
     .fav-toggle-btn {
       display: inline-flex;
@@ -1291,11 +912,7 @@
       cursor: pointer;
     }
 
-    .fav-toggle-btn.is-fav {
-      background: #332b24;
-      color: #facc15;
-      border-color: #ca8a04;
-    }
+    .fav-toggle-btn.is-fav { background: #332b24; color: #facc15; border-color: #ca8a04; }
 
     .share-other-btn {
       display: inline-flex;
@@ -1312,9 +929,7 @@
       transition: background 0.15s;
     }
 
-    .share-other-btn:hover {
-      background: var(--share-btn-hover);
-    }
+    .share-other-btn:hover { background: var(--share-btn-hover); }
 
     .evernote-btn {
       display: inline-flex;
@@ -1331,9 +946,7 @@
       transition: background 0.15s;
     }
 
-    .evernote-btn:hover {
-      background: #008a25;
-    }
+    .evernote-btn:hover { background: #008a25; }
 
     .toast {
       position: fixed;
@@ -1356,11 +969,7 @@
       line-height: 1.5;
     }
 
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-      pointer-events: auto;
-    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
 
     .toast-link {
       display: inline-block;
@@ -1401,36 +1010,15 @@
     }
 
     @media (max-width: 600px) {
-      .container {
-        padding: calc(8px + env(safe-area-inset-top, 0px)) 10px 32px;
-      }
-      .control-panel {
-        padding: 8px 10px;
-      }
-      .filter-tab-btn {
-        padding: 6px 9px;
-        font-size: 0.8rem;
-      }
-      .beer-grid {
-        grid-template-columns: 1fr;
-        gap: 14px;
-      }
-      .modal-backdrop {
-        padding: calc(6px + env(safe-area-inset-top, 0px)) 8px calc(6px + env(safe-area-inset-bottom, 0px));
-      }
-      .modal-header {
-        padding: 10px 12px;
-      }
-      .modal-body {
-        padding: 12px;
-      }
-      .modal-footer {
-        padding: 9px 12px;
-      }
-      .fav-toggle-btn, .share-other-btn, .evernote-btn {
-        padding: 8px 10px;
-        font-size: 0.8rem;
-      }
+      .container { padding: calc(8px + env(safe-area-inset-top, 0px)) 10px 32px; }
+      .control-panel { padding: 8px 10px; }
+      .filter-tab-btn { padding: 6px 9px; font-size: 0.8rem; }
+      .beer-grid { grid-template-columns: 1fr; gap: 14px; }
+      .modal-backdrop { padding: calc(6px + env(safe-area-inset-top, 0px)) 8px calc(6px + env(safe-area-inset-bottom, 0px)); }
+      .modal-header { padding: 10px 12px; }
+      .modal-body { padding: 12px; }
+      .modal-footer { padding: 9px 12px; }
+      .fav-toggle-btn, .share-other-btn, .evernote-btn { padding: 8px 10px; font-size: 0.8rem; }
     }
   </style>
 </head>
@@ -1438,7 +1026,6 @@
   <div class="container">
     <header class="app-header">
       <div class="brand-group">
-        <!-- 案Bエンブレム（チューリップ型グラス × ベルギー三色旗） -->
         <svg class="brand-emblem" viewBox="0 0 64 64" aria-hidden="true">
           <polygon points="0,0 44,0 14,64 0,64" fill="#18181b"/>
           <polygon points="44,0 64,0 64,20 38,64 14,64" fill="#facc15"/>
@@ -1466,7 +1053,6 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           <input type="search" id="searchInput" class="search-input" placeholder="ビール名・読み・醸造所・特徴・メモを検索（表記ゆれ・委託対応）">
         </div>
-        <!-- 今日の1杯ボタン（紫色） -->
         <button type="button" id="randomBtn" class="action-btn purple-btn" title="現在の絞り込み条件からランダムで1杯表示">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.2" fill="currentColor"/><circle cx="15.5" cy="8.5" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="8.5" cy="15.5" r="1.2" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.2" fill="currentColor"/></svg>
           <span>今日の1杯</span>
@@ -1482,14 +1068,12 @@
       </div>
 
       <div class="filter-bar" role="toolbar" aria-label="カテゴリー絞り込み">
-        <!-- リセットボタン（赤色） -->
         <button type="button" id="resetBtn" class="filter-tab-btn reset-btn">リセット</button>
         <button type="button" class="filter-tab-btn" data-drawer="style">ビール分類</button>
         <button type="button" class="filter-tab-btn" data-drawer="brewery">醸造所</button>
         <button type="button" class="filter-tab-btn" data-drawer="region">地域</button>
         <button type="button" class="filter-tab-btn" data-drawer="term">用語</button>
         <button type="button" class="filter-tab-btn" data-drawer="abv">アルコール度数</button>
-        <!-- お気に入りボタン（黄色文字） -->
         <button type="button" id="favFilterBtn" class="filter-tab-btn fav-tab-btn">★ お気に入り</button>
       </div>
 
@@ -1502,7 +1086,6 @@
       </div>
     </section>
 
-    <!-- HORAL情報バナー（#HORAL絞り込み時に自動表示） -->
     <aside id="horalBanner" class="horal-banner" aria-label="HORAL情報">
       <div class="horal-banner-title">HORAL 活動内容・加盟醸造所一覧</div>
       <p class="horal-banner-text">
@@ -1547,7 +1130,6 @@
       </div>
       <div id="modalBody" class="modal-body"></div>
 
-      <!-- PCおよび共有シート非対応環境用の選択バー（LINE・メール等） -->
       <div id="sharePickerBar" class="share-picker-bar" aria-label="送信先アプリ選択">
         <span class="share-picker-label">送信先を選択（全文コピー済み）:</span>
         <button type="button" id="shareLineBtn" class="share-option-btn line-opt">LINEで送る</button>
@@ -1572,7 +1154,7 @@
     </div>
   </div>
 
-  <!-- ラベル画像拡大ポップアップ（ライトボックス） -->
+  <!-- ラベル画像拡大ポップアップ -->
   <div id="imageModal" class="modal-backdrop image-lightbox" role="dialog" aria-modal="true" aria-labelledby="imageModalTitle">
     <div class="lightbox-dialog">
       <div class="modal-header">
@@ -1653,7 +1235,6 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  <!-- データ部ファイル2：古いキャッシュを使わず常に最新の beers.js を同期読み込み -->
   <script>
     document.write('<script src="beers.js?v=' + Date.now() + '"><\/script>');
   </script>
@@ -1662,12 +1243,8 @@
     (function () {
       'use strict';
 
-      // セッションごとの画像キャッシュ回避用トークン
       let imageCacheToken = String(Date.now());
 
-      // ==========================================
-      // 案Bアプリアイコン（チューリップ型グラス × ベルギー三色旗）PNG自動生成
-      // ==========================================
       function renderBelgeNoteIconPng(size) {
         try {
           const canvas = document.createElement('canvas');
@@ -1802,12 +1379,8 @@
             theme_color: '#18181b',
             icons: []
           };
-          if (png180) {
-            manifestObj.icons.push({ src: png180, sizes: '180x180', type: 'image/png' });
-          }
-          if (png512) {
-            manifestObj.icons.push({ src: png512, sizes: '512x512', type: 'image/png' });
-          }
+          if (png180) manifestObj.icons.push({ src: png180, sizes: '180x180', type: 'image/png' });
+          if (png512) manifestObj.icons.push({ src: png512, sizes: '512x512', type: 'image/png' });
           const manifestUrl = 'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifestObj));
           const manifestLink = document.getElementById('manifestLink');
           if (manifestLink) manifestLink.href = manifestUrl;
@@ -1824,23 +1397,11 @@
         CACHED_BEERS: 'bbn_cached_beers_v1'
       };
 
-      // HORAL加盟醸造所マスターリスト（12醸造所）
       const HORAL_BREWERIES = [
-        'Boon',
-        'De Troch',
-        'Den Herberg',
-        'Eylenbosch',
-        'Hanssens',
-        'Kestemont',
-        'Lambiek Fabriek',
-        'Lindemans',
-        'Mort Subite',
-        'Oud Beersel',
-        'Sako',
-        'Timmermans'
+        'Boon', 'De Troch', 'Den Herberg', 'Eylenbosch', 'Hanssens', 'Kestemont',
+        'Lambiek Fabriek', 'Lindemans', 'Mort Subite', 'Oud Beersel', 'Sako', 'Timmermans'
       ];
 
-      // 醸造所の正規化辞書（「〜委託」や表記ゆれ・略称を同一醸造所として統合）
       const CANONICAL_BREWERY_RULES = [
         { canonical: 'プルーフ醸造所（De Proefbrouwerij）', patterns: ['de proefbrouwerij', 'deproefbrouwerij', 'proefbrouwerij', 'プルーフ醸造所'] },
         { canonical: 'Brouwerij De Graal（デ・グラーレ醸造所）', patterns: ['de graal', 'デ・グラーレ醸造所', 'デグラーレ醸造所'] },
@@ -1862,7 +1423,6 @@
         { canonical: 'The Brew Society / SOSAB（ザ・ブリュー・ソサエティ醸造所 / ソサブ）', patterns: ['the brew society', 'sosab', 'ソサエティ醸造所', 'ソサブ'] }
       ];
 
-      // フリーワード検索用の表記ゆれ・同義語グループ
       const SEARCH_SYNONYM_GROUPS = [
         ['geuze', 'gueuze', 'グーズ'],
         ['tripel', 'triple', 'トリプル', 'トリプゥ'],
@@ -1932,9 +1492,7 @@
         const result = [];
         const addUnique = name => {
           const clean = stripContractSuffix(name);
-          if (clean && !result.includes(clean)) {
-            result.push(clean);
-          }
+          if (clean && !result.includes(clean)) result.push(clean);
         };
 
         const rawBrewery = beer.brewery || '';
@@ -1963,9 +1521,7 @@
           });
         }
 
-        if (result.length === 0 && rawBrewery) {
-          addUnique(rawBrewery);
-        }
+        if (result.length === 0 && rawBrewery) addUnique(rawBrewery);
 
         const detailText = normalizeForSearch(`${beer.brewingMethod || ''} ${beer.history || ''}`);
         if (detailText.includes('委託')) {
@@ -2017,11 +1573,13 @@
         }
       }
 
-      // 裏付けの取れていない記述の除去・補正（Brasserie Lupulusの「シャンパンボトルで瓶内二次発酵」記述を削除）
+      // 不適切な表現や未確認記述の自動補正
       function sanitizeBeerEntry(item) {
         if (!item || typeof item !== 'object') return item;
-        const brewNorm = normalizeForSearch(`${item.brewery || ''} ${item.name || ''}`);
-        if (brewNorm.includes('lupulus') || brewNorm.includes('ルプルス')) {
+        const nameAndBrew = normalizeForSearch(`${item.brewery || ''} ${item.name || ''} ${item.reading || ''}`);
+
+        // 1. Brasserie Lupulus（ルプルス醸造所）の「シャンパンボトル」記述を除去
+        if (nameAndBrew.includes('lupulus') || nameAndBrew.includes('ルプルス')) {
           const cleanLupulusText = text => {
             if (!text || typeof text !== 'string') return text;
             return text
@@ -2031,17 +1589,61 @@
               .replace(/シャンパンボトルによる瓶内二次発酵/g, '瓶内二次発酵')
               .replace(/シャンパンボトル/g, 'ボトル');
           };
-          return Object.assign({}, item, {
+          item = Object.assign({}, item, {
             summary: cleanLupulusText(item.summary),
             brewingMethod: cleanLupulusText(item.brewingMethod),
             flavorProfile: cleanLupulusText(item.flavorProfile),
             history: cleanLupulusText(item.history)
           });
         }
+
+        // 2. 伝統的ランビック／グーズ（Lindemans Cuvee Rene、Cantillon Gueuze、Boon Geuze Mariage Parfait）での不適切な「シャンパン」表現を適切な表現へ置換・削除
+        const isTargetGueuze =
+          nameAndBrew.includes('cuvee rene') ||
+          nameAndBrew.includes('キュベルネ') ||
+          nameAndBrew.includes('キュベ・ルネ') ||
+          nameAndBrew.includes('キュベ･ルネ') ||
+          nameAndBrew.includes('cantillon gueuze') ||
+          nameAndBrew.includes('カンティヨングーズ') ||
+          nameAndBrew.includes('カンティヨン・グーズ') ||
+          nameAndBrew.includes('mariage parfait') ||
+          nameAndBrew.includes('マリアージュパルフェ') ||
+          nameAndBrew.includes('マリアージュ・パルフェ');
+
+        if (isTargetGueuze) {
+          const cleanGueuzeText = text => {
+            if (!text || typeof text !== 'string') return text;
+            return text
+              .replace(/「ブリュッセルのシャンパン」とも称される/g, '')
+              .replace(/「ブリュッセルのシャンパン」と称される/g, '')
+              .replace(/ブリュッセルのシャンパン/g, '伝統的な自然発酵スパークリング・ビール')
+              .replace(/シャンパンのようなきめ細かな泡立ち/g, 'きめ細かで豊かな泡立ち')
+              .replace(/シャンパンのようにきめ細かな泡立ち/g, 'きめ細かで豊かな泡立ち')
+              .replace(/シャンパンのような繊細な泡立ち/g, '繊細できめ細かな泡立ち')
+              .replace(/シャンパンのような泡立ち/g, 'きめ細かな泡立ち')
+              .replace(/シャンパンを思わせる/g, '白ワインやスパークリングワインを思わせる')
+              .replace(/シャンパンのような/g, 'スパークリングワインのような')
+              .replace(/シャンパンのように/g, 'スパークリングワインのように')
+              .replace(/シャンパンボトル（750ml等）に詰めて/g, '厚手の750ml瓶等に詰めて')
+              .replace(/シャンパンボトルに詰めて/g, '厚手の瓶に詰めて')
+              .replace(/750mlシャンパンボトル/g, '750ml瓶')
+              .replace(/シャンパンボトル/g, '厚手の瓶')
+              .replace(/シャンパン製法/g, '瓶内二次発酵製法')
+              .replace(/シャンパーニュ製法/g, '瓶内二次発酵製法')
+              .replace(/シャンパン/g, 'スパークリングワイン')
+              .replace(/シャンパーニュ/g, 'スパークリングワイン');
+          };
+          item = Object.assign({}, item, {
+            summary: cleanGueuzeText(item.summary),
+            brewingMethod: cleanGueuzeText(item.brewingMethod),
+            flavorProfile: cleanGueuzeText(item.flavorProfile),
+            history: cleanGueuzeText(item.history)
+          });
+        }
+
         return item;
       }
 
-      // 重複データ統合（beers.js 内に同じ id または同じビール名が複数ある場合、後の新しいデータで上書き）
       function deduplicateBeers(rawList) {
         if (!Array.isArray(rawList)) return [];
         const mapByKey = new Map();
@@ -2069,7 +1671,6 @@
         saveJson(STORAGE_KEYS.CACHED_BEERS, beers);
       }
 
-      // WEB環境（http/https）では、ページ表示後にもキャッシュ完全無視（no-store）で最新 beers.js を再確認する
       async function refreshBeersFromNetwork() {
         if (!/^https?:$/i.test(window.location.protocol)) return false;
         try {
@@ -2105,9 +1706,7 @@
 
       function getEffectiveTerms(beer) {
         const base = Array.isArray(beer.terms) ? beer.terms.slice() : [];
-        if (isHoralMember(beer) && !base.includes('#HORAL')) {
-          base.push('#HORAL');
-        }
+        if (isHoralMember(beer) && !base.includes('#HORAL')) base.push('#HORAL');
         return base;
       }
 
@@ -2185,9 +1784,7 @@
           memos[beerId] = { date: dateVal, text: textVal };
         }
         const ok = saveJson(STORAGE_KEYS.MEMOS, memos);
-        if (!ok) {
-          showToast('ブラウザの保存領域に書き込めませんでした。');
-        }
+        if (!ok) showToast('ブラウザの保存領域に書き込めませんでした。');
         return ok;
       }
 
@@ -2197,9 +1794,7 @@
         const span = document.createElement('span');
         span.textContent = msg;
         toastEl.appendChild(span);
-        if (htmlAction) {
-          toastEl.appendChild(htmlAction);
-        }
+        if (htmlAction) toastEl.appendChild(htmlAction);
         toastEl.classList.add('show');
         clearTimeout(toastTimer);
         toastTimer = setTimeout(() => toastEl.classList.remove('show'), htmlAction ? 6500 : 4000);
@@ -2236,9 +1831,7 @@
 
       function buildSafeUrlBody(fullText, maxEncodedLen) {
         const limit = maxEncodedLen || 4500;
-        if (encodeURIComponent(fullText).length <= limit) {
-          return { body: fullText, truncated: false };
-        }
+        if (encodeURIComponent(fullText).length <= limit) return { body: fullText, truncated: false };
         const suffix = '\n\n（※文字数制限のため以下省略：全文はコピー済みですので貼り付けできます）';
         let cut = fullText.slice(0, 480);
         while (cut.length > 50 && encodeURIComponent(cut + suffix).length > limit) {
@@ -2291,12 +1884,7 @@
           userMemoBlock
         ].filter(line => line !== null && line !== undefined).join('\n').replace(/\n{3,}/g, '\n\n').trim();
 
-        return {
-          baseTitle,
-          evernoteSubject,
-          cleanNotebook,
-          noteText
-        };
+        return { baseTitle, evernoteSubject, cleanNotebook, noteText };
       }
 
       function getDriveImageUrls(driveUrl, size) {
@@ -2313,11 +1901,7 @@
           };
         }
         const sep = driveUrl.includes('?') ? '&' : '?';
-        return {
-          primary: `${driveUrl}${sep}cb=${imageCacheToken}`,
-          cleanPrimary: driveUrl,
-          fallback: ''
-        };
+        return { primary: `${driveUrl}${sep}cb=${imageCacheToken}`, cleanPrimary: driveUrl, fallback: '' };
       }
 
       const FALLBACK_BOTTLE_SVG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 120'%3E%3Crect width='80' height='120' rx='8' fill='%23ede7db'/%3E%3Cpath d='M34 14h12v14l8 14v58a6 6 0 0 1-6 6H32a6 6 0 0 1-6-6V42l8-14V14z' fill='%239a4d0e'/%3E%3Crect x='29' y='54' width='22' height='26' rx='2' fill='%23fbf9f4'/%3E%3C/svg%3E";
@@ -2398,11 +1982,7 @@
 
       function applySingleCondition(type, value) {
         searchInput.value = '';
-        if (value === 'すべて') {
-          currentFilter = { type: 'all', value: 'all' };
-        } else {
-          currentFilter = { type, value };
-        }
+        currentFilter = value === 'すべて' ? { type: 'all', value: 'all' } : { type, value };
         closeDrawer();
         closeDetailModal(true);
         updateFilterTabHighlights();
@@ -2438,16 +2018,12 @@
         let items = [];
         if (drawerType === 'brewery') {
           const set = new Set();
-          beers.forEach(b => {
-            getBeerBreweries(b).forEach(name => set.add(name));
-          });
+          beers.forEach(b => getBeerBreweries(b).forEach(name => set.add(name)));
           items = Array.from(set).sort((a, b) => a.localeCompare(b, 'ja'));
         } else if (drawerType === 'region') {
           const base = FILTER_OPTIONS.region.slice();
           beers.forEach(b => {
-            if (b.region && !base.includes(b.region)) {
-              base.push(b.region);
-            }
+            if (b.region && !base.includes(b.region)) base.push(b.region);
           });
           items = base;
         } else {
@@ -2459,9 +2035,7 @@
           btn.type = 'button';
           btn.className = 'sub-chip';
           btn.textContent = item;
-          btn.addEventListener('click', () => {
-            applySingleCondition(drawerType, item);
-          });
+          btn.addEventListener('click', () => applySingleCondition(drawerType, item));
           subfilterGrid.appendChild(btn);
         });
 
@@ -2484,22 +2058,10 @@
           : '';
 
         const rawHaystack = [
-          beer.name,
-          beer.reading,
-          beer.brewery,
-          canonicalBreweries.join(' '),
-          beer.style,
-          beer.region,
-          beer.summary,
-          beer.importer,
-          beer.ingredients,
-          beer.brewingMethod,
-          beer.flavorProfile,
-          beer.history,
-          effectiveTerms.join(' '),
-          horalText,
-          entry.date,
-          entry.text
+          beer.name, beer.reading, beer.brewery, canonicalBreweries.join(' '),
+          beer.style, beer.region, beer.summary, beer.importer,
+          beer.ingredients, beer.brewingMethod, beer.flavorProfile, beer.history,
+          effectiveTerms.join(' '), horalText, entry.date, entry.text
         ].join(' ');
 
         const normHaystack = normalizeForSearch(rawHaystack);
@@ -2545,32 +2107,22 @@
 
         return beers.filter(beer => {
           const effectiveTerms = getEffectiveTerms(beer);
-
-          if (keyword) {
-            return matchesSearchKeyword(beer, keyword);
-          }
+          if (keyword) return matchesSearchKeyword(beer, keyword);
 
           const { type, value } = currentFilter;
           if (type === 'all' || value === 'all') return true;
+          if (type === 'favorite') return favorites.includes(beer.id);
 
-          if (type === 'favorite') {
-            return favorites.includes(beer.id);
-          }
           if (type === 'style') {
             const normName = normalizeForSearch(`${beer.name} ${beer.reading}`);
             if (value === 'トリプル') {
               return beer.style === 'トリプル' ||
-                normName.includes('tripel') ||
-                normName.includes('triple') ||
-                normName.includes('トリプル') ||
-                normName.includes('トリプゥ');
+                normName.includes('tripel') || normName.includes('triple') ||
+                normName.includes('トリプル') || normName.includes('トリプゥ');
             }
             if (value === 'ダブル') {
-              return beer.style === 'ダブル' ||
-                effectiveTerms.includes('#ダブル') ||
-                normName.includes('dubbel') ||
-                normName.includes('double') ||
-                normName.includes('ダブル');
+              return beer.style === 'ダブル' || effectiveTerms.includes('#ダブル') ||
+                normName.includes('dubbel') || normName.includes('double') || normName.includes('ダブル');
             }
             return beer.style === value;
           }
@@ -2581,16 +2133,10 @@
               stripContractSuffix(beer.brewery) === cleanVal ||
               compactForSearch(beer.brewery).includes(compactForSearch(cleanVal));
           }
-          if (type === 'region') {
-            return beer.region === value;
-          }
+          if (type === 'region') return beer.region === value;
           if (type === 'term') {
-            if (value === '#HORAL' || value === 'HORAL') {
-              return isHoralMember(beer);
-            }
-            if (value === '#ダブル') {
-              return effectiveTerms.includes('#ダブル') || beer.style === 'ダブル';
-            }
+            if (value === '#HORAL' || value === 'HORAL') return isHoralMember(beer);
+            if (value === '#ダブル') return effectiveTerms.includes('#ダブル') || beer.style === 'ダブル';
             if (value === '#ゴールデン' || value === '#ゴールデ') {
               return effectiveTerms.includes('#ゴールデン') || effectiveTerms.includes('#ゴールデ');
             }
@@ -2612,26 +2158,12 @@
         const copy = list.slice();
 
         copy.sort((a, b) => {
-          if (mode === 'abv-desc') {
-            return (Number(b.abv) - Number(a.abv)) || a.reading.localeCompare(b.reading, 'ja');
-          }
-          if (mode === 'abv-asc') {
-            return (Number(a.abv) - Number(b.abv)) || a.reading.localeCompare(b.reading, 'ja');
-          }
-          if (mode === 'name-ja') {
-            return a.reading.localeCompare(b.reading, 'ja');
-          }
-          if (mode === 'style') {
-            return a.style.localeCompare(b.style, 'ja') || (Number(b.abv) - Number(a.abv));
-          }
-          if (mode === 'brewery') {
-            return getPrimaryCanonicalBrewery(a).localeCompare(getPrimaryCanonicalBrewery(b), 'ja') ||
-              a.reading.localeCompare(b.reading, 'ja');
-          }
-          if (mode === 'region') {
-            return a.region.localeCompare(b.region, 'ja') ||
-              getPrimaryCanonicalBrewery(a).localeCompare(getPrimaryCanonicalBrewery(b), 'ja');
-          }
+          if (mode === 'abv-desc') return (Number(b.abv) - Number(a.abv)) || a.reading.localeCompare(b.reading, 'ja');
+          if (mode === 'abv-asc') return (Number(a.abv) - Number(b.abv)) || a.reading.localeCompare(b.reading, 'ja');
+          if (mode === 'name-ja') return a.reading.localeCompare(b.reading, 'ja');
+          if (mode === 'style') return a.style.localeCompare(b.style, 'ja') || (Number(b.abv) - Number(a.abv));
+          if (mode === 'brewery') return getPrimaryCanonicalBrewery(a).localeCompare(getPrimaryCanonicalBrewery(b), 'ja') || a.reading.localeCompare(b.reading, 'ja');
+          if (mode === 'region') return a.region.localeCompare(b.region, 'ja') || getPrimaryCanonicalBrewery(a).localeCompare(getPrimaryCanonicalBrewery(b), 'ja');
           return 0;
         });
 
@@ -2671,12 +2203,8 @@
           activeFilterBadge.textContent = `検索語: 「${keyword}」`;
         } else if (currentFilter.type !== 'all') {
           const labels = {
-            style: '分類',
-            brewery: '醸造所',
-            region: '地域',
-            term: '用語',
-            abv: '度数',
-            favorite: 'お気に入り'
+            style: '分類', brewery: '醸造所', region: '地域',
+            term: '用語', abv: '度数', favorite: 'お気に入り'
           };
           activeFilterBadge.style.display = 'inline-flex';
           activeFilterBadge.textContent = currentFilter.type === 'favorite'
@@ -2851,7 +2379,6 @@
       }
 
       function openDetailModal(beer) {
-        // 最新の beers 配列から同じID/名前のオブジェクトを再取得して鮮度を保証
         const latestBeer = beers.find(item => item.id === beer.id || item.name === beer.name) || beer;
         currentDetailBeer = latestBeer;
         hasUnsavedMemo = false;
@@ -3039,9 +2566,7 @@
             textarea.blur();
             dateInput.blur();
             showToast('テイスティングメモを保存しました。');
-            if (searchInput.value.trim()) {
-              renderBeers();
-            }
+            if (searchInput.value.trim()) renderBeers();
           }
         });
 
@@ -3100,10 +2625,7 @@
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         if (isMobile && navigator.share) {
           try {
-            await navigator.share({
-              title: payload.baseTitle,
-              text: payload.noteText
-            });
+            await navigator.share({ title: payload.baseTitle, text: payload.noteText });
             return;
           } catch (e) {
             if (e && e.name === 'AbortError') return;
@@ -3118,8 +2640,7 @@
         if (!payload) return;
         copyTextSyncFallback(payload.noteText);
         const safe = buildSafeUrlBody(payload.noteText, 1800);
-        const lineUrl = `https://line.me/R/share?text=${encodeURIComponent(safe.body)}`;
-        window.open(lineUrl, '_blank', 'noopener,noreferrer');
+        window.open(`https://line.me/R/share?text=${encodeURIComponent(safe.body)}`, '_blank', 'noopener,noreferrer');
         sharePickerBar.classList.remove('open');
         showToast('LINE共有画面を開きました（全文もクリップボードにコピー済みです）。');
       });
@@ -3129,8 +2650,7 @@
         if (!payload) return;
         copyTextSyncFallback(payload.noteText);
         const safe = buildSafeUrlBody(payload.noteText, 4500);
-        const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&su=${encodeURIComponent(payload.baseTitle)}&body=${encodeURIComponent(safe.body)}`;
-        window.open(gmailUrl, '_blank', 'noopener,noreferrer');
+        window.open(`https://mail.google.com/mail/?view=cm&fs=1&su=${encodeURIComponent(payload.baseTitle)}&body=${encodeURIComponent(safe.body)}`, '_blank', 'noopener,noreferrer');
         sharePickerBar.classList.remove('open');
         showToast('Gmailの作成画面を新しいタブで開きました。');
       });
@@ -3163,9 +2683,7 @@
 
         if (evernoteEmail && evernoteEmail.includes('@')) {
           let effectiveClient = evernoteMailClient;
-          if (effectiveClient === 'auto') {
-            effectiveClient = isMobile ? 'mailto' : 'gmail';
-          }
+          if (effectiveClient === 'auto') effectiveClient = isMobile ? 'mailto' : 'gmail';
 
           if (effectiveClient === 'gmail') {
             const safeResult = buildSafeUrlBody(payload.noteText, 4500);
@@ -3188,10 +2706,7 @@
 
         if (isMobile && navigator.share) {
           try {
-            await navigator.share({
-              title: payload.evernoteSubject,
-              text: payload.noteText
-            });
+            await navigator.share({ title: payload.evernoteSubject, text: payload.noteText });
             return;
           } catch (e) {
             if (e && e.name === 'AbortError') return;
@@ -3211,16 +2726,12 @@
       document.getElementById('resetBtn').addEventListener('click', resetAllFilters);
 
       document.querySelectorAll('.filter-tab-btn[data-drawer]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          openDrawer(btn.getAttribute('data-drawer'));
-        });
+        btn.addEventListener('click', () => openDrawer(btn.getAttribute('data-drawer')));
       });
 
       document.getElementById('closeDrawerBtn').addEventListener('click', closeDrawer);
 
-      document.getElementById('favFilterBtn').addEventListener('click', () => {
-        applySingleCondition('favorite', 'true');
-      });
+      document.getElementById('favFilterBtn').addEventListener('click', () => applySingleCondition('favorite', 'true'));
 
       searchInput.addEventListener('input', () => {
         if (currentFilter.type !== 'all') {
@@ -3273,11 +2784,8 @@
         if (e.target === settingsModal) closeSettingsModal();
       });
 
-      // キャッシュを破棄して最新版の beers.js と画像を強制再読込するボタン
       document.getElementById('forceReloadBtn').addEventListener('click', async () => {
-        try {
-          localStorage.removeItem(STORAGE_KEYS.CACHED_BEERS);
-        } catch (e) {}
+        try { localStorage.removeItem(STORAGE_KEYS.CACHED_BEERS); } catch (e) {}
         imageCacheToken = String(Date.now());
 
         if (/^https?:$/i.test(window.location.protocol)) {
@@ -3301,22 +2809,13 @@
         evernoteMailClient = clientVal;
 
         localStorage.setItem(STORAGE_KEYS.EVERNOTE_MAIL_CLIENT, clientVal);
+        if (emailVal) localStorage.setItem(STORAGE_KEYS.EVERNOTE_EMAIL, emailVal);
+        else localStorage.removeItem(STORAGE_KEYS.EVERNOTE_EMAIL);
 
-        if (emailVal) {
-          localStorage.setItem(STORAGE_KEYS.EVERNOTE_EMAIL, emailVal);
-        } else {
-          localStorage.removeItem(STORAGE_KEYS.EVERNOTE_EMAIL);
-        }
+        if (nbVal) localStorage.setItem(STORAGE_KEYS.EVERNOTE_NOTEBOOK, nbVal);
+        else localStorage.removeItem(STORAGE_KEYS.EVERNOTE_NOTEBOOK);
 
-        if (nbVal) {
-          localStorage.setItem(STORAGE_KEYS.EVERNOTE_NOTEBOOK, nbVal);
-        } else {
-          localStorage.removeItem(STORAGE_KEYS.EVERNOTE_NOTEBOOK);
-        }
-
-        const msg = nbVal
-          ? `Evernote設定を保存しました（送信先ノートブック: @${nbVal}）。`
-          : 'Evernote設定を保存しました。';
+        const msg = nbVal ? `Evernote設定を保存しました（送信先ノートブック: @${nbVal}）。` : 'Evernote設定を保存しました。';
         showToast(msg);
       });
 
@@ -3384,10 +2883,7 @@
 
       document.addEventListener('keydown', e => {
         if (e.key === 'Escape') {
-          if (imageModal.classList.contains('open')) {
-            closeImageModal();
-            return;
-          }
+          if (imageModal.classList.contains('open')) { closeImageModal(); return; }
           if (detailModal.classList.contains('open')) closeDetailModal(false);
           if (settingsModal.classList.contains('open')) closeSettingsModal();
         }
@@ -3398,7 +2894,6 @@
       initTheme();
       renderBeers();
 
-      // WEB環境の場合はバックグラウンドでも最新 beers.js を確認し、差分があれば自動更新
       refreshBeersFromNetwork().then(updated => {
         if (updated) {
           imageCacheToken = String(Date.now());
