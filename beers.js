@@ -2665,7 +2665,7 @@ window.BEER_DATA.push(
   },
   {
     id: "duvel-tripel-hop",
-    name: "DuvelTripel Hop",
+    name: "Duvel Tripel Hop",
     reading: "デュベル・トリプルホップ",
     brewery: "Brouwerij Duvel Moortgat（デュベル・モルトガット醸造所）",
     style: "IPA",
@@ -2684,7 +2684,7 @@ window.BEER_DATA.push(
   },
   {
     id: "duvel-tripel-hop-cashmere",
-    name: "DuvelTripel Hop Cashimere",
+    name: "Duvel Tripel Hop Cashimere",
     reading: "デュベル・トリプルホップ・カシミア",
     brewery: "Brouwerij Duvel Moortgat（デュベル・モルトガット醸造所）",
     style: "IPA",
@@ -2780,7 +2780,7 @@ window.BEER_DATA.push(
   {
     id: "delirium-christmas",
     name: "Delirium Christmas",
-    reading: "デリリュウム・クリスマ",
+    reading: "デリリュウム・クリスマス",
     brewery: "Brouwerij Huyghe（ヒューグ醸造所）",
     style: "ブラウン",
     region: "東フランデレン州",
