@@ -1449,7 +1449,7 @@
       <div class="search-row">
         <div class="search-input-wrap">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="search" id="searchInput" class="search-input" placeholder="ビール名・読み・醸造所・特徴・テイスティングメモを検索...">
+          <input type="search" id="searchInput" class="search-input" placeholder="ビール名・読み・醸造所・特徴・メモを検索（表記ゆれ・委託対応）">
         </div>
         <!-- 今日の1杯ボタン（紫色） -->
         <button type="button" id="randomBtn" class="action-btn purple-btn" title="現在の絞り込み条件からランダムで1杯表示">
@@ -1813,16 +1813,170 @@
         'Timmermans'
       ];
 
+      // 醸造所の正規化辞書（「〜委託」や表記ゆれ・略称を同一醸造所として統合）
+      const CANONICAL_BREWERY_RULES = [
+        { canonical: 'プルーフ醸造所（De Proefbrouwerij）', patterns: ['de proefbrouwerij', 'deproefbrouwerij', 'proefbrouwerij', 'プルーフ醸造所'] },
+        { canonical: 'Brouwerij De Graal（デ・グラーレ醸造所）', patterns: ['de graal', 'デ・グラーレ醸造所', 'デグラーレ醸造所'] },
+        { canonical: 'Brouwerij Duvel Moortgat（デュベル・モルトガット醸造所）', patterns: ['duvel moortgat', 'デュベル・モルトガット醸造所', 'デュベルモルトガット醸造所'] },
+        { canonical: 'ムスケティールス醸造所（Brouwerij The Musketeers）', patterns: ['the musketeers', 'ムスケティールス醸造所'] },
+        { canonical: 'ヴェルハーゲ醸造所（Brouwerij Verhaeghe）', patterns: ['verhaeghe', 'ヴェルハーゲ醸造所', 'ベルハーゲ醸造所'] },
+        { canonical: 'ラ・センヌ醸造所（Brasserie de la Senne）', patterns: ['de la senne', 'ラ・センヌ醸造所', 'ラセンヌ醸造所'] },
+        { canonical: 'デ・ライト醸造所（De Leite Brouwerij）', patterns: ['de leite', 'デ・ライト醸造所', 'デライト醸造所'] },
+        { canonical: "ブラッスリー・ダシュフ醸造所（Brasserie d'Achouffe）", patterns: ["d'achouffe", 'achouffe', 'ダシュフ醸造所'] },
+        { canonical: 'Brouwerij Boon（ブーン醸造所）', patterns: ['brouwerij boon', 'ブーン醸造所'] },
+        { canonical: 'Brouwerij De Ranke（デ・ランク醸造所）', patterns: ['de ranke', 'デ・ランク醸造所', 'デランク醸造所'] },
+        { canonical: 'De Dolle Brouwers（ドゥ・ドール醸造所）', patterns: ['de dolle', 'ドゥ・ドール醸造所', 'ドゥドール醸造所'] },
+        { canonical: 'Brouwerij Bosteels（ボスティールス醸造所）', patterns: ['bosteels', 'ボスティールス醸造所'] },
+        { canonical: 'Brouwerij St. Bernardus（セント・ベルナルデュス醸造所）', patterns: ['st. bernardus', 'st bernardus', 'セント・ベルナルデュス醸造所'] },
+        { canonical: 'Brasserie Caracole（カラコル醸造所）', patterns: ['caracole', 'カラコル醸造所'] },
+        { canonical: 'Brasserie de Silly（シリィ醸造所）', patterns: ['de silly', 'シリィ醸造所'] },
+        { canonical: 'Brasserie Dupont（デュポン醸造所）', patterns: ['brasserie dupont', 'デュポン醸造所'] },
+        { canonical: 'Brasserie Lefebvre（ルフェーヴル醸造所）', patterns: ['lefebvre', 'ルフェーヴル醸造所', 'ルフェーブル醸造所'] },
+        { canonical: 'The Brew Society / SOSAB（ザ・ブリュー・ソサエティ醸造所 / ソサブ）', patterns: ['the brew society', 'sosab', 'ソサエティ醸造所', 'ソサブ'] }
+      ];
+
+      // フリーワード検索用の表記ゆれ・同義語グループ
+      const SEARCH_SYNONYM_GROUPS = [
+        ['geuze', 'gueuze', 'グーズ'],
+        ['tripel', 'triple', 'トリプル', 'トリプゥ'],
+        ['dubbel', 'double', 'ダブル'],
+        ['quadrupel', 'quadruple', 'クアドルプル', 'クワドルプル'],
+        ['witbier', 'white', 'blanche', 'ウィット', 'ホワイト', 'ブランシュ'],
+        ['bruin', 'brune', 'brown', 'ブリューン', 'ブリュンヌ', 'ブラウン'],
+        ['blond', 'blonde', 'ブロンド'],
+        ['kriek', 'krieken', 'クリーク'],
+        ['chouffe', 'シュフ'],
+        ['rochefort', 'ロシュフォール'],
+        ['chimay', 'シメイ'],
+        ['westmalle', 'ウエストマール', 'ウェストマール'],
+        ['westvleteren', 'ウェストフレテレン', 'ウエストフレテレン'],
+        ['orval', 'オルヴァル', 'オルバル'],
+        ['duvel', 'デュベル'],
+        ['boon', 'ブーン'],
+        ['cantillon', 'カンティヨン'],
+        ['rodenbach', 'ローデンバッハ'],
+        ['proefbrouwerij', 'プルーフ醸造所'],
+        ['de graal', 'デグラーレ', 'デ・グラーレ'],
+        ['de ranke', 'デランク', 'デ・ランク'],
+        ['de dolle', 'ドゥドール', 'ドゥ・ドール'],
+        ['bosteels', 'ボスティールス'],
+        ['dupont', 'デュポン'],
+        ['lefebvre', 'ルフェーヴル', 'ルフェーブル'],
+        ['verhaeghe', 'ヴェルハーゲ', 'ベルハーゲ'],
+        ['de la senne', 'ラセンヌ', 'ラ・センヌ'],
+        ['musketeers', 'ムスケティールス']
+      ];
+
+      // 英字アクセント記号マップ（日本語文字は破壊しない）
+      const ACCENT_CHAR_MAP = {
+        'à': 'a', 'á': 'a', 'â': 'a', 'ã': 'a', 'ä': 'a', 'å': 'a',
+        'ç': 'c',
+        'è': 'e', 'é': 'e', 'ê': 'e', 'ë': 'e',
+        'ì': 'i', 'í': 'i', 'î': 'i', 'ï': 'i',
+        'ñ': 'n',
+        'ò': 'o', 'ó': 'o', 'ô': 'o', 'õ': 'o', 'ö': 'o',
+        'ù': 'u', 'ú': 'u', 'û': 'u', 'ü': 'u',
+        'ý': 'y', 'ÿ': 'y'
+      };
+
+      function normalizeForSearch(str) {
+        if (!str) return '';
+        let s = String(str).normalize('NFKC').toLowerCase();
+        s = s.replace(/[àáâãäåçèéêëìíîïñòóôõöùúûüýÿ]/g, ch => ACCENT_CHAR_MAP[ch] || ch);
+        s = s.replace(/[’'`]/g, '');
+        return s;
+      }
+
+      // 中黒・ハイフン・空白・括弧・委託などを除去した圧縮文字列（表記ゆれ吸収用）
+      function compactForSearch(str) {
+        return normalizeForSearch(str)
+          .replace(/委託醸造|委託生産|委託/g, '')
+          .replace(/[\s・･\-‐－—/／()（）【】\[\].,、。!！?？:：]/g, '');
+      }
+
+      // 醸造所名から「委託」接尾語を除去して整形
+      function stripContractSuffix(breweryStr) {
+        if (!breweryStr) return '';
+        return String(breweryStr)
+          .replace(/（委託醸造）|\(委託醸造\)|（委託生産）|\(委託生産\)|（委託）|\(委託\)/g, '')
+          .replace(/委託醸造|委託生産|委託/g, '')
+          .replace(/\s+/g, ' ')
+          .trim();
+      }
+
+      // 1つのビールが紐づく正規化醸造所名リストを取得（メイン醸造所＋併記・委託先醸造所）
+      function getBeerBreweries(beer) {
+        const result = [];
+        const addUnique = name => {
+          const clean = stripContractSuffix(name);
+          if (clean && !result.includes(clean)) {
+            result.push(clean);
+          }
+        };
+
+        const rawBrewery = beer.brewery || '';
+        const normBrewery = normalizeForSearch(rawBrewery);
+
+        // 1. 既知の正規化ルールにマッチする醸造所をすべて抽出（併記や委託も吸収）
+        CANONICAL_BREWERY_RULES.forEach(rule => {
+          if (rule.patterns.some(p => normBrewery.includes(normalizeForSearch(p)))) {
+            addUnique(rule.canonical);
+          }
+        });
+
+        // 2. 「/」で複数併記されている場合（例: White Pony Microbrewery / De Graal（ホワイト・ポニー / デ・グラーレ醸造所委託））
+        if (rawBrewery.includes('/')) {
+          const cleaned = stripContractSuffix(rawBrewery);
+          // 既にルールで1つ以上抽出できていれば、重複した長い併記文字列は増やさずブランド側のみ補助抽出
+          const mainPart = cleaned.split('（')[0].split('(')[0].trim();
+          const subParts = mainPart.split('/').map(p => p.trim()).filter(Boolean);
+          subParts.forEach(part => {
+            const normPart = normalizeForSearch(part);
+            const matchedRule = CANONICAL_BREWERY_RULES.find(r =>
+              r.patterns.some(p => normPart.includes(normalizeForSearch(p)))
+            );
+            if (matchedRule) {
+              addUnique(matchedRule.canonical);
+            } else if (result.length === 0) {
+              addUnique(cleaned);
+            }
+          });
+        }
+
+        // 3. ルール未登録の一般醸造所は「委託」等の文字だけ除去した名前を登録
+        if (result.length === 0 && rawBrewery) {
+          addUnique(rawBrewery);
+        }
+
+        // 4. 解説文（製法・歴史）にプルーフ醸造所等の委託生産が明記されている場合も関連付け
+        const detailText = normalizeForSearch(`${beer.brewingMethod || ''} ${beer.history || ''}`);
+        if (detailText.includes('委託')) {
+          CANONICAL_BREWERY_RULES.forEach(rule => {
+            if (rule.patterns.some(p => detailText.includes(normalizeForSearch(p)))) {
+              addUnique(rule.canonical);
+            }
+          });
+        }
+
+        return result;
+      }
+
+      // カードや詳細モーダルの醸造所リンクを押した際に使う代表正規化醸造所名
+      function getPrimaryCanonicalBrewery(beer) {
+        const list = getBeerBreweries(beer);
+        return list.length > 0 ? list[0] : stripContractSuffix(beer.brewery || '');
+      }
+
       const FILTER_OPTIONS = {
         style: ['すべて', 'ランビック', 'トラピスト', 'アビイ', 'トリプル', 'ダブル', 'セゾン', 'サワー', 'ホワイト', 'アンバー', 'ブラウン', 'ピルスナー', 'IPA', 'フルーツ'],
         term: ['#ランビック', '#トラピスト', '#アビイ', '#ブレタノマイセス', '#修道院', '#レッド', '#ゴールデン', '#ダーク', '#ダブル', '#ハイアルコール', '#HORAL'],
         abv: ['4.9%以下', '5.0%〜6.9%', '7.0%〜8.9%', '9.0%以上'],
-        region: ['西フランデレン州', '東フランデレン州', 'フラームス・ブラバント州', 'アントウェルペン州', 'リンブルフ州', 'ワロン・ブラバント州', 'ナミュール州', 'エノー州', 'リエージュ州', 'リュクサンブール州']
+        region: ['西フランデレン州', '東フランデレン州', 'フラームス・ブラバント州', 'アントウェルペン州', 'リンブルフ州', 'ワロン・ブラバント州', 'ナミュール州', 'エノー州', 'リエージュ州', 'リュクサンブール州', 'ブリュッセル首都圏地域']
       };
 
       const DRAWER_TITLES = {
         style: 'ビール分類を選択（選択すると自動で閉じます）',
-        brewery: '醸造所を選択（選択すると自動で閉じます）',
+        brewery: '醸造所を選択（委託・表記ゆれ統合済み）',
         region: '地域を選択（選択すると自動で閉じます）',
         term: '用語を選択（選択すると自動で閉じます）',
         abv: 'アルコール度数を選択（選択すると自動で閉じます）'
@@ -1877,7 +2031,6 @@
       const sharePickerBar = document.getElementById('sharePickerBar');
       const toastEl = document.getElementById('toast');
 
-      // iOS Safariでも背面ページのスクロール貫通を完全に防ぐロック制御
       function updateBodyScrollLock() {
         const anyOpen =
           detailModal.classList.contains('open') ||
@@ -2182,8 +2335,19 @@
 
         let items = [];
         if (drawerType === 'brewery') {
-          const set = new Set(beers.map(b => b.brewery).filter(Boolean));
+          const set = new Set();
+          beers.forEach(b => {
+            getBeerBreweries(b).forEach(name => set.add(name));
+          });
           items = Array.from(set).sort((a, b) => a.localeCompare(b, 'ja'));
+        } else if (drawerType === 'region') {
+          const base = FILTER_OPTIONS.region.slice();
+          beers.forEach(b => {
+            if (b.region && !base.includes(b.region)) {
+              base.push(b.region);
+            }
+          });
+          items = base;
         } else {
           items = FILTER_OPTIONS[drawerType] || [];
         }
@@ -2209,35 +2373,82 @@
         updateFilterTabHighlights();
       }
 
+      // フリーワード検索の一致判定（表記ゆれ・同義語・委託・複数キーワードAND検索対応）
+      function matchesSearchKeyword(beer, rawKeyword) {
+        const effectiveTerms = getEffectiveTerms(beer);
+        const canonicalBreweries = getBeerBreweries(beer);
+        const entry = getMemoEntry(beer.id);
+        const horalText = isHoralMember(beer)
+          ? 'HORAL Toer de Geuze トゥール・ド・グーズ Megablend メガブレンド'
+          : '';
+
+        const rawHaystack = [
+          beer.name,
+          beer.reading,
+          beer.brewery,
+          canonicalBreweries.join(' '),
+          beer.style,
+          beer.region,
+          beer.summary,
+          beer.importer,
+          beer.ingredients,
+          beer.brewingMethod,
+          beer.flavorProfile,
+          beer.history,
+          effectiveTerms.join(' '),
+          horalText,
+          entry.date,
+          entry.text
+        ].join(' ');
+
+        const normHaystack = normalizeForSearch(rawHaystack);
+        const compactHaystack = compactForSearch(rawHaystack);
+
+        // スペース（全角・半角）で分割してすべて一致するAND検索
+        const tokens = rawKeyword.trim().split(/[\s\u3000]+/).filter(Boolean);
+        if (tokens.length === 0) return true;
+
+        return tokens.every(token => {
+          const normToken = normalizeForSearch(token);
+          const compactToken = compactForSearch(token);
+
+          if (!normToken && !compactToken) return true;
+          if (normHaystack.includes(normToken)) return true;
+          if (compactToken && compactHaystack.includes(compactToken)) return true;
+
+          // 同義語グループによる照合（Geuze/Gueuze、トリプル/トリプゥ、ウィット/ホワイト 等）
+          for (let i = 0; i < SEARCH_SYNONYM_GROUPS.length; i++) {
+            const group = SEARCH_SYNONYM_GROUPS[i];
+            const matchedInGroup = group.some(word => {
+              const nw = normalizeForSearch(word);
+              const cw = compactForSearch(word);
+              return normToken === nw || compactToken === cw ||
+                (compactToken.length >= 3 && cw.includes(compactToken)) ||
+                (cw.length >= 3 && compactToken.includes(cw));
+            });
+
+            if (matchedInGroup) {
+              const hitSynonym = group.some(syn => {
+                const ns = normalizeForSearch(syn);
+                const cs = compactForSearch(syn);
+                return normHaystack.includes(ns) || (cs && compactHaystack.includes(cs));
+              });
+              if (hitSynonym) return true;
+            }
+          }
+
+          return false;
+        });
+      }
+
       function getFilteredBeers() {
-        const keyword = searchInput.value.trim().toLowerCase();
+        const keyword = searchInput.value.trim();
 
         return beers.filter(beer => {
           const effectiveTerms = getEffectiveTerms(beer);
 
           if (keyword) {
-            const entry = getMemoEntry(beer.id);
-            const horalText = isHoralMember(beer)
-              ? 'HORAL Toer de Geuze トゥール・ド・グーズ Megablend メガブレンド'
-              : '';
-            const haystack = [
-              beer.name,
-              beer.reading,
-              beer.brewery,
-              beer.style,
-              beer.region,
-              beer.summary,
-              beer.importer,
-              beer.ingredients,
-              beer.brewingMethod,
-              beer.flavorProfile,
-              beer.history,
-              effectiveTerms.join(' '),
-              horalText,
-              entry.date,
-              entry.text
-            ].join(' ').toLowerCase();
-            return haystack.includes(keyword);
+            return matchesSearchKeyword(beer, keyword);
           }
 
           const { type, value } = currentFilter;
@@ -2247,13 +2458,29 @@
             return favorites.includes(beer.id);
           }
           if (type === 'style') {
+            const normName = normalizeForSearch(`${beer.name} ${beer.reading}`);
+            if (value === 'トリプル') {
+              return beer.style === 'トリプル' ||
+                normName.includes('tripel') ||
+                normName.includes('triple') ||
+                normName.includes('トリプル') ||
+                normName.includes('トリプゥ');
+            }
             if (value === 'ダブル') {
-              return beer.style === 'ダブル' || effectiveTerms.includes('#ダブル');
+              return beer.style === 'ダブル' ||
+                effectiveTerms.includes('#ダブル') ||
+                normName.includes('dubbel') ||
+                normName.includes('double') ||
+                normName.includes('ダブル');
             }
             return beer.style === value;
           }
           if (type === 'brewery') {
-            return beer.brewery === value;
+            const beerBreweries = getBeerBreweries(beer);
+            const cleanVal = stripContractSuffix(value);
+            return beerBreweries.includes(cleanVal) ||
+              stripContractSuffix(beer.brewery) === cleanVal ||
+              compactForSearch(beer.brewery).includes(compactForSearch(cleanVal));
           }
           if (type === 'region') {
             return beer.region === value;
@@ -2299,10 +2526,12 @@
             return a.style.localeCompare(b.style, 'ja') || (Number(b.abv) - Number(a.abv));
           }
           if (mode === 'brewery') {
-            return a.brewery.localeCompare(b.brewery, 'ja') || a.reading.localeCompare(b.reading, 'ja');
+            return getPrimaryCanonicalBrewery(a).localeCompare(getPrimaryCanonicalBrewery(b), 'ja') ||
+              a.reading.localeCompare(b.reading, 'ja');
           }
           if (mode === 'region') {
-            return a.region.localeCompare(b.region, 'ja') || a.brewery.localeCompare(b.brewery, 'ja');
+            return a.region.localeCompare(b.region, 'ja') ||
+              getPrimaryCanonicalBrewery(a).localeCompare(getPrimaryCanonicalBrewery(b), 'ja');
           }
           return 0;
         });
@@ -2446,7 +2675,7 @@
           brewBtn.textContent = beer.brewery;
           brewBtn.addEventListener('click', e => {
             e.stopPropagation();
-            applySingleCondition('brewery', beer.brewery);
+            applySingleCondition('brewery', getPrimaryCanonicalBrewery(beer));
           });
           brewRow.appendChild(brewBtn);
 
@@ -2565,7 +2794,7 @@
         brewLink.className = 'inline-link';
         brewLink.style.fontSize = '0.92rem';
         brewLink.textContent = beer.brewery;
-        brewLink.addEventListener('click', () => applySingleCondition('brewery', beer.brewery));
+        brewLink.addEventListener('click', () => applySingleCondition('brewery', getPrimaryCanonicalBrewery(beer)));
         brewSpec.appendChild(brewLink);
 
         const styleSpec = document.createElement('div');
