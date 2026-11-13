@@ -2439,7 +2439,7 @@ window.BEER_DATA.push(
     region: "東フランデレン州",
     abv: 13.7,
     terms: ["#ダーク", "#ハイアルコール"],
-    imageUrl: "https://drive.google.com/file/d/1zQAIbwKESbPK0MVbjGv24LybwNRLINJN/view?usp=drive_link",
+    imageUrl: "https://drive.google.com/file/d/1zQAIbwKESbPK0MVbjGv24LybwNRLINJN/view?usp=drive_link&v=2",
     productUrl: "https://www.whiteponybeerstore.com/Strongest-Than-Ever-vertical-tasting-BOX_p_293.html",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Brouwerij+De+Graal+Brakel+Belgium",
     summary: "アルコール度数13.7%を誇る、圧倒的濃度のベルジャン・クアドルプル／バーレーワイン。ダークフルーツ、トフィー、リキュールを思わせる濃密なコクと長い余韻が特徴の極限の1本です。",
