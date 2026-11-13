@@ -1600,6 +1600,12 @@
       </div>
       <div class="modal-body">
         <div class="detail-section">
+          <h3>データの強制再読込（キャッシュクリア）</h3>
+          <p style="margin-bottom:8px; font-size:0.85rem;"><code>beers.js</code> の画像URLやデータを書き換えた直後に古い画像が残る場合は、下のボタンで最新データを再取得できます。</p>
+          <button type="button" id="forceReloadBtn" class="action-btn primary">最新データに更新（強制再読込）</button>
+        </div>
+        <hr style="border:none; border-top:1px solid var(--border); margin:16px 0;">
+        <div class="detail-section">
           <h3>Evernote保存用メール・ノートブック設定</h3>
           <p style="margin-bottom:8px; font-size:0.85rem;">Evernote専用メールアドレス（<code>〇〇@m.evernote.com</code>）と送信先ノートブック名を登録すると、「Evernoteへ送る」ボタンで件名に <code>@ノートブック名</code> を自動付与して送信できます。</p>
 
@@ -1647,8 +1653,10 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  <!-- データ部ファイル2 -->
-  <script src="beers.js"></script>
+  <!-- データ部ファイル2：古いキャッシュを使わず常に最新の beers.js を同期読み込み -->
+  <script>
+    document.write('<script src="beers.js?v=' + Date.now() + '"><\/script>');
+  </script>
 
   <script>
     (function () {
@@ -1809,7 +1817,8 @@
         THEME: 'bbn_theme_v1',
         EVERNOTE_EMAIL: 'bbn_evernote_email_v1',
         EVERNOTE_NOTEBOOK: 'bbn_evernote_notebook_v1',
-        EVERNOTE_MAIL_CLIENT: 'bbn_evernote_mail_client_v1'
+        EVERNOTE_MAIL_CLIENT: 'bbn_evernote_mail_client_v1',
+        CACHED_BEERS: 'bbn_cached_beers_v1'
       };
 
       // HORAL加盟醸造所マスターリスト（12醸造所）
@@ -1987,11 +1996,34 @@
         abv: 'アルコール度数を選択（選択すると自動で閉じます）'
       };
 
+      function loadJson(key, fallback) {
+        try {
+          const raw = localStorage.getItem(key);
+          return raw ? JSON.parse(raw) : fallback;
+        } catch (e) {
+          return fallback;
+        }
+      }
+
+      function saveJson(key, value) {
+        try {
+          localStorage.setItem(key, JSON.stringify(value));
+          return true;
+        } catch (e) {
+          return false;
+        }
+      }
+
+      // 最新の beers.js からデータを取得し、オフライン時のみローカルキャッシュをフォールバック使用
       let beers = [];
-      if (typeof BEER_DATA !== 'undefined' && Array.isArray(BEER_DATA)) {
+      if (typeof BEER_DATA !== 'undefined' && Array.isArray(BEER_DATA) && BEER_DATA.length > 0) {
         beers = BEER_DATA;
-      } else if (Array.isArray(window.BEER_DATA)) {
+        saveJson(STORAGE_KEYS.CACHED_BEERS, beers);
+      } else if (Array.isArray(window.BEER_DATA) && window.BEER_DATA.length > 0) {
         beers = window.BEER_DATA;
+        saveJson(STORAGE_KEYS.CACHED_BEERS, beers);
+      } else {
+        beers = loadJson(STORAGE_KEYS.CACHED_BEERS, []);
       }
 
       function isHoralMember(beer) {
@@ -2070,25 +2102,6 @@
         }
       });
 
-      function loadJson(key, fallback) {
-        try {
-          const raw = localStorage.getItem(key);
-          return raw ? JSON.parse(raw) : fallback;
-        } catch (e) {
-          return fallback;
-        }
-      }
-
-      function saveJson(key, value) {
-        try {
-          localStorage.setItem(key, JSON.stringify(value));
-          return true;
-        } catch (e) {
-          showToast('ブラウザの保存領域に書き込めませんでした。');
-          return false;
-        }
-      }
-
       function getMemoEntry(beerId) {
         const raw = memos[beerId];
         if (!raw) return { date: '', text: '' };
@@ -2102,7 +2115,11 @@
         } else {
           memos[beerId] = { date: dateVal, text: textVal };
         }
-        return saveJson(STORAGE_KEYS.MEMOS, memos);
+        const ok = saveJson(STORAGE_KEYS.MEMOS, memos);
+        if (!ok) {
+          showToast('ブラウザの保存領域に書き込めませんでした。');
+        }
+        return ok;
       }
 
       let toastTimer = null;
@@ -3172,6 +3189,15 @@
       document.getElementById('closeSettingsBtn').addEventListener('click', closeSettingsModal);
       settingsModal.addEventListener('click', e => {
         if (e.target === settingsModal) closeSettingsModal();
+      });
+
+      // キャッシュを破棄して最新版のアプリ・beers.jsを再読込するボタン
+      document.getElementById('forceReloadBtn').addEventListener('click', () => {
+        try {
+          localStorage.removeItem(STORAGE_KEYS.CACHED_BEERS);
+        } catch (e) {}
+        const baseUrl = window.location.href.split('?')[0].split('#')[0];
+        window.location.replace(baseUrl + '?reload=' + Date.now());
       });
 
       document.getElementById('saveEvernoteEmailBtn').addEventListener('click', () => {
