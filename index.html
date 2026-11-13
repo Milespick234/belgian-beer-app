@@ -2017,15 +2017,40 @@
         }
       }
 
+      // 裏付けの取れていない記述の除去・補正（Brasserie Lupulusの「シャンパンボトルで瓶内二次発酵」記述を削除）
+      function sanitizeBeerEntry(item) {
+        if (!item || typeof item !== 'object') return item;
+        const brewNorm = normalizeForSearch(`${item.brewery || ''} ${item.name || ''}`);
+        if (brewNorm.includes('lupulus') || brewNorm.includes('ルプルス')) {
+          const cleanLupulusText = text => {
+            if (!text || typeof text !== 'string') return text;
+            return text
+              .replace(/750mlシャンパンボトルで瓶内二次発酵/g, '瓶内二次発酵')
+              .replace(/シャンパンボトルで瓶内二次発酵/g, '瓶内二次発酵')
+              .replace(/シャンパンボトルに詰めて瓶内二次発酵/g, '瓶内二次発酵')
+              .replace(/シャンパンボトルによる瓶内二次発酵/g, '瓶内二次発酵')
+              .replace(/シャンパンボトル/g, 'ボトル');
+          };
+          return Object.assign({}, item, {
+            summary: cleanLupulusText(item.summary),
+            brewingMethod: cleanLupulusText(item.brewingMethod),
+            flavorProfile: cleanLupulusText(item.flavorProfile),
+            history: cleanLupulusText(item.history)
+          });
+        }
+        return item;
+      }
+
       // 重複データ統合（beers.js 内に同じ id または同じビール名が複数ある場合、後の新しいデータで上書き）
       function deduplicateBeers(rawList) {
         if (!Array.isArray(rawList)) return [];
         const mapByKey = new Map();
         rawList.forEach((item, idx) => {
           if (!item || typeof item !== 'object') return;
-          const normName = compactForSearch(item.name || '');
-          const key = normName || (item.id ? String(item.id).toLowerCase() : `idx_${idx}`);
-          mapByKey.set(key, item);
+          const sanitized = sanitizeBeerEntry(item);
+          const normName = compactForSearch(sanitized.name || '');
+          const key = normName || (sanitized.id ? String(sanitized.id).toLowerCase() : `idx_${idx}`);
+          mapByKey.set(key, sanitized);
         });
         return Array.from(mapByKey.values());
       }
