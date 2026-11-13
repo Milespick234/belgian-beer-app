@@ -4,12 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Beer Nav">
-  <title>Belgian Beer Navigator</title>
-  <!-- クロスプラットフォーム対応インラインSVGファビコン（文字化け防止） -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23b45309'/%3E%3Cpath d='M20 14h24l-2 16c-1 8-6 12-10 12s-9-4-10-12l-2-16z' fill='%23fbbf24'/%3E%3Cpath d='M20 14h24v6H20z' fill='%23fffbeb'/%3E%3Cpath d='M32 42v10M23 52h18' stroke='%23fffbeb' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
-  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23b45309'/%3E%3Cpath d='M20 14h24l-2 16c-1 8-6 12-10 12s-9-4-10-12l-2-16z' fill='%23fbbf24'/%3E%3Cpath d='M20 14h24v6H20z' fill='%23fffbeb'/%3E%3Cpath d='M32 42v10M23 52h18' stroke='%23fffbeb' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="BelgeNote">
+  <meta name="application-name" content="BelgeNote">
+  <title>BelgeNote - Belgian Beer Navigator</title>
+  <!-- 案B：チューリップ型グラス × ベルギー三色旗 SVGファビコン -->
+  <link id="faviconLink" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3CclipPath id='c'%3E%3Crect width='64' height='64' rx='14'/%3E%3C/clipPath%3E%3C/defs%3E%3Cg clip-path='url(%23c)'%3E%3Cpolygon points='0,0 44,0 14,64 0,64' fill='%2318181b'/%3E%3Cpolygon points='44,0 64,0 64,20 38,64 14,64' fill='%23facc15'/%3E%3Cpolygon points='64,20 64,64 38,64' fill='%23dc2626'/%3E%3Cpath d='M21 11h22c2 11 4 21-10 25v13h9v4H22v-4h9V36C17 32 19 22 21 11z' fill='%23ffffff' stroke='%2318181b' stroke-width='2.2'/%3E%3Cpath d='M21.5 19h21c.5 7-1 13-10.5 15.5C22.5 32 21 26 21.5 19z' fill='%23d97706'/%3E%3C/g%3E%3C/svg%3E">
+  <!-- iPhoneホーム画面追加用PNGアイコン（起動時にJavaScriptで180x180 PNGを自動生成してセット） -->
+  <link id="appleTouchIconLink" rel="apple-touch-icon" sizes="180x180" href="">
+  <link id="manifestLink" rel="manifest" href="">
   <style>
     :root {
       --bg-page: #f3efe6;
@@ -100,7 +103,7 @@
       max-width: 1200px;
       width: 100%;
       margin: 0 auto;
-      padding: 10px 14px 40px;
+      padding: calc(10px + env(safe-area-inset-top, 0px)) 14px 40px;
     }
 
     .app-header {
@@ -112,18 +115,57 @@
       border-bottom: 1px solid var(--border);
     }
 
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+    }
+
+    .brand-emblem {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.22);
+      overflow: hidden;
+    }
+
+    .brand-titles {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 7px;
+      min-width: 0;
+    }
+
     .app-title {
       margin: 0;
-      font-size: clamp(1.25rem, 3.2vw, 1.65rem);
+      font-size: clamp(1.18rem, 3.1vw, 1.6rem);
       font-weight: 800;
       letter-spacing: 0.01em;
       color: var(--accent);
+      line-height: 1.2;
+    }
+
+    .brand-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #18181b;
+      color: #facc15;
+      border: 1px solid #ca8a04;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
     }
 
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      flex-shrink: 0;
     }
 
     .icon-btn {
@@ -131,12 +173,12 @@
       align-items: center;
       justify-content: center;
       gap: 5px;
-      padding: 7px 11px;
+      padding: 7px 10px;
       border: 1px solid var(--border);
       border-radius: 8px;
       background: var(--bg-surface);
       color: var(--text-primary);
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       font-weight: 600;
       cursor: pointer;
       transition: background 0.15s, border-color 0.15s;
@@ -1115,6 +1157,24 @@
       margin-bottom: 10px;
     }
 
+    .icon-preview-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+    }
+
+    .icon-preview-box img {
+      width: 56px;
+      height: 56px;
+      border-radius: 13px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.28);
+      flex-shrink: 0;
+    }
+
     /* PC・フォールバック用共有選択バー（LINE・メール等） */
     .share-picker-bar {
       display: none;
@@ -1312,7 +1372,7 @@
 
     @media (max-width: 600px) {
       .container {
-        padding: 8px 10px 32px;
+        padding: calc(8px + env(safe-area-inset-top, 0px)) 10px 32px;
       }
       .control-panel {
         padding: 8px 10px;
@@ -1343,7 +1403,20 @@
 <body>
   <div class="container">
     <header class="app-header">
-      <h1 class="app-title">Belgian Beer Navigator</h1>
+      <div class="brand-group">
+        <!-- 案Bエンブレム（チューリップ型グラス × ベルギー三色旗） -->
+        <svg class="brand-emblem" viewBox="0 0 64 64" aria-hidden="true">
+          <polygon points="0,0 44,0 14,64 0,64" fill="#18181b"/>
+          <polygon points="44,0 64,0 64,20 38,64 14,64" fill="#facc15"/>
+          <polygon points="64,20 64,64 38,64" fill="#dc2626"/>
+          <path d="M21 11h22c2 11 4 21-10 25v13h9v4H22v-4h9V36C17 32 19 22 21 11z" fill="#ffffff" stroke="#18181b" stroke-width="2.2"/>
+          <path d="M21.5 19h21c.5 7-1 13-10.5 15.5C22.5 32 21 26 21.5 19z" fill="#d97706"/>
+        </svg>
+        <div class="brand-titles">
+          <h1 class="app-title">Belgian Beer Navigator</h1>
+          <span class="brand-pill">BelgeNote</span>
+        </div>
+      </div>
       <div class="header-actions">
         <button type="button" id="themeToggleBtn" class="icon-btn" title="ダークモード切替" aria-label="ダークモード切替"></button>
         <button type="button" id="settingsBtn" class="icon-btn" title="設定・データバックアップ" aria-label="設定">
@@ -1523,6 +1596,17 @@
           <p style="margin-bottom:10px; font-size:0.85rem;">保存済みのバックアップファイル（.json）を選択して、お気に入りとメモを復元します。</p>
           <input type="file" id="importJsonInput" accept=".json,application/json" style="font-size:16px;">
         </div>
+        <hr style="border:none; border-top:1px solid var(--border); margin:16px 0;">
+        <div class="detail-section">
+          <h3>ホーム画面アイコン（BelgeNote）</h3>
+          <div class="icon-preview-box">
+            <img id="iconPreviewImg" alt="BelgeNote アプリアイコン">
+            <p style="font-size:0.82rem; margin:0;">
+              <strong>アプリ名：BelgeNote</strong><br>
+              iPhoneのSafariで画面下の共有ボタンから「ホーム画面に追加」を選ぶと、このアイコンで登録されます。
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1535,6 +1619,176 @@
   <script>
     (function () {
       'use strict';
+
+      // ==========================================
+      // 案Bアプリアイコン（チューリップ型グラス × ベルギー三色旗）PNG自動生成
+      // iPhone Safari の「ホーム画面に追加」でもスクリーンショットにならず確実にアイコン表示させる
+      // ==========================================
+      function renderBelgeNoteIconPng(size) {
+        try {
+          const canvas = document.createElement('canvas');
+          canvas.width = size;
+          canvas.height = size;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) return '';
+
+          const s = size / 180; // 180px基準スケーリング
+          ctx.save();
+          ctx.scale(s, s);
+
+          // 1. ベルギー三色旗の斜めモダンストライプ背景（黒・黄・赤）
+          // 左斜め上：ベルギーブラック
+          ctx.fillStyle = '#18181b';
+          ctx.fillRect(0, 0, 180, 180);
+
+          // 中央斜め帯：ベルジャンゴールド
+          ctx.fillStyle = '#facc15';
+          ctx.beginPath();
+          ctx.moveTo(118, 0);
+          ctx.lineTo(180, 0);
+          ctx.lineTo(180, 56);
+          ctx.lineTo(106, 180);
+          ctx.lineTo(38, 180);
+          ctx.closePath();
+          ctx.fill();
+
+          // 右斜め下：ベルジャンレッド
+          ctx.fillStyle = '#dc2626';
+          ctx.beginPath();
+          ctx.moveTo(180, 52);
+          ctx.lineTo(180, 180);
+          ctx.lineTo(104, 180);
+          ctx.closePath();
+          ctx.fill();
+
+          // 微細な光沢オーバーレイ
+          const gloss = ctx.createLinearGradient(0, 0, 0, 180);
+          gloss.addColorStop(0, 'rgba(255, 255, 255, 0.14)');
+          gloss.addColorStop(0.5, 'rgba(255, 255, 255, 0)');
+          gloss.addColorStop(1, 'rgba(0, 0, 0, 0.18)');
+          ctx.fillStyle = gloss;
+          ctx.fillRect(0, 0, 180, 180);
+
+          // 2. チューリップ型グラスのドロップシャドウ
+          ctx.save();
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.45)';
+          ctx.shadowBlur = 14;
+          ctx.shadowOffsetY = 5;
+
+          // グラス全体のパス定義（デュベル型チューリップグラス）
+          function traceTulipGlass() {
+            ctx.beginPath();
+            // リム（飲み口）左から右
+            ctx.moveTo(58, 28);
+            ctx.lineTo(122, 28);
+            // 右側面（少し外に反ってからふっくら膨らみ、下へすぼまる）
+            ctx.bezierCurveTo(125, 44, 134, 62, 128, 82);
+            ctx.bezierCurveTo(123, 98, 108, 106, 95, 109);
+            // ステム（脚）右側
+            ctx.lineTo(95, 144);
+            // フット（台座）
+            ctx.lineTo(118, 149);
+            ctx.quadraticCurveTo(121, 150, 121, 153);
+            ctx.lineTo(59, 153);
+            ctx.quadraticCurveTo(59, 150, 62, 149);
+            ctx.lineTo(85, 144);
+            // ステム（脚）左側
+            ctx.lineTo(85, 109);
+            // ボウル左側
+            ctx.bezierCurveTo(72, 106, 57, 98, 52, 82);
+            ctx.bezierCurveTo(46, 62, 55, 44, 58, 28);
+            ctx.closePath();
+          }
+
+          // グラスの白ベース塗り
+          traceTulipGlass();
+          ctx.fillStyle = '#ffffff';
+          ctx.fill();
+          ctx.restore();
+
+          // 3. グラス内部のビールと泡（ボウル内側にクリップ）
+          ctx.save();
+          ctx.beginPath();
+          ctx.moveTo(61, 31);
+          ctx.lineTo(119, 31);
+          ctx.bezierCurveTo(122, 46, 130, 62, 125, 80);
+          ctx.bezierCurveTo(120, 94, 106, 102, 90, 104);
+          ctx.bezierCurveTo(74, 102, 60, 94, 55, 80);
+          ctx.bezierCurveTo(50, 62, 58, 46, 61, 31);
+          ctx.closePath();
+          ctx.clip();
+
+          // クリーミーな泡（上部）
+          ctx.fillStyle = '#fffbeb';
+          ctx.fillRect(45, 28, 90, 26);
+
+          // 黄金色のベルギービール（下部グラデーション）
+          const beerGrad = ctx.createLinearGradient(0, 52, 0, 106);
+          beerGrad.addColorStop(0, '#f59e0b');
+          beerGrad.addColorStop(0.55, '#d97706');
+          beerGrad.addColorStop(1, '#b45309');
+          ctx.fillStyle = beerGrad;
+          ctx.fillRect(45, 52, 90, 56);
+
+          // 泡とビールの境界線
+          ctx.fillStyle = '#fef3c7';
+          ctx.fillRect(45, 50, 90, 4);
+
+          // グラス左側の光沢ハイライト
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.36)';
+          ctx.beginPath();
+          ctx.ellipse(68, 72, 4.5, 22, -0.18, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.restore();
+
+          // 4. グラス全体のシャープなダーク輪郭線
+          traceTulipGlass();
+          ctx.lineWidth = 3.2;
+          ctx.strokeStyle = '#18181b';
+          ctx.stroke();
+
+          ctx.restore();
+          return canvas.toDataURL('image/png');
+        } catch (e) {
+          return '';
+        }
+      }
+
+      function setupAppIconsAndManifest() {
+        const png180 = renderBelgeNoteIconPng(180);
+        const png512 = renderBelgeNoteIconPng(512);
+
+        if (png180) {
+          const appleLink = document.getElementById('appleTouchIconLink');
+          if (appleLink) appleLink.href = png180;
+
+          const previewImg = document.getElementById('iconPreviewImg');
+          if (previewImg) previewImg.src = png180;
+        }
+
+        try {
+          const manifestObj = {
+            name: 'BelgeNote - Belgian Beer Navigator',
+            short_name: 'BelgeNote',
+            description: 'ベルギービール検索・テイスティングノートアプリ',
+            start_url: './index.html',
+            display: 'standalone',
+            background_color: '#f3efe6',
+            theme_color: '#18181b',
+            icons: []
+          };
+          if (png180) {
+            manifestObj.icons.push({ src: png180, sizes: '180x180', type: 'image/png' });
+          }
+          if (png512) {
+            manifestObj.icons.push({ src: png512, sizes: '512x512', type: 'image/png' });
+          }
+          const manifestUrl = 'data:application/manifest+json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifestObj));
+          const manifestLink = document.getElementById('manifestLink');
+          if (manifestLink) manifestLink.href = manifestUrl;
+        } catch (e) {}
+      }
 
       const STORAGE_KEYS = {
         FAVORITES: 'bbn_favorites_v1',
@@ -1737,7 +1991,6 @@
         return { body: cut + suffix, truncated: true };
       }
 
-      // 現在表示中のビールの送信・共有用テキスト一式を生成
       function buildCurrentBeerSharePayload() {
         if (!currentDetailBeer) return null;
         const b = currentDetailBeer;
@@ -2495,7 +2748,6 @@
         toggleFavorite(currentDetailBeer.id);
       });
 
-      // 1. 「LINE・メール等で共有」ボタン（iPhone標準共有シート / PC選択メニュー）
       document.getElementById('shareOtherBtn').addEventListener('click', async () => {
         const payload = buildCurrentBeerSharePayload();
         if (!payload) return;
@@ -2516,11 +2768,9 @@
           }
         }
 
-        // Mac / PC または共有シート非対応環境では送信先選択バーを開閉
         sharePickerBar.classList.toggle('open');
       });
 
-      // 選択バー内の各送信ボタン
       document.getElementById('shareLineBtn').addEventListener('click', () => {
         const payload = buildCurrentBeerSharePayload();
         if (!payload) return;
@@ -2559,7 +2809,6 @@
         showToast('ビール情報とメモの全文をクリップボードにコピーしました。');
       });
 
-      // 2. 「Evernoteへ送る」ボタン（@ノートブック名 自動付与対応）
       document.getElementById('evernoteBtn').addEventListener('click', async () => {
         const payload = buildCurrentBeerSharePayload();
         if (!payload) return;
@@ -2595,7 +2844,6 @@
           }
         }
 
-        // メールアドレス未設定時：iPhone / iPad の共有シート
         if (isMobile && navigator.share) {
           try {
             await navigator.share({
@@ -2608,7 +2856,6 @@
           }
         }
 
-        // メールアドレス未設定時：Mac / PC 環境
         const webFallbackLink = document.createElement('a');
         webFallbackLink.href = 'https://www.evernote.com/client/web';
         webFallbackLink.target = '_blank';
@@ -2672,7 +2919,6 @@
         updateBodyScrollLock();
       }
 
-      // 設定モーダル（Evernoteメールアドレス・送信先ノートブック名・送信方法＋JSONバックアップ）
       document.getElementById('settingsBtn').addEventListener('click', () => {
         document.getElementById('evernoteEmailInput').value = evernoteEmail;
         document.getElementById('evernoteNotebookInput').value = evernoteNotebook;
@@ -2716,7 +2962,7 @@
 
       document.getElementById('exportJsonBtn').addEventListener('click', () => {
         const payload = {
-          app: 'Belgian Beer Navigator',
+          app: 'BelgeNote - Belgian Beer Navigator',
           exportedAt: new Date().toISOString(),
           registeredBeerCount: beers.length,
           evernoteEmail,
@@ -2730,7 +2976,7 @@
         const a = document.createElement('a');
         const dateStr = new Date().toISOString().slice(0, 10);
         a.href = url;
-        a.download = `belgian-beer-navigator-backup-${dateStr}.json`;
+        a.download = `belgenote-backup-${dateStr}.json`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -2787,6 +3033,7 @@
         }
       });
 
+      setupAppIconsAndManifest();
       searchInput.value = '';
       initTheme();
       renderBeers();
