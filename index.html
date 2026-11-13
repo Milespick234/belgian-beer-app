@@ -1600,7 +1600,7 @@
       </div>
       <div class="modal-body">
         <div class="detail-section">
-          <h3>データの強制再読込（キャッシュクリア）</h3>
+          <h3>データの強制再読込（画像・テキストのキャッシュ更新）</h3>
           <p style="margin-bottom:8px; font-size:0.85rem;"><code>beers.js</code> の画像URLやデータを書き換えた直後に古い画像が残る場合は、下のボタンで最新データを再取得できます。</p>
           <button type="button" id="forceReloadBtn" class="action-btn primary">最新データに更新（強制再読込）</button>
         </div>
@@ -1661,6 +1661,9 @@
   <script>
     (function () {
       'use strict';
+
+      // セッションごとの画像キャッシュ回避用トークン
+      let imageCacheToken = String(Date.now());
 
       // ==========================================
       // 案Bアプリアイコン（チューリップ型グラス × ベルギー三色旗）PNG自動生成
@@ -2014,16 +2017,57 @@
         }
       }
 
-      // 最新の beers.js からデータを取得し、オフライン時のみローカルキャッシュをフォールバック使用
-      let beers = [];
+      // 重複データ統合（beers.js 内に同じ id または同じビール名が複数ある場合、後の新しいデータで上書き）
+      function deduplicateBeers(rawList) {
+        if (!Array.isArray(rawList)) return [];
+        const mapByKey = new Map();
+        rawList.forEach((item, idx) => {
+          if (!item || typeof item !== 'object') return;
+          const normName = compactForSearch(item.name || '');
+          const key = normName || (item.id ? String(item.id).toLowerCase() : `idx_${idx}`);
+          mapByKey.set(key, item);
+        });
+        return Array.from(mapByKey.values());
+      }
+
+      let rawInitialBeers = [];
       if (typeof BEER_DATA !== 'undefined' && Array.isArray(BEER_DATA) && BEER_DATA.length > 0) {
-        beers = BEER_DATA;
-        saveJson(STORAGE_KEYS.CACHED_BEERS, beers);
+        rawInitialBeers = BEER_DATA;
       } else if (Array.isArray(window.BEER_DATA) && window.BEER_DATA.length > 0) {
-        beers = window.BEER_DATA;
-        saveJson(STORAGE_KEYS.CACHED_BEERS, beers);
+        rawInitialBeers = window.BEER_DATA;
       } else {
-        beers = loadJson(STORAGE_KEYS.CACHED_BEERS, []);
+        rawInitialBeers = loadJson(STORAGE_KEYS.CACHED_BEERS, []);
+      }
+
+      let beers = deduplicateBeers(rawInitialBeers);
+      if (beers.length > 0) {
+        saveJson(STORAGE_KEYS.CACHED_BEERS, beers);
+      }
+
+      // WEB環境（http/https）では、ページ表示後にもキャッシュ完全無視（no-store）で最新 beers.js を再確認する
+      async function refreshBeersFromNetwork() {
+        if (!/^https?:$/i.test(window.location.protocol)) return false;
+        try {
+          const resp = await fetch('beers.js?nocache=' + Date.now(), {
+            cache: 'no-store',
+            headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate' }
+          });
+          if (!resp.ok) return false;
+          const scriptText = await resp.text();
+          if (!scriptText || scriptText.length < 100) return false;
+
+          const sandboxWin = { BEER_DATA: [] };
+          const runner = new Function('window', scriptText + '\n;return window.BEER_DATA || (typeof BEER_DATA !== "undefined" ? BEER_DATA : []);');
+          const fetchedList = runner(sandboxWin);
+          if (Array.isArray(fetchedList) && fetchedList.length > 0) {
+            const deduped = deduplicateBeers(fetchedList);
+            const changed = JSON.stringify(deduped) !== JSON.stringify(beers);
+            beers = deduped;
+            saveJson(STORAGE_KEYS.CACHED_BEERS, beers);
+            return changed;
+          }
+        } catch (e) {}
+        return false;
       }
 
       function isHoralMember(beer) {
@@ -2232,16 +2276,23 @@
 
       function getDriveImageUrls(driveUrl, size) {
         const px = size || 600;
-        if (!driveUrl) return { primary: '', fallback: '' };
+        if (!driveUrl) return { primary: '', fallback: '', cleanPrimary: '' };
         const match = driveUrl.match(/\/d\/([a-zA-Z0-9_-]+)/) || driveUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
         if (match && match[1]) {
           const id = match[1];
+          const cleanPrimary = `https://lh3.googleusercontent.com/d/${id}=w${px}`;
           return {
-            primary: `https://lh3.googleusercontent.com/d/${id}=w${px}`,
-            fallback: `https://drive.google.com/thumbnail?id=${id}&sz=w${px}`
+            primary: `${cleanPrimary}?cb=${imageCacheToken}`,
+            cleanPrimary,
+            fallback: `https://drive.google.com/thumbnail?id=${id}&sz=w${px}&cb=${imageCacheToken}`
           };
         }
-        return { primary: driveUrl, fallback: '' };
+        const sep = driveUrl.includes('?') ? '&' : '?';
+        return {
+          primary: `${driveUrl}${sep}cb=${imageCacheToken}`,
+          cleanPrimary: driveUrl,
+          fallback: ''
+        };
       }
 
       const FALLBACK_BOTTLE_SVG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 120'%3E%3Crect width='80' height='120' rx='8' fill='%23ede7db'/%3E%3Cpath d='M34 14h12v14l8 14v58a6 6 0 0 1-6 6H32a6 6 0 0 1-6-6V42l8-14V14z' fill='%239a4d0e'/%3E%3Crect x='29' y='54' width='22' height='26' rx='2' fill='%23fbf9f4'/%3E%3C/svg%3E";
@@ -2254,8 +2305,12 @@
         img.loading = 'lazy';
         img.referrerPolicy = 'no-referrer';
         img.src = urls.primary || FALLBACK_BOTTLE_SVG;
+        let step = 0;
         img.onerror = function () {
-          if (urls.fallback && this.src !== urls.fallback) {
+          step += 1;
+          if (step === 1 && urls.cleanPrimary && this.src !== urls.cleanPrimary) {
+            this.src = urls.cleanPrimary;
+          } else if (step <= 2 && urls.fallback && this.src !== urls.fallback) {
             this.src = urls.fallback;
           } else {
             this.onerror = null;
@@ -2771,24 +2826,26 @@
       }
 
       function openDetailModal(beer) {
-        currentDetailBeer = beer;
+        // 最新の beers 配列から同じID/名前のオブジェクトを再取得して鮮度を保証
+        const latestBeer = beers.find(item => item.id === beer.id || item.name === beer.name) || beer;
+        currentDetailBeer = latestBeer;
         hasUnsavedMemo = false;
         sharePickerBar.classList.remove('open');
 
         const titleEl = document.getElementById('modalBeerTitle');
         titleEl.innerHTML = '';
-        if (beer.productUrl) {
+        if (latestBeer.productUrl) {
           const link = document.createElement('a');
-          link.href = beer.productUrl;
+          link.href = latestBeer.productUrl;
           link.target = '_blank';
           link.rel = 'noopener noreferrer';
-          link.textContent = beer.name;
+          link.textContent = latestBeer.name;
           titleEl.appendChild(link);
         } else {
-          titleEl.textContent = beer.name;
+          titleEl.textContent = latestBeer.name;
         }
 
-        document.getElementById('modalBeerReading').textContent = beer.reading;
+        document.getElementById('modalBeerReading').textContent = latestBeer.reading;
 
         const body = document.getElementById('modalBody');
         body.innerHTML = '';
@@ -2799,8 +2856,8 @@
         const imgBox = document.createElement('div');
         imgBox.className = 'detail-img-box';
         imgBox.title = 'クリックでラベル画像を拡大表示';
-        imgBox.appendChild(createImageElement(beer.imageUrl, beer.name, '', 600));
-        imgBox.addEventListener('click', () => openImageModal(beer));
+        imgBox.appendChild(createImageElement(latestBeer.imageUrl, latestBeer.name, '', 600));
+        imgBox.addEventListener('click', () => openImageModal(latestBeer));
 
         const specs = document.createElement('div');
         specs.className = 'detail-specs';
@@ -2812,8 +2869,8 @@
         brewLink.type = 'button';
         brewLink.className = 'inline-link';
         brewLink.style.fontSize = '0.92rem';
-        brewLink.textContent = beer.brewery;
-        brewLink.addEventListener('click', () => applySingleCondition('brewery', getPrimaryCanonicalBrewery(beer)));
+        brewLink.textContent = latestBeer.brewery;
+        brewLink.addEventListener('click', () => applySingleCondition('brewery', getPrimaryCanonicalBrewery(latestBeer)));
         brewSpec.appendChild(brewLink);
 
         const styleSpec = document.createElement('div');
@@ -2822,11 +2879,11 @@
         const styleLink = document.createElement('button');
         styleLink.type = 'button';
         styleLink.className = 'style-badge';
-        styleLink.textContent = beer.style;
-        styleLink.addEventListener('click', () => applySingleCondition('style', beer.style));
+        styleLink.textContent = latestBeer.style;
+        styleLink.addEventListener('click', () => applySingleCondition('style', latestBeer.style));
         const abvVal = document.createElement('span');
         abvVal.className = 'abv-badge';
-        abvVal.textContent = `ABV ${Number(beer.abv).toFixed(1)}%`;
+        abvVal.textContent = `ABV ${Number(latestBeer.abv).toFixed(1)}%`;
         styleSpec.append(styleLink, abvVal);
 
         const regionSpec = document.createElement('div');
@@ -2835,11 +2892,11 @@
         const regLink = document.createElement('button');
         regLink.type = 'button';
         regLink.className = 'inline-link';
-        regLink.textContent = beer.region;
-        regLink.addEventListener('click', () => applySingleCondition('region', beer.region));
+        regLink.textContent = latestBeer.region;
+        regLink.addEventListener('click', () => applySingleCondition('region', latestBeer.region));
         const mapBtn = document.createElement('a');
         mapBtn.className = 'map-btn';
-        mapBtn.href = beer.mapUrl;
+        mapBtn.href = latestBeer.mapUrl;
         mapBtn.target = '_blank';
         mapBtn.rel = 'noopener noreferrer';
         mapBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>Google Map（現地語）</span>';
@@ -2848,7 +2905,7 @@
         const termSpec = document.createElement('div');
         termSpec.className = 'spec-item';
         termSpec.innerHTML = '<span class="spec-label">関連用語:</span>';
-        getEffectiveTerms(beer).forEach(t => {
+        getEffectiveTerms(latestBeer).forEach(t => {
           const tBtn = document.createElement('button');
           tBtn.type = 'button';
           tBtn.className = t === '#HORAL' ? 'tag-link horal-tag' : 'tag-link';
@@ -2862,14 +2919,14 @@
         body.appendChild(hero);
 
         const sections = [
-          { title: '輸入元 (Importer)', text: beer.importer },
-          { title: '原材料 (Ingredients)', text: beer.ingredients },
-          { title: '製法・醸造の特徴', text: beer.brewingMethod },
-          { title: '特徴・アロマ・味わい', text: beer.flavorProfile },
-          { title: '歴史・醸造所エピソード・豆知識', text: beer.history }
+          { title: '輸入元 (Importer)', text: latestBeer.importer },
+          { title: '原材料 (Ingredients)', text: latestBeer.ingredients },
+          { title: '製法・醸造の特徴', text: latestBeer.brewingMethod },
+          { title: '特徴・アロマ・味わい', text: latestBeer.flavorProfile },
+          { title: '歴史・醸造所エピソード・豆知識', text: latestBeer.history }
         ];
 
-        if (isHoralMember(beer)) {
+        if (isHoralMember(latestBeer)) {
           sections.push({
             title: 'HORAL 加盟情報',
             text: `この醸造所はHORALの加盟メンバーです。HORALでは、醸造所公開イベント「Toer de Geuze（トゥール・ド・グーズ）」の開催や、加盟醸造所のランビックをブレンドした限定酒「HORAL's Oude Geuze Megablend」のリリースなどの活動を行っています。加盟醸造所（12社）：${HORAL_BREWERIES.join('、')}`
@@ -2892,7 +2949,7 @@
         const memoH3 = document.createElement('h3');
         memoH3.textContent = 'テイスティングメモ';
 
-        const currentEntry = getMemoEntry(beer.id);
+        const currentEntry = getMemoEntry(latestBeer.id);
 
         const dateRow = document.createElement('div');
         dateRow.className = 'memo-date-row';
@@ -2949,7 +3006,7 @@
         });
 
         saveBtn.addEventListener('click', () => {
-          const ok = setMemoEntry(beer.id, dateInput.value, textarea.value);
+          const ok = setMemoEntry(latestBeer.id, dateInput.value, textarea.value);
           if (ok) {
             hasUnsavedMemo = false;
             statusSpan.className = 'memo-status saved';
@@ -3191,13 +3248,22 @@
         if (e.target === settingsModal) closeSettingsModal();
       });
 
-      // キャッシュを破棄して最新版のアプリ・beers.jsを再読込するボタン
-      document.getElementById('forceReloadBtn').addEventListener('click', () => {
+      // キャッシュを破棄して最新版の beers.js と画像を強制再読込するボタン
+      document.getElementById('forceReloadBtn').addEventListener('click', async () => {
         try {
           localStorage.removeItem(STORAGE_KEYS.CACHED_BEERS);
         } catch (e) {}
-        const baseUrl = window.location.href.split('?')[0].split('#')[0];
-        window.location.replace(baseUrl + '?reload=' + Date.now());
+        imageCacheToken = String(Date.now());
+
+        if (/^https?:$/i.test(window.location.protocol)) {
+          await refreshBeersFromNetwork();
+          closeSettingsModal();
+          renderBeers();
+          showToast('最新データと画像キャッシュを再取得しました。');
+        } else {
+          const baseUrl = window.location.href.split('?')[0].split('#')[0];
+          window.location.replace(baseUrl + '?reload=' + Date.now());
+        }
       });
 
       document.getElementById('saveEvernoteEmailBtn').addEventListener('click', () => {
@@ -3306,6 +3372,14 @@
       searchInput.value = '';
       initTheme();
       renderBeers();
+
+      // WEB環境の場合はバックグラウンドでも最新 beers.js を確認し、差分があれば自動更新
+      refreshBeersFromNetwork().then(updated => {
+        if (updated) {
+          imageCacheToken = String(Date.now());
+          renderBeers();
+        }
+      });
     })();
   </script>
 </body>
