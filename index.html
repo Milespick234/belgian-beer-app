@@ -75,9 +75,12 @@
       box-sizing: border-box;
     }
 
-    body {
+    html, body {
       margin: 0;
       padding: 0;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
       background-color: var(--bg-page);
       color: var(--text-primary);
       font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", Meiryo, sans-serif;
@@ -85,8 +88,13 @@
       -webkit-text-size-adjust: 100%;
     }
 
+    body.modal-open {
+      overflow: hidden;
+    }
+
     .container {
       max-width: 1200px;
+      width: 100%;
       margin: 0 auto;
       padding: 10px 14px 40px;
     }
@@ -154,6 +162,7 @@
     .search-input-wrap {
       position: relative;
       flex: 1 1 240px;
+      min-width: 0;
       display: flex;
       align-items: center;
     }
@@ -165,6 +174,7 @@
       pointer-events: none;
     }
 
+    /* iOS Safari自動ズーム防止のため16px以上を指定 */
     .search-input {
       width: 100%;
       padding: 8px 10px 8px 34px;
@@ -172,7 +182,7 @@
       border-radius: 8px;
       background: var(--bg-page);
       color: var(--text-primary);
-      font-size: 0.95rem;
+      font-size: 16px;
     }
 
     .search-input:focus {
@@ -467,14 +477,14 @@
       color: var(--text-secondary);
     }
 
-    /* 並び替えボタン（セレクトボックス）：背景色を薄い黄緑色に変更 */
+    /* 並び替えボタン（セレクトボックス）：背景色を薄い黄緑色＋iOSズーム防止のため16px */
     .sort-select {
       padding: 6px 10px;
       border-radius: 8px;
       border: 1px solid var(--sort-border);
       background-color: var(--sort-bg);
       color: var(--sort-text);
-      font-size: 0.85rem;
+      font-size: 16px;
       font-weight: 700;
       cursor: pointer;
       transition: filter 0.15s;
@@ -486,7 +496,7 @@
 
     .beer-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 14px;
     }
 
@@ -637,6 +647,7 @@
       text-underline-offset: 2px;
       cursor: pointer;
       text-align: left;
+      overflow-wrap: anywhere;
     }
 
     .inline-link:hover {
@@ -759,10 +770,14 @@
       display: none;
       position: fixed;
       inset: 0;
+      width: 100%;
+      max-width: 100%;
       background: rgba(0, 0, 0, 0.65);
       z-index: 1000;
-      padding: 14px;
+      padding: 10px;
       overflow-y: auto;
+      overflow-x: hidden;
+      overscroll-behavior: contain;
       align-items: flex-start;
       justify-content: center;
     }
@@ -834,9 +849,10 @@
 
     .modal-beer-title {
       margin: 0;
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       font-weight: 800;
       line-height: 1.3;
+      overflow-wrap: anywhere;
     }
 
     .modal-beer-title a {
@@ -877,23 +893,24 @@
     }
 
     .modal-body {
-      padding: 16px;
-      max-height: 72vh;
+      padding: 14px 16px;
+      max-height: 74vh;
       overflow-y: auto;
+      overflow-x: hidden;
     }
 
     .detail-hero {
       display: flex;
       flex-wrap: wrap;
-      gap: 16px;
+      gap: 14px;
       margin-bottom: 16px;
       padding-bottom: 14px;
       border-bottom: 1px solid var(--border);
     }
 
     .detail-img-box {
-      width: 120px;
-      height: 170px;
+      width: 110px;
+      height: 158px;
       border-radius: 10px;
       background: var(--bg-elevated);
       border: 1px solid var(--border);
@@ -919,7 +936,8 @@
     }
 
     .detail-specs {
-      flex: 1 1 260px;
+      flex: 1 1 220px;
+      min-width: 0;
       display: flex;
       flex-direction: column;
       gap: 7px;
@@ -931,12 +949,13 @@
       flex-wrap: wrap;
       align-items: center;
       gap: 6px;
+      min-width: 0;
     }
 
     .spec-label {
       font-weight: 800;
       color: var(--text-secondary);
-      min-width: 86px;
+      min-width: 82px;
     }
 
     .detail-section {
@@ -957,9 +976,10 @@
       font-size: 0.9rem;
       color: var(--text-primary);
       line-height: 1.65;
+      overflow-wrap: anywhere;
     }
 
-    /* テイスティングメモ欄（保存ボタン付き） */
+    /* テイスティングメモ欄（保存ボタン付き・iOS自動ズーム防止16px） */
     .memo-date-row {
       display: flex;
       flex-wrap: wrap;
@@ -978,7 +998,8 @@
       background: var(--bg-page);
       color: var(--text-primary);
       font-family: inherit;
-      font-size: 0.88rem;
+      font-size: 16px;
+      max-width: 100%;
       cursor: pointer;
     }
 
@@ -987,12 +1008,12 @@
     }
 
     .memo-today-btn {
-      padding: 5px 10px;
+      padding: 6px 10px;
       border-radius: 6px;
       border: 1px solid var(--border);
       background: var(--bg-elevated);
       color: var(--text-primary);
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       font-weight: 700;
       cursor: pointer;
     }
@@ -1004,14 +1025,16 @@
 
     .memo-box {
       width: 100%;
-      min-height: 78px;
+      max-width: 100%;
+      min-height: 82px;
       padding: 9px 11px;
       border-radius: 8px;
       border: 1px solid var(--border);
       background: var(--bg-page);
       color: var(--text-primary);
       font-family: inherit;
-      font-size: 0.9rem;
+      font-size: 16px;
+      line-height: 1.5;
       resize: vertical;
     }
 
@@ -1075,14 +1098,16 @@
       margin: 8px 0 4px;
     }
 
+    /* iOS自動ズーム防止のため16px */
     .settings-input, .settings-select {
       width: 100%;
+      max-width: 100%;
       padding: 8px 10px;
       border-radius: 8px;
       border: 1px solid var(--border);
       background: var(--bg-page);
       color: var(--text-primary);
-      font-size: 0.9rem;
+      font-size: 16px;
       margin-bottom: 10px;
     }
 
@@ -1213,6 +1238,12 @@
       }
       .beer-grid {
         grid-template-columns: 1fr;
+      }
+      .modal-backdrop {
+        padding: 8px;
+      }
+      .modal-body {
+        padding: 12px;
       }
     }
   </style>
@@ -1378,7 +1409,7 @@
         <div class="detail-section">
           <h3>JSONファイルから復元</h3>
           <p style="margin-bottom:10px; font-size:0.85rem;">保存済みのバックアップファイル（.json）を選択して、お気に入りとメモを復元します。</p>
-          <input type="file" id="importJsonInput" accept=".json,application/json" style="font-size:0.86rem;">
+          <input type="file" id="importJsonInput" accept=".json,application/json" style="font-size:16px;">
         </div>
       </div>
     </div>
@@ -1478,6 +1509,29 @@
       const settingsModal = document.getElementById('settingsModal');
       const toastEl = document.getElementById('toast');
 
+      function updateBodyScrollLock() {
+        const anyOpen =
+          detailModal.classList.contains('open') ||
+          imageModal.classList.contains('open') ||
+          settingsModal.classList.contains('open');
+        document.body.classList.toggle('modal-open', anyOpen);
+        if (!anyOpen && window.scrollX !== 0) {
+          window.scrollTo(0, window.scrollY);
+        }
+      }
+
+      // iPhone等でフォーム要素からフォーカスが外れた際の水平ズレ防止
+      document.addEventListener('focusout', e => {
+        const tag = e.target && e.target.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') {
+          setTimeout(() => {
+            if (window.scrollX !== 0) {
+              window.scrollTo(0, window.scrollY);
+            }
+          }, 120);
+        }
+      });
+
       function loadJson(key, fallback) {
         try {
           const raw = localStorage.getItem(key);
@@ -1533,6 +1587,7 @@
           ta.value = text;
           ta.style.position = 'fixed';
           ta.style.left = '-9999px';
+          ta.style.fontSize = '16px';
           document.body.appendChild(ta);
           ta.focus();
           ta.select();
@@ -1555,7 +1610,6 @@
         return syncOk;
       }
 
-      // Gmail Web作成URLの文字数上限(414エラー)を回避しつつ安全に本文を生成
       function buildSafeGmailBody(fullText) {
         const MAX_ENCODED_BODY = 4500;
         if (encodeURIComponent(fullText).length <= MAX_ENCODED_BODY) {
@@ -1611,10 +1665,12 @@
         body.innerHTML = '';
         body.appendChild(createImageElement(beer.imageUrl, beer.name, '', 1200));
         imageModal.classList.add('open');
+        updateBodyScrollLock();
       }
 
       function closeImageModal() {
         imageModal.classList.remove('open');
+        updateBodyScrollLock();
       }
 
       function toggleFavorite(beerId) {
@@ -2217,6 +2273,8 @@
             hasUnsavedMemo = false;
             statusSpan.className = 'memo-status saved';
             statusSpan.textContent = (dateInput.value || textarea.value.trim()) ? '保存しました' : 'メモをクリアして保存しました';
+            textarea.blur();
+            dateInput.blur();
             showToast('テイスティングメモを保存しました。');
             if (searchInput.value.trim()) {
               renderBeers();
@@ -2235,6 +2293,7 @@
 
         updateModalFavButton();
         detailModal.classList.add('open');
+        updateBodyScrollLock();
         body.scrollTop = 0;
       }
 
@@ -2244,8 +2303,12 @@
           if (!discard) return;
         }
         hasUnsavedMemo = false;
+        if (document.activeElement && typeof document.activeElement.blur === 'function') {
+          document.activeElement.blur();
+        }
         detailModal.classList.remove('open');
         currentDetailBeer = null;
+        updateBodyScrollLock();
       }
 
       function updateModalFavButton() {
@@ -2263,7 +2326,6 @@
         toggleFavorite(currentDetailBeer.id);
       });
 
-      // Evernoteへ送る機能（Macでは純正メールを起動せずGmail Web版を直接開く対応）
       document.getElementById('evernoteBtn').addEventListener('click', async () => {
         if (!currentDetailBeer) return;
         const b = currentDetailBeer;
@@ -2305,13 +2367,11 @@
           userMemoBlock
         ].filter(line => line !== null && line !== undefined).join('\n').replace(/\n{3,}/g, '\n\n').trim();
 
-        // 常に全文をクリップボードへコピーしておく
         copyTextSyncFallback(noteText);
         copyTextToClipboard(noteText);
 
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-        // 1. Evernote専用メールアドレスが設定されている場合
         if (evernoteEmail && evernoteEmail.includes('@')) {
           let effectiveClient = evernoteMailClient;
           if (effectiveClient === 'auto') {
@@ -2319,7 +2379,6 @@
           }
 
           if (effectiveClient === 'gmail') {
-            // 純正メールアプリを一切起動せず、ブラウザの新しいタブでGoogle Webメール（Gmail）作成画面を開く
             const safeResult = buildSafeGmailBody(noteText);
             const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(evernoteEmail)}&su=${encodeURIComponent(noteTitle)}&body=${encodeURIComponent(safeResult.body)}`;
             window.open(gmailUrl, '_blank', 'noopener,noreferrer');
@@ -2331,7 +2390,6 @@
             }
             return;
           } else {
-            // 端末標準のメールアプリで開く（iPhone等）
             const mailtoUrl = `mailto:${encodeURIComponent(evernoteEmail)}?subject=${encodeURIComponent(noteTitle)}&body=${encodeURIComponent(noteText)}`;
             showToast('メール作成画面を開きます（送信するとEvernoteへ登録されます）。');
             window.location.href = mailtoUrl;
@@ -2339,7 +2397,6 @@
           }
         }
 
-        // 2. メールアドレス未設定時：iPhone / iPad の共有シート
         if (isMobile && navigator.share) {
           try {
             await navigator.share({
@@ -2352,7 +2409,6 @@
           }
         }
 
-        // 3. メールアドレス未設定時：Mac / PC 環境（コピー＋Web版リンク）
         const webFallbackLink = document.createElement('a');
         webFallbackLink.href = 'https://www.evernote.com/client/web';
         webFallbackLink.target = '_blank';
@@ -2408,17 +2464,23 @@
         if (e.target === imageModal) closeImageModal();
       });
 
-      // 設定モーダル（Evernoteメールアドレス・送信方法設定＋JSONバックアップ・復元）
+      function closeSettingsModal() {
+        if (document.activeElement && typeof document.activeElement.blur === 'function') {
+          document.activeElement.blur();
+        }
+        settingsModal.classList.remove('open');
+        updateBodyScrollLock();
+      }
+
       document.getElementById('settingsBtn').addEventListener('click', () => {
         document.getElementById('evernoteEmailInput').value = evernoteEmail;
         document.getElementById('evernoteMailClientSelect').value = evernoteMailClient;
         settingsModal.classList.add('open');
+        updateBodyScrollLock();
       });
-      document.getElementById('closeSettingsBtn').addEventListener('click', () => {
-        settingsModal.classList.remove('open');
-      });
+      document.getElementById('closeSettingsBtn').addEventListener('click', closeSettingsModal);
       settingsModal.addEventListener('click', e => {
-        if (e.target === settingsModal) settingsModal.classList.remove('open');
+        if (e.target === settingsModal) closeSettingsModal();
       });
 
       document.getElementById('saveEvernoteEmailBtn').addEventListener('click', () => {
@@ -2484,7 +2546,7 @@
               localStorage.setItem(STORAGE_KEYS.EVERNOTE_MAIL_CLIENT, evernoteMailClient);
             }
             renderBeers();
-            settingsModal.classList.remove('open');
+            closeSettingsModal();
             showToast('バックアップデータを復元しました。');
           } catch (err) {
             showToast('JSONファイルの読み込みに失敗しました。形式を確認してください。');
@@ -2501,7 +2563,7 @@
             return;
           }
           if (detailModal.classList.contains('open')) closeDetailModal(false);
-          if (settingsModal.classList.contains('open')) settingsModal.classList.remove('open');
+          if (settingsModal.classList.contains('open')) closeSettingsModal();
         }
       });
 
