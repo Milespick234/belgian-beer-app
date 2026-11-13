@@ -39,6 +39,8 @@
       --sort-text: #183114;
       --save-btn-bg: #1d4ed8;
       --save-btn-hover: #1e40af;
+      --share-btn-bg: #0f766e;
+      --share-btn-hover: #115e59;
     }
 
     html.dark {
@@ -69,6 +71,8 @@
       --sort-text: #14260e;
       --save-btn-bg: #2563eb;
       --save-btn-hover: #3b82f6;
+      --share-btn-bg: #0d9488;
+      --share-btn-hover: #14b8a6;
     }
 
     * {
@@ -894,7 +898,7 @@
 
     .modal-body {
       padding: 14px 16px;
-      max-height: 74vh;
+      max-height: 70vh;
       overflow-y: auto;
       overflow-x: hidden;
     }
@@ -1111,27 +1115,88 @@
       margin-bottom: 10px;
     }
 
+    /* PC・フォールバック用共有選択バー（LINE・メール等） */
+    .share-picker-bar {
+      display: none;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 10px 16px;
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border);
+      animation: fadeIn 0.15s ease-out;
+    }
+
+    .share-picker-bar.open {
+      display: flex;
+    }
+
+    .share-picker-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-right: auto;
+    }
+
+    .share-option-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 12px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .share-option-btn:hover {
+      border-color: var(--accent);
+    }
+
+    .share-option-btn.line-opt {
+      background: #06c755;
+      border-color: #06c755;
+      color: #ffffff;
+    }
+
+    .share-option-btn.line-opt:hover {
+      background: #05b34c;
+    }
+
     .modal-footer {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       padding: 12px 16px;
       background: var(--bg-elevated);
       border-top: 1px solid var(--border);
+    }
+
+    .modal-footer-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
     }
 
     .fav-toggle-btn {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 9px 14px;
+      padding: 9px 12px;
       border-radius: 8px;
       border: 1px solid var(--border);
       background: var(--bg-surface);
       color: var(--text-primary);
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       font-weight: 700;
       cursor: pointer;
     }
@@ -1142,18 +1207,38 @@
       border-color: #ca8a04;
     }
 
+    .share-other-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--share-btn-bg);
+      background: var(--share-btn-bg);
+      color: #ffffff;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .share-other-btn:hover {
+      background: var(--share-btn-hover);
+    }
+
     .evernote-btn {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 9px 14px;
+      gap: 5px;
+      padding: 9px 13px;
       border-radius: 8px;
       border: 1px solid #00a82d;
       background: #00a82d;
       color: #ffffff;
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       font-weight: 700;
       cursor: pointer;
+      transition: background 0.15s;
     }
 
     .evernote-btn:hover {
@@ -1244,6 +1329,13 @@
       }
       .modal-body {
         padding: 12px;
+      }
+      .modal-footer {
+        padding: 10px 12px;
+      }
+      .fav-toggle-btn, .share-other-btn, .evernote-btn {
+        padding: 8px 10px;
+        font-size: 0.8rem;
       }
     }
   </style>
@@ -1347,12 +1439,28 @@
         </button>
       </div>
       <div id="modalBody" class="modal-body"></div>
+
+      <!-- PCおよび共有シート非対応環境用の選択バー（LINE・メール等） -->
+      <div id="sharePickerBar" class="share-picker-bar" aria-label="送信先アプリ選択">
+        <span class="share-picker-label">送信先を選択（全文コピー済み）:</span>
+        <button type="button" id="shareLineBtn" class="share-option-btn line-opt">LINEで送る</button>
+        <button type="button" id="shareGmailBtn" class="share-option-btn">Gmailで送る</button>
+        <button type="button" id="shareMailtoBtn" class="share-option-btn">メールアプリで送る</button>
+        <button type="button" id="shareCopyBtn" class="share-option-btn">コピー</button>
+      </div>
+
       <div class="modal-footer">
         <button type="button" id="modalFavBtn" class="fav-toggle-btn"></button>
-        <button type="button" id="evernoteBtn" class="evernote-btn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
-          <span>Evernoteへ送る</span>
-        </button>
+        <div class="modal-footer-actions">
+          <button type="button" id="shareOtherBtn" class="share-other-btn" title="LINEやメールなど他のアプリへ送信">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            <span>LINE・メール等で共有</span>
+          </button>
+          <button type="button" id="evernoteBtn" class="evernote-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+            <span>Evernoteへ送る</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -1385,10 +1493,14 @@
       </div>
       <div class="modal-body">
         <div class="detail-section">
-          <h3>Evernote保存用メール設定</h3>
-          <p style="margin-bottom:8px; font-size:0.85rem;">Evernote専用メールアドレス（<code>〇〇@m.evernote.com</code>）を登録すると、「Evernoteへ送る」ボタンでメール作成画面が直接開きます。Macでは純正メールアプリを起動せず<strong>Google Webメール（Gmail）</strong>で開く設定が標準になっています。</p>
+          <h3>Evernote保存用メール・ノートブック設定</h3>
+          <p style="margin-bottom:8px; font-size:0.85rem;">Evernote専用メールアドレス（<code>〇〇@m.evernote.com</code>）と送信先ノートブック名を登録すると、「Evernoteへ送る」ボタンで件名に <code>@ノートブック名</code> を自動付与して送信できます。</p>
+
           <label class="settings-label" for="evernoteEmailInput">Evernote専用メールアドレス:</label>
           <input type="email" id="evernoteEmailInput" class="settings-input" placeholder="例: yourname.12345@m.evernote.com">
+
+          <label class="settings-label" for="evernoteNotebookInput">送信先ノートブック名（任意・@は自動付与）:</label>
+          <input type="text" id="evernoteNotebookInput" class="settings-input" placeholder="例: ベルギービール">
 
           <label class="settings-label" for="evernoteMailClientSelect">Evernote送信時のメール方法:</label>
           <select id="evernoteMailClientSelect" class="settings-select">
@@ -1397,12 +1509,12 @@
             <option value="mailto">常に端末の標準メールアプリで開く</option>
           </select>
 
-          <button type="button" id="saveEvernoteEmailBtn" class="action-btn primary">Evernoteメール設定を保存</button>
+          <button type="button" id="saveEvernoteEmailBtn" class="action-btn primary">Evernote設定を保存</button>
         </div>
         <hr style="border:none; border-top:1px solid var(--border); margin:16px 0;">
         <div class="detail-section">
           <h3>JSONファイルへ保存（バックアップ）</h3>
-          <p style="margin-bottom:10px; font-size:0.85rem;">登録した「お気に入り」と「テイスティングメモ（日付・感想）」を、MacやiPhone本体にJSON形式でダウンロード保存します。</p>
+          <p style="margin-bottom:10px; font-size:0.85rem;">登録した「お気に入り」と「テイスティングメモ（日付・感想）」および設定を、MacやiPhone本体にJSON形式でダウンロード保存します。</p>
           <button type="button" id="exportJsonBtn" class="action-btn primary">お気に入り・メモを保存 (.json)</button>
         </div>
         <hr style="border:none; border-top:1px solid var(--border); margin:16px 0;">
@@ -1429,6 +1541,7 @@
         MEMOS: 'bbn_memos_v1',
         THEME: 'bbn_theme_v1',
         EVERNOTE_EMAIL: 'bbn_evernote_email_v1',
+        EVERNOTE_NOTEBOOK: 'bbn_evernote_notebook_v1',
         EVERNOTE_MAIL_CLIENT: 'bbn_evernote_mail_client_v1'
       };
 
@@ -1489,6 +1602,7 @@
       let favorites = loadJson(STORAGE_KEYS.FAVORITES, []);
       let memos = loadJson(STORAGE_KEYS.MEMOS, {});
       let evernoteEmail = localStorage.getItem(STORAGE_KEYS.EVERNOTE_EMAIL) || '';
+      let evernoteNotebook = localStorage.getItem(STORAGE_KEYS.EVERNOTE_NOTEBOOK) || '';
       let evernoteMailClient = localStorage.getItem(STORAGE_KEYS.EVERNOTE_MAIL_CLIENT) || 'auto';
       let currentFilter = { type: 'all', value: 'all' };
       let activeDrawer = null;
@@ -1507,6 +1621,7 @@
       const detailModal = document.getElementById('detailModal');
       const imageModal = document.getElementById('imageModal');
       const settingsModal = document.getElementById('settingsModal');
+      const sharePickerBar = document.getElementById('sharePickerBar');
       const toastEl = document.getElementById('toast');
 
       function updateBodyScrollLock() {
@@ -1520,7 +1635,6 @@
         }
       }
 
-      // iPhone等でフォーム要素からフォーカスが外れた際の水平ズレ防止
       document.addEventListener('focusout', e => {
         const tag = e.target && e.target.tagName;
         if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') {
@@ -1610,17 +1724,70 @@
         return syncOk;
       }
 
-      function buildSafeGmailBody(fullText) {
-        const MAX_ENCODED_BODY = 4500;
-        if (encodeURIComponent(fullText).length <= MAX_ENCODED_BODY) {
+      function buildSafeUrlBody(fullText, maxEncodedLen) {
+        const limit = maxEncodedLen || 4500;
+        if (encodeURIComponent(fullText).length <= limit) {
           return { body: fullText, truncated: false };
         }
-        const suffix = '\n\n（※URL文字数制限のため以下省略：全文はコピー済みですので Command+V で貼り付けできます）';
+        const suffix = '\n\n（※文字数制限のため以下省略：全文はコピー済みですので貼り付けできます）';
         let cut = fullText.slice(0, 480);
-        while (cut.length > 50 && encodeURIComponent(cut + suffix).length > MAX_ENCODED_BODY) {
+        while (cut.length > 50 && encodeURIComponent(cut + suffix).length > limit) {
           cut = cut.slice(0, Math.floor(cut.length * 0.85));
         }
         return { body: cut + suffix, truncated: true };
+      }
+
+      // 現在表示中のビールの送信・共有用テキスト一式を生成
+      function buildCurrentBeerSharePayload() {
+        if (!currentDetailBeer) return null;
+        const b = currentDetailBeer;
+
+        const dateEl = document.getElementById('memoDateInput');
+        const textEl = document.getElementById('memoTextarea');
+        const savedEntry = getMemoEntry(b.id);
+        const memoDate = dateEl ? dateEl.value : savedEntry.date;
+        const memoBody = textEl ? textEl.value : savedEntry.text;
+
+        let userMemoBlock = '';
+        if (memoDate || memoBody.trim()) {
+          const dateHeader = memoDate ? `（記録日: ${memoDate}）` : '';
+          userMemoBlock = `\n【テイスティングメモ${dateHeader}】\n${memoBody}\n`;
+        }
+
+        const horalNote = isHoralMember(b)
+          ? `【HORAL加盟】Toer de Geuze（トゥール・ド・グーズ）の開催やHORAL's Oude Geuze Megablendのリリース等を行うHORALの加盟醸造所`
+          : '';
+
+        const baseTitle = `${b.name}（${b.reading}）`;
+        const cleanNotebook = (evernoteNotebook || '').trim().replace(/^@+/, '');
+        const evernoteSubject = cleanNotebook ? `${baseTitle} @${cleanNotebook}` : baseTitle;
+
+        const noteText = [
+          baseTitle,
+          ``,
+          `醸造所: ${b.brewery}（${b.region}）`,
+          `分類: ${b.style} / アルコール度数: ${Number(b.abv).toFixed(1)}%`,
+          `輸入元: ${b.importer}`,
+          b.productUrl ? `商品ページ: ${b.productUrl}` : '',
+          `Google Map: ${b.mapUrl}`,
+          horalNote,
+          ``,
+          `【原材料】\n${b.ingredients}`,
+          ``,
+          `【製法・醸造の特徴】\n${b.brewingMethod}`,
+          ``,
+          `【特徴・アロマ・味わい】\n${b.flavorProfile}`,
+          ``,
+          `【歴史・豆知識】\n${b.history}`,
+          userMemoBlock
+        ].filter(line => line !== null && line !== undefined).join('\n').replace(/\n{3,}/g, '\n\n').trim();
+
+        return {
+          baseTitle,
+          evernoteSubject,
+          cleanNotebook,
+          noteText
+        };
       }
 
       function getDriveImageUrls(driveUrl, size) {
@@ -2093,6 +2260,7 @@
       function openDetailModal(beer) {
         currentDetailBeer = beer;
         hasUnsavedMemo = false;
+        sharePickerBar.classList.remove('open');
 
         const titleEl = document.getElementById('modalBeerTitle');
         titleEl.innerHTML = '';
@@ -2303,6 +2471,7 @@
           if (!discard) return;
         }
         hasUnsavedMemo = false;
+        sharePickerBar.classList.remove('open');
         if (document.activeElement && typeof document.activeElement.blur === 'function') {
           document.activeElement.blur();
         }
@@ -2317,8 +2486,8 @@
         const isFav = favorites.includes(currentDetailBeer.id);
         btn.classList.toggle('is-fav', isFav);
         btn.innerHTML = isFav
-          ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span>お気に入り登録済み（解除する）</span>'
-          : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span>お気に入りに追加</span>';
+          ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span>お気に入り済</span>'
+          : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span>お気に入り追加</span>';
       }
 
       document.getElementById('modalFavBtn').addEventListener('click', () => {
@@ -2326,51 +2495,80 @@
         toggleFavorite(currentDetailBeer.id);
       });
 
-      document.getElementById('evernoteBtn').addEventListener('click', async () => {
-        if (!currentDetailBeer) return;
-        const b = currentDetailBeer;
+      // 1. 「LINE・メール等で共有」ボタン（iPhone標準共有シート / PC選択メニュー）
+      document.getElementById('shareOtherBtn').addEventListener('click', async () => {
+        const payload = buildCurrentBeerSharePayload();
+        if (!payload) return;
 
-        const dateEl = document.getElementById('memoDateInput');
-        const textEl = document.getElementById('memoTextarea');
-        const savedEntry = getMemoEntry(b.id);
-        const memoDate = dateEl ? dateEl.value : savedEntry.date;
-        const memoBody = textEl ? textEl.value : savedEntry.text;
-
-        let userMemoBlock = '';
-        if (memoDate || memoBody.trim()) {
-          const dateHeader = memoDate ? `（記録日: ${memoDate}）` : '';
-          userMemoBlock = `\n【テイスティングメモ${dateHeader}】\n${memoBody}\n`;
-        }
-
-        const horalNote = isHoralMember(b)
-          ? `【HORAL加盟】Toer de Geuze（トゥール・ド・グーズ）の開催やHORAL's Oude Geuze Megablendのリリース等を行うHORALの加盟醸造所`
-          : '';
-
-        const noteTitle = `${b.name}（${b.reading}）`;
-        const noteText = [
-          noteTitle,
-          ``,
-          `醸造所: ${b.brewery}（${b.region}）`,
-          `分類: ${b.style} / アルコール度数: ${Number(b.abv).toFixed(1)}%`,
-          `輸入元: ${b.importer}`,
-          b.productUrl ? `商品ページ: ${b.productUrl}` : '',
-          `Google Map: ${b.mapUrl}`,
-          horalNote,
-          ``,
-          `【原材料】\n${b.ingredients}`,
-          ``,
-          `【製法・醸造の特徴】\n${b.brewingMethod}`,
-          ``,
-          `【特徴・アロマ・味わい】\n${b.flavorProfile}`,
-          ``,
-          `【歴史・豆知識】\n${b.history}`,
-          userMemoBlock
-        ].filter(line => line !== null && line !== undefined).join('\n').replace(/\n{3,}/g, '\n\n').trim();
-
-        copyTextSyncFallback(noteText);
-        copyTextToClipboard(noteText);
+        copyTextSyncFallback(payload.noteText);
+        copyTextToClipboard(payload.noteText);
 
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile && navigator.share) {
+          try {
+            await navigator.share({
+              title: payload.baseTitle,
+              text: payload.noteText
+            });
+            return;
+          } catch (e) {
+            if (e && e.name === 'AbortError') return;
+          }
+        }
+
+        // Mac / PC または共有シート非対応環境では送信先選択バーを開閉
+        sharePickerBar.classList.toggle('open');
+      });
+
+      // 選択バー内の各送信ボタン
+      document.getElementById('shareLineBtn').addEventListener('click', () => {
+        const payload = buildCurrentBeerSharePayload();
+        if (!payload) return;
+        copyTextSyncFallback(payload.noteText);
+        const safe = buildSafeUrlBody(payload.noteText, 1800);
+        const lineUrl = `https://line.me/R/share?text=${encodeURIComponent(safe.body)}`;
+        window.open(lineUrl, '_blank', 'noopener,noreferrer');
+        sharePickerBar.classList.remove('open');
+        showToast('LINE共有画面を開きました（全文もクリップボードにコピー済みです）。');
+      });
+
+      document.getElementById('shareGmailBtn').addEventListener('click', () => {
+        const payload = buildCurrentBeerSharePayload();
+        if (!payload) return;
+        copyTextSyncFallback(payload.noteText);
+        const safe = buildSafeUrlBody(payload.noteText, 4500);
+        const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&su=${encodeURIComponent(payload.baseTitle)}&body=${encodeURIComponent(safe.body)}`;
+        window.open(gmailUrl, '_blank', 'noopener,noreferrer');
+        sharePickerBar.classList.remove('open');
+        showToast('Gmailの作成画面を新しいタブで開きました。');
+      });
+
+      document.getElementById('shareMailtoBtn').addEventListener('click', () => {
+        const payload = buildCurrentBeerSharePayload();
+        if (!payload) return;
+        copyTextSyncFallback(payload.noteText);
+        sharePickerBar.classList.remove('open');
+        window.location.href = `mailto:?subject=${encodeURIComponent(payload.baseTitle)}&body=${encodeURIComponent(payload.noteText)}`;
+      });
+
+      document.getElementById('shareCopyBtn').addEventListener('click', async () => {
+        const payload = buildCurrentBeerSharePayload();
+        if (!payload) return;
+        await copyTextToClipboard(payload.noteText);
+        sharePickerBar.classList.remove('open');
+        showToast('ビール情報とメモの全文をクリップボードにコピーしました。');
+      });
+
+      // 2. 「Evernoteへ送る」ボタン（@ノートブック名 自動付与対応）
+      document.getElementById('evernoteBtn').addEventListener('click', async () => {
+        const payload = buildCurrentBeerSharePayload();
+        if (!payload) return;
+
+        copyTextSyncFallback(payload.noteText);
+        copyTextToClipboard(payload.noteText);
+
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        const nbNotice = payload.cleanNotebook ? `（保存先ノートブック: @${payload.cleanNotebook}）` : '';
 
         if (evernoteEmail && evernoteEmail.includes('@')) {
           let effectiveClient = evernoteMailClient;
@@ -2379,29 +2577,30 @@
           }
 
           if (effectiveClient === 'gmail') {
-            const safeResult = buildSafeGmailBody(noteText);
-            const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(evernoteEmail)}&su=${encodeURIComponent(noteTitle)}&body=${encodeURIComponent(safeResult.body)}`;
+            const safeResult = buildSafeUrlBody(payload.noteText, 4500);
+            const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(evernoteEmail)}&su=${encodeURIComponent(payload.evernoteSubject)}&body=${encodeURIComponent(safeResult.body)}`;
             window.open(gmailUrl, '_blank', 'noopener,noreferrer');
 
             if (safeResult.truncated) {
-              showToast('Gmailの作成画面を新しいタブで開きました。全文はコピー済みですので、本文欄で Command+V を押すと全内容を貼り付けできます。');
+              showToast(`Gmail作成画面を開きました${nbNotice}。全文はコピー済みですので Command+V で貼り付けできます。`);
             } else {
-              showToast('Gmailの作成画面を新しいタブで開きました。内容を確認して「送信」を押すとEvernoteへ登録されます。');
+              showToast(`Gmail作成画面を開きました${nbNotice}。「送信」を押すとEvernoteへ登録されます。`);
             }
             return;
           } else {
-            const mailtoUrl = `mailto:${encodeURIComponent(evernoteEmail)}?subject=${encodeURIComponent(noteTitle)}&body=${encodeURIComponent(noteText)}`;
-            showToast('メール作成画面を開きます（送信するとEvernoteへ登録されます）。');
+            const mailtoUrl = `mailto:${encodeURIComponent(evernoteEmail)}?subject=${encodeURIComponent(payload.evernoteSubject)}&body=${encodeURIComponent(payload.noteText)}`;
+            showToast(`メール作成画面を開きます${nbNotice}（送信するとEvernoteへ登録されます）。`);
             window.location.href = mailtoUrl;
             return;
           }
         }
 
+        // メールアドレス未設定時：iPhone / iPad の共有シート
         if (isMobile && navigator.share) {
           try {
             await navigator.share({
-              title: noteTitle,
-              text: noteText
+              title: payload.evernoteSubject,
+              text: payload.noteText
             });
             return;
           } catch (e) {
@@ -2409,6 +2608,7 @@
           }
         }
 
+        // メールアドレス未設定時：Mac / PC 環境
         const webFallbackLink = document.createElement('a');
         webFallbackLink.href = 'https://www.evernote.com/client/web';
         webFallbackLink.target = '_blank';
@@ -2416,7 +2616,7 @@
         webFallbackLink.className = 'toast-link';
         webFallbackLink.textContent = 'Web版Evernoteを開く';
 
-        showToast('ノート全文をクリップボードにコピーしました。「設定」からEvernoteメールアドレスを登録するとGmailから直接送信できます。', webFallbackLink);
+        showToast('ノート全文をクリップボードにコピーしました。「設定」からEvernoteメールアドレスとノートブック名を登録すると直接送信できます。', webFallbackLink);
       });
 
       document.getElementById('resetBtn').addEventListener('click', resetAllFilters);
@@ -2472,8 +2672,10 @@
         updateBodyScrollLock();
       }
 
+      // 設定モーダル（Evernoteメールアドレス・送信先ノートブック名・送信方法＋JSONバックアップ）
       document.getElementById('settingsBtn').addEventListener('click', () => {
         document.getElementById('evernoteEmailInput').value = evernoteEmail;
+        document.getElementById('evernoteNotebookInput').value = evernoteNotebook;
         document.getElementById('evernoteMailClientSelect').value = evernoteMailClient;
         settingsModal.classList.add('open');
         updateBodyScrollLock();
@@ -2485,18 +2687,31 @@
 
       document.getElementById('saveEvernoteEmailBtn').addEventListener('click', () => {
         const emailVal = document.getElementById('evernoteEmailInput').value.trim();
+        const nbVal = document.getElementById('evernoteNotebookInput').value.trim().replace(/^@+/, '');
         const clientVal = document.getElementById('evernoteMailClientSelect').value || 'auto';
+
         evernoteEmail = emailVal;
+        evernoteNotebook = nbVal;
         evernoteMailClient = clientVal;
+
         localStorage.setItem(STORAGE_KEYS.EVERNOTE_MAIL_CLIENT, clientVal);
 
         if (emailVal) {
           localStorage.setItem(STORAGE_KEYS.EVERNOTE_EMAIL, emailVal);
-          showToast('Evernoteメール設定を保存しました。');
         } else {
           localStorage.removeItem(STORAGE_KEYS.EVERNOTE_EMAIL);
-          showToast('Evernoteメールアドレスを解除しました。');
         }
+
+        if (nbVal) {
+          localStorage.setItem(STORAGE_KEYS.EVERNOTE_NOTEBOOK, nbVal);
+        } else {
+          localStorage.removeItem(STORAGE_KEYS.EVERNOTE_NOTEBOOK);
+        }
+
+        const msg = nbVal
+          ? `Evernote設定を保存しました（送信先ノートブック: @${nbVal}）。`
+          : 'Evernote設定を保存しました。';
+        showToast(msg);
       });
 
       document.getElementById('exportJsonBtn').addEventListener('click', () => {
@@ -2505,6 +2720,7 @@
           exportedAt: new Date().toISOString(),
           registeredBeerCount: beers.length,
           evernoteEmail,
+          evernoteNotebook,
           evernoteMailClient,
           favorites,
           memos
@@ -2519,7 +2735,7 @@
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-        showToast('お気に入り・メモのバックアップJSONをダウンロードしました。');
+        showToast('お気に入り・メモ・設定のバックアップJSONをダウンロードしました。');
       });
 
       document.getElementById('importJsonInput').addEventListener('change', e => {
@@ -2540,6 +2756,10 @@
             if (typeof parsed.evernoteEmail === 'string') {
               evernoteEmail = parsed.evernoteEmail;
               localStorage.setItem(STORAGE_KEYS.EVERNOTE_EMAIL, evernoteEmail);
+            }
+            if (typeof parsed.evernoteNotebook === 'string') {
+              evernoteNotebook = parsed.evernoteNotebook;
+              localStorage.setItem(STORAGE_KEYS.EVERNOTE_NOTEBOOK, evernoteNotebook);
             }
             if (typeof parsed.evernoteMailClient === 'string') {
               evernoteMailClient = parsed.evernoteMailClient;
