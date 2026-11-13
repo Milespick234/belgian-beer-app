@@ -567,7 +567,7 @@ window.BEER_DATA.push(
     region: "アントウェルペン州",
     abv: 13.0,
     terms: ["#ダーク", "#ハイアルコール"],
-    imageUrl: "https://drive.google.com/file/d/1Y939o0K_8SWq0LtMNRq604URN_Zk_GLx/view?usp=drive_link",
+    imageUrl: "https://drive.google.com/file/d/1L5pwAEUmjozija-LcycuKdEgAh3hUMCq/view?usp=drive_link",
     productUrl: "https://www.dedochtervandekorenaar.be/en/core-range/lensemble/",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Brouwerij+De+Dochter+van+de+Korenaar+Baarle-Hertog+Belgium",
     summary: "オランダ領内に点在するベルギーの飛地バールレ＝ヘルトフで造られる、度数13.0%のバーレーワイン／ストロング・ダークエール。重厚なモルトの甘みとホップの苦味が圧巻です。",
