@@ -2565,7 +2565,7 @@ window.BEER_DATA.push(
   },
   {
     id: "lambiek-fabriek-brett-elle-oude-geuze",
-    name: "Brett-Elle Oude Geuze [代表銘柄]",
+    name: "Brett-Elle Oude Geuze",
     reading: "ブレット・エル・オード・グーズ",
     brewery: "Lambiek Fabriek（ランビック・ファブリーク醸造所）",
     style: "ランビック",
