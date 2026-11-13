@@ -3,9 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Beer Nav">
   <title>Belgian Beer Navigator</title>
   <!-- クロスプラットフォーム対応インラインSVGファビコン（文字化け防止） -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23b45309'/%3E%3Cpath d='M20 14h24l-2 16c-1 8-6 12-10 12s-9-4-10-12l-2-16z' fill='%23fbbf24'/%3E%3Cpath d='M20 14h24v6H20z' fill='%23fffbeb'/%3E%3Cpath d='M32 42v10M23 52h18' stroke='%23fffbeb' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23b45309'/%3E%3Cpath d='M20 14h24l-2 16c-1 8-6 12-10 12s-9-4-10-12l-2-16z' fill='%23fbbf24'/%3E%3Cpath d='M20 14h24v6H20z' fill='%23fffbeb'/%3E%3Cpath d='M32 42v10M23 52h18' stroke='%23fffbeb' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
   <style>
     :root {
       --bg-page: #f3efe6;
@@ -33,6 +37,8 @@
       --sort-bg: #e2f3d5;
       --sort-border: #95c47a;
       --sort-text: #183114;
+      --save-btn-bg: #1d4ed8;
+      --save-btn-hover: #1e40af;
     }
 
     html.dark {
@@ -61,6 +67,8 @@
       --sort-bg: #d9f2c7;
       --sort-border: #84b867;
       --sort-text: #14260e;
+      --save-btn-bg: #2563eb;
+      --save-btn-hover: #3b82f6;
     }
 
     * {
@@ -401,13 +409,13 @@
       font-weight: 800;
       color: var(--accent);
       margin-bottom: 4px;
-      font-size: 0.9rem;
+      font-size: 0.92rem;
     }
 
     .horal-banner-text {
       margin: 0;
       color: var(--text-primary);
-      line-height: 1.55;
+      line-height: 1.6;
     }
 
     .status-bar {
@@ -951,6 +959,7 @@
       line-height: 1.65;
     }
 
+    /* テイスティングメモ欄（保存ボタン付き） */
     .memo-date-row {
       display: flex;
       flex-wrap: wrap;
@@ -995,7 +1004,7 @@
 
     .memo-box {
       width: 100%;
-      min-height: 76px;
+      min-height: 78px;
       padding: 9px 11px;
       border-radius: 8px;
       border: 1px solid var(--border);
@@ -1006,10 +1015,75 @@
       resize: vertical;
     }
 
+    .memo-action-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .memo-save-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--save-btn-bg);
+      background: var(--save-btn-bg);
+      color: #ffffff;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .memo-save-btn:hover {
+      background: var(--save-btn-hover);
+    }
+
+    .memo-status {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .memo-status.unsaved {
+      color: var(--danger);
+    }
+
+    .memo-status.saved {
+      color: #15803d;
+    }
+
+    html.dark .memo-status.saved {
+      color: #4ade80;
+    }
+
     .memo-hint {
       font-size: 0.78rem;
       color: var(--text-muted);
-      margin-top: 4px;
+      margin-top: 5px;
+    }
+
+    .settings-label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin: 8px 0 4px;
+    }
+
+    .settings-input, .settings-select {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg-page);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      margin-bottom: 10px;
     }
 
     .modal-footer {
@@ -1068,22 +1142,36 @@
       transform: translateX(-50%) translateY(20px);
       background: #241f1c;
       color: #ffffff;
-      padding: 10px 18px;
+      padding: 11px 18px;
       border-radius: 10px;
-      font-size: 0.86rem;
+      font-size: 0.85rem;
       font-weight: 600;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.2s, transform 0.2s;
       z-index: 2000;
-      max-width: 92vw;
+      max-width: 94vw;
       text-align: center;
+      line-height: 1.5;
     }
 
     .toast.show {
       opacity: 1;
       transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+    }
+
+    .toast-link {
+      display: inline-block;
+      margin-left: 8px;
+      padding: 2px 8px;
+      border-radius: 5px;
+      background: #00a82d;
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.8rem;
     }
 
     .empty-state {
@@ -1135,7 +1223,7 @@
       <h1 class="app-title">Belgian Beer Navigator</h1>
       <div class="header-actions">
         <button type="button" id="themeToggleBtn" class="icon-btn" title="ダークモード切替" aria-label="ダークモード切替"></button>
-        <button type="button" id="settingsBtn" class="icon-btn" title="データバックアップ・復元" aria-label="設定">
+        <button type="button" id="settingsBtn" class="icon-btn" title="設定・データバックアップ" aria-label="設定">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
           <span>設定</span>
         </button>
@@ -1184,12 +1272,12 @@
       </div>
     </section>
 
-    <!-- HORAL加盟醸造所情報バナー（#HORAL絞り込み時に自動表示） -->
-    <aside id="horalBanner" class="horal-banner" aria-label="HORAL加盟醸造所情報">
-      <div class="horal-banner-title">HORAL（伝統ランビック高等評議会）加盟醸造所一覧</div>
+    <!-- HORAL情報バナー（#HORAL絞り込み時に自動表示） -->
+    <aside id="horalBanner" class="horal-banner" aria-label="HORAL情報">
+      <div class="horal-banner-title">HORAL 活動内容・加盟醸造所一覧</div>
       <p class="horal-banner-text">
-        伝統的なランビックおよびオード・グーズの保護・普及を目的とする団体「HORAL」の加盟醸造所は、以下の12醸造所です：<br>
-        <strong>Boon、De Troch、Den Herberg、Eylenbosch、Hanssens、Kestemont、Lambiek Fabriek、Lindemans、Mort Subite、Oud Beersel、Sako、Timmermans</strong>
+        HORALでは、醸造所公開イベント<strong>「Toer de Geuze（トゥール・ド・グーズ）」</strong>の開催や、加盟醸造所のランビックをブレンドした特別限定酒<strong>「HORAL's Oude Geuze Megablend」</strong>のリリースなどの活動を行っています。<br>
+        <strong>加盟醸造所（12社）：</strong>Boon、De Troch、Den Herberg、Eylenbosch、Hanssens、Kestemont、Lambiek Fabriek、Lindemans、Mort Subite、Oud Beersel、Sako、Timmermans
       </p>
     </aside>
 
@@ -1257,23 +1345,39 @@
 
   <!-- 設定・データバックアップモーダル -->
   <div id="settingsModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
-    <div class="modal-dialog" style="max-width: 520px;">
+    <div class="modal-dialog" style="max-width: 540px;">
       <div class="modal-header">
         <div class="modal-title-group">
-          <h2 id="settingsTitle" class="modal-beer-title">データバックアップ・復元</h2>
+          <h2 id="settingsTitle" class="modal-beer-title">設定・データバックアップ</h2>
         </div>
         <button type="button" id="closeSettingsBtn" class="modal-close-btn">閉じる</button>
       </div>
       <div class="modal-body">
         <div class="detail-section">
+          <h3>Evernote保存用メール設定</h3>
+          <p style="margin-bottom:8px; font-size:0.85rem;">Evernote専用メールアドレス（<code>〇〇@m.evernote.com</code>）を登録すると、「Evernoteへ送る」ボタンでメール作成画面が直接開きます。Macでは純正メールアプリを起動せず<strong>Google Webメール（Gmail）</strong>で開く設定が標準になっています。</p>
+          <label class="settings-label" for="evernoteEmailInput">Evernote専用メールアドレス:</label>
+          <input type="email" id="evernoteEmailInput" class="settings-input" placeholder="例: yourname.12345@m.evernote.com">
+
+          <label class="settings-label" for="evernoteMailClientSelect">Evernote送信時のメール方法:</label>
+          <select id="evernoteMailClientSelect" class="settings-select">
+            <option value="auto">自動判定（Mac/PCはGmail Web版・iPhoneは標準メール）</option>
+            <option value="gmail">常にGoogle Webメール（Gmail）をブラウザで開く</option>
+            <option value="mailto">常に端末の標準メールアプリで開く</option>
+          </select>
+
+          <button type="button" id="saveEvernoteEmailBtn" class="action-btn primary">Evernoteメール設定を保存</button>
+        </div>
+        <hr style="border:none; border-top:1px solid var(--border); margin:16px 0;">
+        <div class="detail-section">
           <h3>JSONファイルへ保存（バックアップ）</h3>
-          <p style="margin-bottom:10px;">登録した「お気に入り」と「テイスティングメモ（日付・感想）」を、MacやiPhone本体にJSON形式でダウンロード保存します（※ビール図鑑のマスターデータは <code>beers.js</code> に保存されています）。</p>
+          <p style="margin-bottom:10px; font-size:0.85rem;">登録した「お気に入り」と「テイスティングメモ（日付・感想）」を、MacやiPhone本体にJSON形式でダウンロード保存します。</p>
           <button type="button" id="exportJsonBtn" class="action-btn primary">お気に入り・メモを保存 (.json)</button>
         </div>
         <hr style="border:none; border-top:1px solid var(--border); margin:16px 0;">
         <div class="detail-section">
           <h3>JSONファイルから復元</h3>
-          <p style="margin-bottom:10px;">保存済みのバックアップファイル（.json）を選択して、お気に入りとメモを復元します。</p>
+          <p style="margin-bottom:10px; font-size:0.85rem;">保存済みのバックアップファイル（.json）を選択して、お気に入りとメモを復元します。</p>
           <input type="file" id="importJsonInput" accept=".json,application/json" style="font-size:0.86rem;">
         </div>
       </div>
@@ -1292,10 +1396,12 @@
       const STORAGE_KEYS = {
         FAVORITES: 'bbn_favorites_v1',
         MEMOS: 'bbn_memos_v1',
-        THEME: 'bbn_theme_v1'
+        THEME: 'bbn_theme_v1',
+        EVERNOTE_EMAIL: 'bbn_evernote_email_v1',
+        EVERNOTE_MAIL_CLIENT: 'bbn_evernote_mail_client_v1'
       };
 
-      // HORAL加盟醸造所マスターリスト（重複除去済み全12醸造所）
+      // HORAL加盟醸造所マスターリスト（12醸造所）
       const HORAL_BREWERIES = [
         'Boon',
         'De Troch',
@@ -1333,7 +1439,6 @@
         beers = window.BEER_DATA;
       }
 
-      // HORAL加盟醸造所かどうかを判定するヘルパー関数
       function isHoralMember(beer) {
         if (!beer) return false;
         const terms = beer.terms || [];
@@ -1342,7 +1447,6 @@
         return HORAL_BREWERIES.some(member => brewLower.includes(member.toLowerCase()));
       }
 
-      // 各ビールの表示用用語リスト取得（HORAL加盟醸造所の場合は自動で#HORALを付与）
       function getEffectiveTerms(beer) {
         const base = Array.isArray(beer.terms) ? beer.terms.slice() : [];
         if (isHoralMember(beer) && !base.includes('#HORAL')) {
@@ -1353,9 +1457,12 @@
 
       let favorites = loadJson(STORAGE_KEYS.FAVORITES, []);
       let memos = loadJson(STORAGE_KEYS.MEMOS, {});
+      let evernoteEmail = localStorage.getItem(STORAGE_KEYS.EVERNOTE_EMAIL) || '';
+      let evernoteMailClient = localStorage.getItem(STORAGE_KEYS.EVERNOTE_MAIL_CLIENT) || 'auto';
       let currentFilter = { type: 'all', value: 'all' };
       let activeDrawer = null;
       let currentDetailBeer = null;
+      let hasUnsavedMemo = false;
 
       const beerGrid = document.getElementById('beerGrid');
       const resultCount = document.getElementById('resultCount');
@@ -1383,8 +1490,10 @@
       function saveJson(key, value) {
         try {
           localStorage.setItem(key, JSON.stringify(value));
+          return true;
         } catch (e) {
           showToast('ブラウザの保存領域に書き込めませんでした。');
+          return false;
         }
       }
 
@@ -1401,15 +1510,63 @@
         } else {
           memos[beerId] = { date: dateVal, text: textVal };
         }
-        saveJson(STORAGE_KEYS.MEMOS, memos);
+        return saveJson(STORAGE_KEYS.MEMOS, memos);
       }
 
       let toastTimer = null;
-      function showToast(msg) {
-        toastEl.textContent = msg;
+      function showToast(msg, htmlAction) {
+        toastEl.innerHTML = '';
+        const span = document.createElement('span');
+        span.textContent = msg;
+        toastEl.appendChild(span);
+        if (htmlAction) {
+          toastEl.appendChild(htmlAction);
+        }
         toastEl.classList.add('show');
         clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => toastEl.classList.remove('show'), 3200);
+        toastTimer = setTimeout(() => toastEl.classList.remove('show'), htmlAction ? 6500 : 4000);
+      }
+
+      function copyTextSyncFallback(text) {
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.left = '-9999px';
+          document.body.appendChild(ta);
+          ta.focus();
+          ta.select();
+          const ok = document.execCommand('copy');
+          document.body.removeChild(ta);
+          return ok;
+        } catch (e) {
+          return false;
+        }
+      }
+
+      async function copyTextToClipboard(text) {
+        const syncOk = copyTextSyncFallback(text);
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(text);
+            return true;
+          }
+        } catch (e) {}
+        return syncOk;
+      }
+
+      // Gmail Web作成URLの文字数上限(414エラー)を回避しつつ安全に本文を生成
+      function buildSafeGmailBody(fullText) {
+        const MAX_ENCODED_BODY = 4500;
+        if (encodeURIComponent(fullText).length <= MAX_ENCODED_BODY) {
+          return { body: fullText, truncated: false };
+        }
+        const suffix = '\n\n（※URL文字数制限のため以下省略：全文はコピー済みですので Command+V で貼り付けできます）';
+        let cut = fullText.slice(0, 480);
+        while (cut.length > 50 && encodeURIComponent(cut + suffix).length > MAX_ENCODED_BODY) {
+          cut = cut.slice(0, Math.floor(cut.length * 0.85));
+        }
+        return { body: cut + suffix, truncated: true };
       }
 
       function getDriveImageUrls(driveUrl, size) {
@@ -1504,7 +1661,7 @@
           currentFilter = { type, value };
         }
         closeDrawer();
-        closeDetailModal();
+        closeDetailModal(true);
         updateFilterTabHighlights();
         renderBeers();
       }
@@ -1572,7 +1729,9 @@
 
           if (keyword) {
             const entry = getMemoEntry(beer.id);
-            const horalText = isHoralMember(beer) ? 'HORAL 加盟醸造所' : '';
+            const horalText = isHoralMember(beer)
+              ? 'HORAL Toer de Geuze トゥール・ド・グーズ Megablend メガブレンド'
+              : '';
             const haystack = [
               beer.name,
               beer.reading,
@@ -1877,6 +2036,8 @@
 
       function openDetailModal(beer) {
         currentDetailBeer = beer;
+        hasUnsavedMemo = false;
+
         const titleEl = document.getElementById('modalBeerTitle');
         titleEl.innerHTML = '';
         if (beer.productUrl) {
@@ -1971,11 +2132,10 @@
           { title: '歴史・醸造所エピソード・豆知識', text: beer.history }
         ];
 
-        // HORAL加盟醸造所の場合は詳細モーダルにも加盟情報を自動追加
         if (isHoralMember(beer)) {
           sections.push({
-            title: 'HORAL（伝統ランビック高等評議会）加盟情報',
-            text: `この醸造所は伝統的なランビックの保護・継承を目的とする団体「HORAL」の加盟メンバーです。現在のHORAL加盟醸造所：${HORAL_BREWERIES.join('、')}`
+            title: 'HORAL 加盟情報',
+            text: `この醸造所はHORALの加盟メンバーです。HORALでは、醸造所公開イベント「Toer de Geuze（トゥール・ド・グーズ）」の開催や、加盟醸造所のランビックをブレンドした限定酒「HORAL's Oude Geuze Megablend」のリリースなどの活動を行っています。加盟醸造所（12社）：${HORAL_BREWERIES.join('、')}`
           });
         }
 
@@ -2017,30 +2177,60 @@
         dateRow.append(dateLabel, dateInput, todayBtn);
 
         const textarea = document.createElement('textarea');
+        textarea.id = 'memoTextarea';
         textarea.className = 'memo-box';
-        textarea.placeholder = '飲んだ感想やお店、ペアリングなどを自由に記録できます（日付・メモとも自動保存され、検索窓からも検索できます）';
+        textarea.placeholder = '飲んだ感想やお店、ペアリングなどを入力し、下の「メモを保存する」ボタンを押してください';
         textarea.value = currentEntry.text;
 
-        const syncMemo = () => {
-          setMemoEntry(beer.id, dateInput.value, textarea.value);
+        const actionRow = document.createElement('div');
+        actionRow.className = 'memo-action-row';
+
+        const saveBtn = document.createElement('button');
+        saveBtn.type = 'button';
+        saveBtn.className = 'memo-save-btn';
+        saveBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg><span>メモを保存する</span>';
+
+        const statusSpan = document.createElement('span');
+        statusSpan.className = 'memo-status';
+        statusSpan.textContent = (currentEntry.date || currentEntry.text) ? '保存済み' : '未入力';
+
+        const markUnsaved = () => {
+          hasUnsavedMemo = true;
+          statusSpan.className = 'memo-status unsaved';
+          statusSpan.textContent = '※未保存の変更があります（「メモを保存する」で確定）';
         };
 
-        dateInput.addEventListener('change', syncMemo);
-        textarea.addEventListener('input', syncMemo);
+        dateInput.addEventListener('change', markUnsaved);
+        textarea.addEventListener('input', markUnsaved);
         todayBtn.addEventListener('click', () => {
           const now = new Date();
           const yyyy = now.getFullYear();
           const mm = String(now.getMonth() + 1).padStart(2, '0');
           const dd = String(now.getDate()).padStart(2, '0');
           dateInput.value = `${yyyy}-${mm}-${dd}`;
-          syncMemo();
+          markUnsaved();
         });
+
+        saveBtn.addEventListener('click', () => {
+          const ok = setMemoEntry(beer.id, dateInput.value, textarea.value);
+          if (ok) {
+            hasUnsavedMemo = false;
+            statusSpan.className = 'memo-status saved';
+            statusSpan.textContent = (dateInput.value || textarea.value.trim()) ? '保存しました' : 'メモをクリアして保存しました';
+            showToast('テイスティングメモを保存しました。');
+            if (searchInput.value.trim()) {
+              renderBeers();
+            }
+          }
+        });
+
+        actionRow.append(saveBtn, statusSpan);
 
         const hint = document.createElement('div');
         hint.className = 'memo-hint';
-        hint.textContent = '※日付とメモはブラウザに自動保存され、「Evernoteへ送る」ボタンでEvernoteにも転記できます。';
+        hint.textContent = '※「メモを保存する」ボタンを押したときだけ保存され、トップの検索窓からも検索できるようになります。';
 
-        memoDiv.append(memoH3, dateRow, textarea, hint);
+        memoDiv.append(memoH3, dateRow, textarea, actionRow, hint);
         body.appendChild(memoDiv);
 
         updateModalFavButton();
@@ -2048,7 +2238,12 @@
         body.scrollTop = 0;
       }
 
-      function closeDetailModal() {
+      function closeDetailModal(force) {
+        if (!force && hasUnsavedMemo) {
+          const discard = window.confirm('テイスティングメモに未保存の変更があります。保存せずに閉じますか？');
+          if (!discard) return;
+        }
+        hasUnsavedMemo = false;
         detailModal.classList.remove('open');
         currentDetailBeer = null;
       }
@@ -2068,22 +2263,31 @@
         toggleFavorite(currentDetailBeer.id);
       });
 
+      // Evernoteへ送る機能（Macでは純正メールを起動せずGmail Web版を直接開く対応）
       document.getElementById('evernoteBtn').addEventListener('click', async () => {
         if (!currentDetailBeer) return;
         const b = currentDetailBeer;
-        const entry = getMemoEntry(b.id);
+
+        const dateEl = document.getElementById('memoDateInput');
+        const textEl = document.getElementById('memoTextarea');
+        const savedEntry = getMemoEntry(b.id);
+        const memoDate = dateEl ? dateEl.value : savedEntry.date;
+        const memoBody = textEl ? textEl.value : savedEntry.text;
+
         let userMemoBlock = '';
-        if (entry.date || entry.text.trim()) {
-          const dateHeader = entry.date ? `（記録日: ${entry.date}）` : '';
-          userMemoBlock = `\n【テイスティングメモ${dateHeader}】\n${entry.text}\n`;
+        if (memoDate || memoBody.trim()) {
+          const dateHeader = memoDate ? `（記録日: ${memoDate}）` : '';
+          userMemoBlock = `\n【テイスティングメモ${dateHeader}】\n${memoBody}\n`;
         }
 
         const horalNote = isHoralMember(b)
-          ? `【HORAL加盟】伝統ランビック高等評議会（HORAL）加盟醸造所`
+          ? `【HORAL加盟】Toer de Geuze（トゥール・ド・グーズ）の開催やHORAL's Oude Geuze Megablendのリリース等を行うHORALの加盟醸造所`
           : '';
 
+        const noteTitle = `${b.name}（${b.reading}）`;
         const noteText = [
-          `■ ${b.name}（${b.reading}）`,
+          noteTitle,
+          ``,
           `醸造所: ${b.brewery}（${b.region}）`,
           `分類: ${b.style} / アルコール度数: ${Number(b.abv).toFixed(1)}%`,
           `輸入元: ${b.importer}`,
@@ -2091,32 +2295,72 @@
           `Google Map: ${b.mapUrl}`,
           horalNote,
           ``,
-          `【原材料】${b.ingredients}`,
-          `【製法・醸造の特徴】${b.brewingMethod}`,
-          `【特徴・アロマ・味わい】${b.flavorProfile}`,
-          `【歴史・豆知識】${b.history}`,
+          `【原材料】\n${b.ingredients}`,
+          ``,
+          `【製法・醸造の特徴】\n${b.brewingMethod}`,
+          ``,
+          `【特徴・アロマ・味わい】\n${b.flavorProfile}`,
+          ``,
+          `【歴史・豆知識】\n${b.history}`,
           userMemoBlock
-        ].filter(Boolean).join('\n');
+        ].filter(line => line !== null && line !== undefined).join('\n').replace(/\n{3,}/g, '\n\n').trim();
 
-        try {
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            await navigator.clipboard.writeText(noteText);
-          }
-        } catch (e) {}
+        // 常に全文をクリップボードへコピーしておく
+        copyTextSyncFallback(noteText);
+        copyTextToClipboard(noteText);
 
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+        // 1. Evernote専用メールアドレスが設定されている場合
+        if (evernoteEmail && evernoteEmail.includes('@')) {
+          let effectiveClient = evernoteMailClient;
+          if (effectiveClient === 'auto') {
+            effectiveClient = isMobile ? 'mailto' : 'gmail';
+          }
+
+          if (effectiveClient === 'gmail') {
+            // 純正メールアプリを一切起動せず、ブラウザの新しいタブでGoogle Webメール（Gmail）作成画面を開く
+            const safeResult = buildSafeGmailBody(noteText);
+            const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(evernoteEmail)}&su=${encodeURIComponent(noteTitle)}&body=${encodeURIComponent(safeResult.body)}`;
+            window.open(gmailUrl, '_blank', 'noopener,noreferrer');
+
+            if (safeResult.truncated) {
+              showToast('Gmailの作成画面を新しいタブで開きました。全文はコピー済みですので、本文欄で Command+V を押すと全内容を貼り付けできます。');
+            } else {
+              showToast('Gmailの作成画面を新しいタブで開きました。内容を確認して「送信」を押すとEvernoteへ登録されます。');
+            }
+            return;
+          } else {
+            // 端末標準のメールアプリで開く（iPhone等）
+            const mailtoUrl = `mailto:${encodeURIComponent(evernoteEmail)}?subject=${encodeURIComponent(noteTitle)}&body=${encodeURIComponent(noteText)}`;
+            showToast('メール作成画面を開きます（送信するとEvernoteへ登録されます）。');
+            window.location.href = mailtoUrl;
+            return;
+          }
+        }
+
+        // 2. メールアドレス未設定時：iPhone / iPad の共有シート
         if (isMobile && navigator.share) {
           try {
             await navigator.share({
-              title: `${b.name} - Belgian Beer Navigator`,
+              title: noteTitle,
               text: noteText
             });
             return;
-          } catch (e) {}
+          } catch (e) {
+            if (e && e.name === 'AbortError') return;
+          }
         }
 
-        window.open('https://www.evernote.com/client/web', '_blank', 'noopener,noreferrer');
-        showToast('ノート内容をクリップボードにコピーしました。Evernoteの新規ノートに貼り付けて保存できます。');
+        // 3. メールアドレス未設定時：Mac / PC 環境（コピー＋Web版リンク）
+        const webFallbackLink = document.createElement('a');
+        webFallbackLink.href = 'https://www.evernote.com/client/web';
+        webFallbackLink.target = '_blank';
+        webFallbackLink.rel = 'noopener noreferrer';
+        webFallbackLink.className = 'toast-link';
+        webFallbackLink.textContent = 'Web版Evernoteを開く';
+
+        showToast('ノート全文をクリップボードにコピーしました。「設定」からEvernoteメールアドレスを登録するとGmailから直接送信できます。', webFallbackLink);
       });
 
       document.getElementById('resetBtn').addEventListener('click', resetAllFilters);
@@ -2154,9 +2398,9 @@
         openDetailModal(chosen);
       });
 
-      document.getElementById('closeDetailBtn').addEventListener('click', closeDetailModal);
+      document.getElementById('closeDetailBtn').addEventListener('click', () => closeDetailModal(false));
       detailModal.addEventListener('click', e => {
-        if (e.target === detailModal) closeDetailModal();
+        if (e.target === detailModal) closeDetailModal(false);
       });
 
       document.getElementById('closeImageModalBtn').addEventListener('click', closeImageModal);
@@ -2164,7 +2408,10 @@
         if (e.target === imageModal) closeImageModal();
       });
 
+      // 設定モーダル（Evernoteメールアドレス・送信方法設定＋JSONバックアップ・復元）
       document.getElementById('settingsBtn').addEventListener('click', () => {
+        document.getElementById('evernoteEmailInput').value = evernoteEmail;
+        document.getElementById('evernoteMailClientSelect').value = evernoteMailClient;
         settingsModal.classList.add('open');
       });
       document.getElementById('closeSettingsBtn').addEventListener('click', () => {
@@ -2174,11 +2421,29 @@
         if (e.target === settingsModal) settingsModal.classList.remove('open');
       });
 
+      document.getElementById('saveEvernoteEmailBtn').addEventListener('click', () => {
+        const emailVal = document.getElementById('evernoteEmailInput').value.trim();
+        const clientVal = document.getElementById('evernoteMailClientSelect').value || 'auto';
+        evernoteEmail = emailVal;
+        evernoteMailClient = clientVal;
+        localStorage.setItem(STORAGE_KEYS.EVERNOTE_MAIL_CLIENT, clientVal);
+
+        if (emailVal) {
+          localStorage.setItem(STORAGE_KEYS.EVERNOTE_EMAIL, emailVal);
+          showToast('Evernoteメール設定を保存しました。');
+        } else {
+          localStorage.removeItem(STORAGE_KEYS.EVERNOTE_EMAIL);
+          showToast('Evernoteメールアドレスを解除しました。');
+        }
+      });
+
       document.getElementById('exportJsonBtn').addEventListener('click', () => {
         const payload = {
           app: 'Belgian Beer Navigator',
           exportedAt: new Date().toISOString(),
           registeredBeerCount: beers.length,
+          evernoteEmail,
+          evernoteMailClient,
           favorites,
           memos
         };
@@ -2210,6 +2475,14 @@
               memos = parsed.memos;
               saveJson(STORAGE_KEYS.MEMOS, memos);
             }
+            if (typeof parsed.evernoteEmail === 'string') {
+              evernoteEmail = parsed.evernoteEmail;
+              localStorage.setItem(STORAGE_KEYS.EVERNOTE_EMAIL, evernoteEmail);
+            }
+            if (typeof parsed.evernoteMailClient === 'string') {
+              evernoteMailClient = parsed.evernoteMailClient;
+              localStorage.setItem(STORAGE_KEYS.EVERNOTE_MAIL_CLIENT, evernoteMailClient);
+            }
             renderBeers();
             settingsModal.classList.remove('open');
             showToast('バックアップデータを復元しました。');
@@ -2227,11 +2500,12 @@
             closeImageModal();
             return;
           }
-          if (detailModal.classList.contains('open')) closeDetailModal();
+          if (detailModal.classList.contains('open')) closeDetailModal(false);
           if (settingsModal.classList.contains('open')) settingsModal.classList.remove('open');
         }
       });
 
+      searchInput.value = '';
       initTheme();
       renderBeers();
     })();
