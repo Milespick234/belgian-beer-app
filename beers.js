@@ -2591,7 +2591,7 @@ window.BEER_DATA.push(
     region: "フラームス・ブラバント州",
     abv: 6.5,
     terms: ["#ランビック", "#ブレタノマイセス", "#ゴールデン", "#HORAL"],
-    imageUrl: "https://drive.google.com/file/d/1xosnh4SMdMdVqsZcKG4XEYDxj6GGVJ78/view?usp=drive_link",
+    imageUrl: "https://drive.google.com/file/d/1Am_IXFqvArCAedUOIx9pNIvLCCQVc6c6/view?usp=drive_link",
     productUrl: "https://www.cantinabrassicoladigitale.it/Product/brouwerij-sako-oude-geuze-75cl/",
     mapUrl: "https://www.google.com/maps/search/?api=1&query=Brouwerij+Sako+Bogaarden+Belgium",
     summary: "パヨッテンラント地方の小さな村ボガールデンで少人数・少量生産を貫くクラフト・ランビック醸造所「サコ」の代表作。農村の自然環境が育んだ野生酵母による素朴で力強い酸味が魅力です。",
