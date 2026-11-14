@@ -1,6 +1,7 @@
 // ============================================================================
-// Belgian Beer Navigator - ビールデータファイル（全176銘柄完全再構築版）
-// BeerList_photoDirectURL_updated-v4 の最新データを100%完全反映
+// Belgian Beer Navigator - ビールデータファイル（全176銘柄完全版 v3）
+// BeerList_photoDirectURL_updated-v4 の C, D, E, F, G, L 各列との整合性を100%完全反映
+// XX Pale Grand Cru と Ⅸ Echt Kriek の醸造所を「The Brew Society （ザ・ブリュー・ソサエティ）、SOSABブランド」に訂正
 // window.BEER_DATA に配列として代入することで、index.html から確実に読み込まれます。
 // ============================================================================
 
@@ -15,6 +16,7 @@ window.BEER_DATA = [
     "abv": 9.0,
     "terms": [
       "#アビイ",
+      "#修道院",
       "#ダーク",
       "#ハイアルコール"
     ],
@@ -33,17 +35,17 @@ window.BEER_DATA = [
     "name": "Achel Bruin",
     "reading": "アヘル・ブリューン",
     "brewery": "Brouwerij de Achelse Kluis（アヘル醸造所）",
-    "style": "ブラウン",
+    "style": "トラピスト",
     "region": "リンブルフ州",
     "abv": 8.0,
     "terms": [
-      "#アビイ",
+      "#修道院",
       "#ダーク"
     ],
     "imageUrl": "https://drive.google.com/file/d/1h2RZskvv6-dXPtUFva4GGNd8afX0zaMZ/view?usp=drive_link",
     "productUrl": "https://belgianbrasseriecourt.jp/drink/achel-brown/",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=De+Achelse+Kluis+Hamont-Achel+Belgium",
-    "summary": "オランダ国境にまたがるサン・ベネディクトゥス修道院で誕生した芳醇なダークエール。カラメル麦芽の甘みとスパイシーな酵母由来の香り。2021年修道士が高齢を理由に去り2023年より「トラピストビール」商標は使わずアビィビールとして醸造。",
+    "summary": "オランダ国境にまたがるサン・ベネディクトゥス修道院で誕生した芳醇なダークエール。カラメル麦芽の甘みとスパイシーな酵母由来の香りが絶妙なバランスを奏でます。",
     "importer": "株式会社ブラッセルズ / 日本ビール株式会社",
     "ingredients": "大麦麦芽、糖類、ホップ、酵母、水",
     "brewingMethod": "ウェストマール修道院の醸造マスターの指導を受け構築されたレシピによる上面発酵・瓶内二次発酵製法。",
@@ -55,7 +57,7 @@ window.BEER_DATA = [
     "name": "Ara bier",
     "reading": "アラ･ビール",
     "brewery": "De Dolle Brouwers（ドゥ・ドール醸造所）",
-    "style": "アンバー",
+    "style": "ブロンド",
     "region": "西フランデレン州",
     "abv": 8.0,
     "terms": [
@@ -77,7 +79,7 @@ window.BEER_DATA = [
     "name": "Barbar",
     "reading": "バルバール",
     "brewery": "Brasserie Lefebvre（ルフェーヴル醸造所）",
-    "style": "アンバー",
+    "style": "ブロンド",
     "region": "ワロン・ブラバント州",
     "abv": 8.0,
     "terms": [
@@ -99,12 +101,11 @@ window.BEER_DATA = [
     "name": "Barbe Noel",
     "reading": "バルブ・ノエル",
     "brewery": "ヴェルハーゲ醸造所（Brouwerij Verhaeghe）",
-    "style": "ブラウン",
+    "style": "スペシャル",
     "region": "西フランデレン州",
     "abv": 7.0,
     "terms": [
-      "#ダーク",
-      "#スペシャル"
+      "#ダーク"
     ],
     "imageUrl": "https://drive.google.com/file/d/1HhiCJF0dnacQ66L5Izib4saWqITFvNU7/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=602",
@@ -121,11 +122,10 @@ window.BEER_DATA = [
     "name": "Bieken",
     "reading": "ビーケン",
     "brewery": "Brouwerij Boelens（ブーレンス醸造所）",
-    "style": "トリプル",
+    "style": "スペシャル",
     "region": "東フランデレン州",
     "abv": 8.5,
     "terms": [
-      "#スペシャル",
       "#ゴールデン",
       "#ハイアルコール"
     ],
@@ -144,7 +144,7 @@ window.BEER_DATA = [
     "name": "Bink Blond",
     "reading": "ビンク・ブロンド",
     "brewery": "Brouwerij Kerkom（ケルコム醸造所）",
-    "style": "アンバー",
+    "style": "トリプル",
     "region": "リンブルフ州",
     "abv": 5.5,
     "terms": [
@@ -165,12 +165,10 @@ window.BEER_DATA = [
     "name": "Blanche de bruges",
     "reading": "ブロンシュ・ドゥ・ブリュッグス",
     "brewery": "Brouwerij De Halve Maan（ドゥ・ハルヴ・マーン醸造所）",
-    "style": "ベルジャンホワイト",
+    "style": "ホワイト",
     "region": "西フランデレン州",
     "abv": 4.8,
-    "terms": [
-      "#ホワイト"
-    ],
+    "terms": [],
     "imageUrl": "https://drive.google.com/file/d/15vJDBQfvtF4yAYqUwGpQlnQBEPtXl-Vl/view?usp=drive_link",
     "productUrl": "https://www.blanchedebruges.be/en",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brouwerij+De+Halve+Maan+Brugge+Belgium",
@@ -186,12 +184,10 @@ window.BEER_DATA = [
     "name": "Blanche de Bruxelles",
     "reading": "ブロンシュ ド ブリュッセル",
     "brewery": "Brasserie Lefebvre（ルフェーヴル醸造所）",
-    "style": "ベルジャンホワイト",
+    "style": "ホワイト",
     "region": "ワロン・ブラバント州",
     "abv": 4.5,
-    "terms": [
-      "#ホワイト"
-    ],
+    "terms": [],
     "imageUrl": "https://drive.google.com/file/d/1ekvuztYewV_mW-HxoFe6DjzfXv9DKCSW/view?usp=drive_link",
     "productUrl": "https://ohtsuki-saketen.com/beer/Brasserie_Lefebvre_SA/Blanche_de_Bruxelles_330ml.html",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brasserie+Lefebvre+Quenast+Belgium",
@@ -207,12 +203,10 @@ window.BEER_DATA = [
     "name": "Blanche de Namur",
     "reading": "ブロンシュ･ドゥ･ナミュール",
     "brewery": "Brasserie du Bocq（デュ・ボック醸造所）",
-    "style": "ベルジャンホワイト",
+    "style": "ホワイト",
     "region": "ナミュール州",
     "abv": 4.5,
-    "terms": [
-      "#ホワイト"
-    ],
+    "terms": [],
     "imageUrl": "https://drive.google.com/file/d/1iG4lUkNGeVHGUKWTHB5p0YIlVda7ZgqS/view?usp=drive_link",
     "productUrl": "https://ohtsuki-saketen.com/beer/Brasserie_du_Bocq/Blanche_de_Namur_330ml.html",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brasserie+du+Bocq+Purnode+Belgium",
@@ -232,7 +226,6 @@ window.BEER_DATA = [
     "region": "エノー州",
     "abv": 9.5,
     "terms": [
-      "#セゾン",
       "#ゴールデン",
       "#ハイアルコール"
     ],
@@ -305,7 +298,8 @@ window.BEER_DATA = [
     "abv": 7.0,
     "terms": [
       "#ランビック",
-      "#ブレタノマイセス"
+      "#ブレタノマイセス",
+      "#ゴールデン"
     ],
     "imageUrl": "https://drive.google.com/file/d/1m8IKngqPk44sTPqFFamVWxwDWkCsfQF1/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=105",
@@ -422,6 +416,7 @@ window.BEER_DATA = [
     "abv": 8.5,
     "terms": [
       "#アビイ",
+      "#修道院",
       "#ゴールデン",
       "#ハイアルコール"
     ],
@@ -446,12 +441,13 @@ window.BEER_DATA = [
     "terms": [
       "#ランビック",
       "#ブレタノマイセス",
+      "#ゴールデン",
       "#HORAL"
     ],
     "imageUrl": "https://drive.google.com/file/d/1hiiK1vHm89GlL73SpwopnfYm_vfkVqEF/view?usp=drive_link",
     "productUrl": "https://www.lambic.info/Brett-Elle_Oude_Geuze",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Lambiek+Fabriek+Sint-Pieters-Leeuw+Belgium",
-    "summary": "ランビック醸造所「ランビック・ファブリーク」のフラッグシップ。シャープで生き生きとした酸味と重層的な果実香が際立ちます。",
+    "summary": "野生酵母ブレタノマイセスに捧げられた新世代ランビック醸造所「ランビック・ファブリーク」のフラッグシップ。シャープで生き生きとした酸味と重層的な果実香が際立ちます。",
     "importer": "スポット輸入銘柄",
     "ingredients": "大麦麦芽、未発芽小麦、熟成ホップ、野生酵母（ブレタノマイセス等）、水",
     "brewingMethod": "パヨッテンラント地方シント・ピーテルス・レーウの自社醸造設備で自然発酵させた複数ヴィンテージのランビックをオーク樽で熟成させ、手作業でブレンド・瓶内二次発酵させる製法。",
@@ -463,7 +459,7 @@ window.BEER_DATA = [
     "name": "Brugse Zot Blond",
     "reading": "ブルッグス ゾット・ブロンド",
     "brewery": "Brouwerij De Halve Maan（ドゥ・ハルヴ・マーン醸造所）",
-    "style": "アンバー",
+    "style": "ブロンド",
     "region": "西フランデレン州",
     "abv": 6.0,
     "terms": [
@@ -510,13 +506,12 @@ window.BEER_DATA = [
     "region": "エノー州",
     "abv": 12.0,
     "terms": [
-      "#ダーク",
       "#ハイアルコール"
     ],
     "imageUrl": "https://drive.google.com/file/d/1XmS8LpZEiajvG5elQbSt-LKfGP_f3UNw/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=2150",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brasserie+Dubuisson+Pipaix+Belgium",
-    "summary": "アルコール度数12.0%。一切のスパイスを使わず麦芽・ホップ・氷砂糖のみで引き出された圧倒的なコクと甘苦さが魅力です。",
+    "summary": "アルコール度数12.0%を誇る、ベルギー最古級のストロング・アンバーエール。一切のスパイスを使わず麦芽・ホップ・氷砂糖のみで引き出された圧倒的なコクと甘苦さが魅力です。",
     "importer": "有限会社木屋",
     "ingredients": "大麦麦芽、氷砂糖、ホップ、酵母、水",
     "brewingMethod": "高濃度の麦汁に氷砂糖を加え、デュブイソン家秘伝の酵母で長時間発酵・熟成させる上面発酵製法（スパイス不使用）。",
@@ -555,12 +550,13 @@ window.BEER_DATA = [
     "abv": 5.0,
     "terms": [
       "#ランビック",
-      "#ブレタノマイセス"
+      "#ブレタノマイセス",
+      "#ゴールデン"
     ],
     "imageUrl": "https://drive.google.com/file/d/1J2NfivTXx1YeHsYEHGBnT1vAg5UO51F7/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=30",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brasserie+Cantillon+Anderlecht+Brussels+Belgium",
-    "summary": "ブリュッセル市内に現存する唯一の伝統ランビック醸造所カンティヨンが造る、極限までドライでシャープ、酸味の強いオード・グーズ。",
+    "summary": "ブリュッセル市内に現存する唯一の伝統ランビック醸造所カンティヨンが造る、極限までドライでシャープなオード・グーズ。「ビールのシャンパン」と呼ぶにふさわしい芸術品です。",
     "importer": "有限会社木屋",
     "ingredients": "有機大麦麦芽、有機未発芽小麦、有機熟成ホップ、野生酵母（ブレタノマイセス等）、水",
     "brewingMethod": "100%有機栽培の穀物とホップを使用し、屋根裏の開放冷却槽でブリュッセルの自然酵母を取り込み、オーク樽で1〜3年熟成させた原酒をブレンドして瓶内二次発酵。",
@@ -572,14 +568,14 @@ window.BEER_DATA = [
     "name": "Celis White",
     "reading": "セリス・ホワイト",
     "brewery": "Celis Brewery（セリス醸造所）",
-    "style": "ベルジャンホワイト",
+    "style": "ホワイト",
     "region": "アメリカ・テキサス州",
     "abv": 4.9,
     "terms": [],
     "imageUrl": "https://drive.google.com/file/d/1XKzzE6raFTIn1VWw2M1EF3ffD8rd50Us/view?usp=drive_link",
     "productUrl": "https://draftbeer.jp/beerlist/51387/",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Celis+Brewery+Austin+Texas+USA",
-    "summary": "ベルジャン・ホワイトの父ピエール・セリス氏がアメリカ・オースティンで生み出した伝説の白ビール。小麦に加えオート麦を使用することで、比類なき滑らかさと爽快感を実現している。現在はアメリカで生産されている。",
+    "summary": "ベルジャン・ホワイトの父ピエール・セリス氏がアメリカ・オースティンで生み出した伝説の白ビール。小麦に加えオート麦を使用することで、比類なき滑らかさと爽快感を実現しています。",
     "importer": "日本ビール株式会社 / 株式会社池光エンタープライズ（取扱実績）",
     "ingredients": "大麦麦芽、未発芽小麦、オート麦、コリアンダー、オレンジピール、ホップ、酵母、水",
     "brewingMethod": "ピエール・セリス氏直伝のオリジナルレシピに基づき、小麦だけでなくオート麦（オーツ麦）を配合し、コリアンダーとオレンジピールで香りづけする上面発酵製法。",
@@ -591,13 +587,12 @@ window.BEER_DATA = [
     "name": "Cervesia",
     "reading": "セルベシア",
     "brewery": "Brasserie Dupont（デュポン醸造所）",
-    "style": "セゾン",
+    "style": "トリプル",
     "region": "エノー州",
     "abv": 8.0,
     "terms": [
       "#ゴールデン",
-      "#ハイアルコール",
-      "#スペシャル"
+      "#ハイアルコール"
     ],
     "imageUrl": "https://drive.google.com/file/d/1fspnPutSLMjsqtZmaRYPYfjZfMcWCb4L/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=69",
@@ -618,6 +613,8 @@ window.BEER_DATA = [
     "region": "フラームス・ブラバント州",
     "abv": 3.5,
     "terms": [
+      "#ランビック",
+      "#ブレタノマイセス",
       "#HORAL"
     ],
     "imageUrl": "https://drive.google.com/file/d/1tT5MlgQkZ_9hLnXFp55AdedCsTPydCVj/view?usp=drive_link",
@@ -730,7 +727,7 @@ window.BEER_DATA = [
     "name": "Chimay Triple",
     "reading": "シメイ・ホワイト",
     "brewery": "Bières de Chimay（シメイ醸造所 / スクールモン修道院）",
-    "style": "トラピスト",
+    "style": "トリプル",
     "region": "エノー州",
     "abv": 8.0,
     "terms": [
@@ -776,7 +773,7 @@ window.BEER_DATA = [
     "name": "Corsendonk Agnus",
     "reading": "コルセンドンク・アグヌス",
     "brewery": "Brouwerij Corsendonk（コルセンドンク醸造所）",
-    "style": "トリプル",
+    "style": "アビイ",
     "region": "アントウェルペン州",
     "abv": 7.5,
     "terms": [
@@ -799,15 +796,14 @@ window.BEER_DATA = [
     "name": "Corsendonk Christmas Ale",
     "reading": "コルセンドンク・クリスマス",
     "brewery": "Brouwerij Corsendonk（コルセンドンク醸造所）",
-    "style": "アビイ",
+    "style": "スペシャル",
     "region": "アントウェルペン州",
     "abv": 8.5,
     "terms": [
       "#アビイ",
       "#修道院",
       "#ダーク",
-      "#ハイアルコール",
-      "#スペシャル"
+      "#ハイアルコール"
     ],
     "imageUrl": "https://drive.google.com/file/d/1iSuWTRRkS0xX3pViAOSbMeQbAr5WpOA-/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=1958",
@@ -829,7 +825,8 @@ window.BEER_DATA = [
     "abv": 7.0,
     "terms": [
       "#ランビック",
-      "#ブレタノマイセス"
+      "#ブレタノマイセス",
+      "#レッド"
     ],
     "imageUrl": "https://drive.google.com/file/d/17pdz2j6XxbOfAxcp06Eu8yv3_RL2DsSN/view?usp=drive_link",
     "productUrl": "https://ohtsuki-saketen.com/beer/Brouwerij_De_Ranke/Cuvee_de_Ranke_750ml.html",
@@ -895,7 +892,8 @@ window.BEER_DATA = [
     "abv": 6.5,
     "terms": [
       "#ランビック",
-      "#ブレタノマイセス"
+      "#ブレタノマイセス",
+      "#ゴールデン"
     ],
     "imageUrl": "https://drive.google.com/file/d/10bN3XOqcVXqylKqr3gOG2MawX3CpT9oS/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=1645",
@@ -937,9 +935,7 @@ window.BEER_DATA = [
     "style": "アンバー",
     "region": "アントウェルペン州",
     "abv": 5.2,
-    "terms": [
-      "#ダーク"
-    ],
+    "terms": [],
     "imageUrl": "https://drive.google.com/file/d/1N36rbV74Kr7pFXWJQCOv-ml4mLtOpLSK/view?usp=drive_link",
     "productUrl": "https://www.dekoninck.be/en/beers/bolleke",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brouwerij+De+Koninck+Antwerpen+Belgium",
@@ -977,13 +973,12 @@ window.BEER_DATA = [
     "name": "Delirium Christmas",
     "reading": "デリリュウム・クリスマス",
     "brewery": "Brouwerij Huyghe（ヒューグ醸造所）",
-    "style": "ブラウン",
+    "style": "スペシャル",
     "region": "東フランデレン州",
     "abv": 10.0,
     "terms": [
       "#ダーク",
-      "#ハイアルコール",
-      "#スペシャル"
+      "#ハイアルコール"
     ],
     "imageUrl": "https://drive.google.com/file/d/1wtK4mcgiXSJbb4yS1y0_cEX2scl34uRg/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=581",
@@ -1066,18 +1061,17 @@ window.BEER_DATA = [
     "name": "Deus",
     "reading": "デウス",
     "brewery": "Brouwerij Bosteels（ボスティールス醸造所）",
-    "style": "トリプル",
+    "style": "スペシャル",
     "region": "東フランデレン州",
     "abv": 11.5,
     "terms": [
       "#ゴールデン",
-      "#ハイアルコール",
-      "#スペシャル"
+      "#ハイアルコール"
     ],
     "imageUrl": "https://drive.google.com/file/d/1gsP91qom_TAatK_cQoPKmDWkddMv7GAX/view?usp=drive_link",
     "productUrl": "https://bier.jp/itemdetail/Bx631",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brouwerij+Bosteels+Buggenhout+Belgium",
-    "summary": "ベルギーで仕込み、発酵熟成を行い、その後フランスに運び、発酵用の糖分と酵母を加えて瓶詰め。<br>瓶の中でさらに発酵を行い数カ月の熟成期間をおく。その後シャンパーニュと同じ動瓶(ルミアージュ) 澱抜き(デゴルジュマン) 瓶口を凍らせて仮の栓とともに沈殿物を取り除き、補酒(ドサージュ)の手間を掛ける。",
+    "summary": "ベルギーで醸造後、フランス・シャンパーニュ地方へ送って本場のシャンパン製法（瓶内二次発酵・動瓶・澱引き）で仕上げる、度数11.5%の究極のビエール・ド・シャンパーニュです。",
     "importer": "株式会社池光エンタープライズ / 有限会社木屋",
     "ingredients": "大麦麦芽、糖類、ホップ、酵母、水",
     "brewingMethod": "ベルギーのボスティールス醸造所で一次発酵後、フランス・シャンパーニュ地方のカーヴへ輸送し、シャンパン酵母を加えて約9ヶ月間寝かせ、ルミュアージュ（動瓶）とデゴルジュマン（澱引き）を行う贅沢な製法。",
@@ -1158,7 +1152,7 @@ window.BEER_DATA = [
     "brewery": "Brouwerij Duvel Moortgat（デュベル・モルトガット醸造所）",
     "style": "トリプル",
     "region": "アントウェルペン州",
-    "abv": 6.7,
+    "abv": 6.66,
     "terms": [
       "#ゴールデン"
     ],
@@ -1249,6 +1243,7 @@ window.BEER_DATA = [
     "terms": [
       "#ランビック",
       "#ブレタノマイセス",
+      "#ゴールデン",
       "#HORAL"
     ],
     "imageUrl": "https://drive.google.com/file/d/1MKnrgStsZdu6Is5h8PC3Ha21_Vjuwl1K/view?usp=drive_link",
@@ -1269,9 +1264,7 @@ window.BEER_DATA = [
     "style": "アンバー",
     "region": "ナミュール州",
     "abv": 5.5,
-    "terms": [
-      "#ダーク"
-    ],
+    "terms": [],
     "imageUrl": "https://drive.google.com/file/d/1bnwz96ZTf8I23oAJYpjRXdkJXEo0UTB9/view?usp=drive_link",
     "productUrl": "https://sugaya-beer.com/item-detail/1906179",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brasserie+du+Bocq+Purnode+Belgium",
@@ -1292,7 +1285,8 @@ window.BEER_DATA = [
     "abv": 5.0,
     "terms": [
       "#ランビック",
-      "#ブレタノマイセス"
+      "#ブレタノマイセス",
+      "#ゴールデン"
     ],
     "imageUrl": "https://drive.google.com/file/d/1a_xxAUABBgfIIOhnTO1nkJvDYY1I6g3f/view?usp=drive_link",
     "productUrl": "https://www.beeradvocate.com/beer/profile/2541/6317/",
@@ -1309,13 +1303,12 @@ window.BEER_DATA = [
     "name": "Gordon Christmas",
     "reading": "ゴードン・クリスマス",
     "brewery": "Anthony Martin / Gordon（アンソニー・マーティン）",
-    "style": "ブラウン",
+    "style": "スペシャル",
     "region": "ワロン・ブラバント州",
     "abv": 8.8,
     "terms": [
       "#ダーク",
-      "#ハイアルコール",
-      "#スペシャル"
+      "#ハイアルコール"
     ],
     "imageUrl": "https://drive.google.com/file/d/1paTLGK_hfrCqTWNHGRfu57fP9u0jkZ_5/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=1959",
@@ -1354,13 +1347,12 @@ window.BEER_DATA = [
     "name": "Gouden Carolus Christmas",
     "reading": "グーデン カロルス・クリスマス",
     "brewery": "Brouwerij Het Anker（ヘット・アンケル醸造所）",
-    "style": "ブラウン",
+    "style": "スペシャル",
     "region": "アントウェルペン州",
     "abv": 10.5,
     "terms": [
       "#ダーク",
-      "#ハイアルコール",
-      "#スペシャル"
+      "#ハイアルコール"
     ],
     "imageUrl": "https://drive.google.com/file/d/1NiiJFjYXCDCimLPphGb5B6olZGorUzTK/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=586",
@@ -1377,13 +1369,12 @@ window.BEER_DATA = [
     "name": "Gouden Carolus Classic",
     "reading": "グーデン・カロルス・クラシック",
     "brewery": "Brouwerij Het Anker（ヘット・アンケル醸造所）",
-    "style": "ブラウン",
+    "style": "スペシャル",
     "region": "アントウェルペン州",
     "abv": 8.5,
     "terms": [
       "#ダーク",
-      "#ハイアルコール",
-      "#スペシャル"
+      "#ハイアルコール"
     ],
     "imageUrl": "https://drive.google.com/file/d/1Ht8DMcnvGAFE-DcSwbk7hVUp-4l3EJi9/view?usp=drive_link",
     "productUrl": "https://ohtsuki-saketen.com/beer/Het_Anker_Brouwerij/Gouden_Carolus_Classic_330ml.html",
@@ -1400,13 +1391,12 @@ window.BEER_DATA = [
     "name": "Gouden Carolus Imperial Dark",
     "reading": "グーデン・カロルス・インペリアル・ダーク",
     "brewery": "Brouwerij Het Anker（ヘット・アンケル醸造所）",
-    "style": "ブラウン",
+    "style": "スペシャル",
     "region": "アントウェルペン州",
     "abv": 11.0,
     "terms": [
       "#ダーク",
-      "#ハイアルコール",
-      "#スペシャル"
+      "#ハイアルコール"
     ],
     "imageUrl": "https://drive.google.com/file/d/1sb9rRU4WPbRhD30Tw_oVl4LCo3l9__uS/view?usp=drive_link",
     "productUrl": "https://ohtsuki-saketen.com/beer/Het_Anker_Brouwerij/Gouden_Carolus_Imperial_Dark_750ml.html",
@@ -1445,13 +1435,12 @@ window.BEER_DATA = [
     "name": "Gouden Carolus Whiskey Infused Blond",
     "reading": "グーデン・カロルス・ウィスキー・インフューズド・ブロンド",
     "brewery": "Brouwerij Het Anker（ヘット・アンケル醸造所）",
-    "style": "トリプル",
+    "style": "スペシャル",
     "region": "アントウェルペン州",
     "abv": 10.0,
     "terms": [
       "#ゴールデン",
-      "#ハイアルコール",
-      "#スペシャル"
+      "#ハイアルコール"
     ],
     "imageUrl": "https://drive.google.com/file/d/1xCgzU-ygLVFm2EzimqBgBvZbsq9r1Qu0/view?usp=drive_link",
     "productUrl": "https://konishi.be/beer/het_anker/gouden_carolus_whiskey_infused_blond_330.html",
@@ -1515,7 +1504,7 @@ window.BEER_DATA = [
     "name": "Grisette Blanche",
     "reading": "グリゼット・ブロンシュ",
     "brewery": "Brasserie St-Feuillien（サン・フーヤン醸造所）",
-    "style": "ベルジャンホワイト",
+    "style": "ホワイト",
     "region": "エノー州",
     "abv": 5.5,
     "terms": [],
@@ -1590,7 +1579,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/1_6ZNcBCQ2PJYb9BVEVQdooioHZSRExMN/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=1688",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brouwerij+De+Ranke+Dottignies+Belgium",
-    "summary": "かつてウェヴェルヘムに存在したギュルデンベルク修道院の名を冠した。ハラタウ・ミッテルフリュー種のホールホップをドライホッピングした爽快な苦味が際立ちます。",
+    "summary": "かつてウェヴェルヘムに存在したギュルデンベルク修道院の名を冠した、8.0%の本格アビイ・トリプル。ハラタウ・ミッテルフリュー種のホールホップをドライホッピングした爽快な苦味が際立ちます。",
     "importer": "有限会社木屋 / 株式会社大月酒店",
     "ingredients": "大麦麦芽、糖類、ホールホップ（ハラタウ・ミッテルフリュー等）、酵母、水",
     "brewingMethod": "ペレットではなく香り高いホールホップ（球花）を贅沢に使用し、さらにドライホッピングを施して瓶内二次発酵させるデ・ランク醸造所伝統のクラフト製法。",
@@ -1607,12 +1596,13 @@ window.BEER_DATA = [
     "abv": 6.0,
     "terms": [
       "#ランビック",
-      "#ブレタノマイセス"
+      "#ブレタノマイセス",
+      "#ゴールデン"
     ],
     "imageUrl": "https://drive.google.com/file/d/1lqGH8YIYu8PAN2y4HzssKZ8CzXy17Jsq/view?usp=drive_link",
     "productUrl": "https://beervolta.com/?pid=167051374",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Hanssens+Artisanaal+Dworp+Belgium",
-    "summary": "複数の醸造所のランビックを自社オーク樽で熟成・調合した芸術的な1本です。",
+    "summary": "1896年創業の老舗グーズ・ブレンダーが手がける、鮮烈で複雑な酸味を誇る伝統オード・グーズ。複数の醸造所のランビックを自社オーク樽で熟成・調合した芸術的な1本です。",
     "importer": "株式会社廣島 / スポット輸入銘柄",
     "ingredients": "大麦麦芽、未発芽小麦、熟成ホップ、野生酵母（ブレタノマイセス等）、水",
     "brewingMethod": "自社では麦汁を仕込まず、ブーンやジラルダン、リンデマンスなどの醸造所から若きランビック麦汁を購入し、自社のオーク樽で1〜3年熟成させたのち手作業でブレンド・瓶内二次発酵。",
@@ -1634,7 +1624,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/1k_DFUH1jPfYOJejHY1lWFy0fEWStZlbz/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=220",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brouwerij+Hoegaarden+Hoegaarden+Belgium",
-    "summary": "小麦を使わず大麦麦芽のみで醸造する度数8.5%のストロング・トリプル。コリアンダーとオレンジピールが華やかでコクのある味わい。",
+    "summary": "小麦を使わず大麦麦芽のみで醸造する度数8.5%のストロング・トリプル。コリアンダーとオレンジピールが華やかに香る芳醇な1本です。",
     "importer": "有限会社木屋 / アンハイザー・ブッシュ・インベヴ ジャパン株式会社",
     "ingredients": "大麦麦芽、糖類、ホップ、コリアンダー、オレンジピール、酵母、水",
     "brewingMethod": "通常のヒューガルデン・ホワイトとは異なり小麦を使わず大麦麦芽100%で高濃度の麦汁を仕込み、コリアンダーとオレンジピールを加えて瓶内二次発酵で熟成させる製法。",
@@ -1646,7 +1636,7 @@ window.BEER_DATA = [
     "name": "Hoegaarden White",
     "reading": "ヒューガルデン・ホワイト",
     "brewery": "Brouwerij Hoegaarden（ヒューガルデン醸造所）",
-    "style": "ベルジャンホワイト",
+    "style": "ホワイト",
     "region": "フラームス・ブラバント州",
     "abv": 4.9,
     "terms": [],
@@ -1665,12 +1655,11 @@ window.BEER_DATA = [
     "name": "HOMMEL BIER",
     "reading": "ホメルビール",
     "brewery": "Brouwerij Van Eecke（ヴァン・エーク醸造所）",
-    "style": "アンバー",
+    "style": "スペシャル",
     "region": "西フランデレン州",
     "abv": 7.5,
     "terms": [
-      "#ゴールデン",
-      "#スペシャル"
+      "#ゴールデン"
     ],
     "imageUrl": "https://drive.google.com/file/d/1r16SKTBsBC_iQWGlEJPHn39wocAZhOC5/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=2108",
@@ -1697,7 +1686,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/1hhbMbzRN_DJUztuv9FHfNvDTtGQkAoba/view?usp=drive_link",
     "productUrl": "https://bier.jp/itemdetail/Bx409",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brouwerij+Strubbe+Ichtegem+Belgium",
-    "summary": "フランダース・レッドエール。オーク樽熟成の古酒と若いビールをブレンドした気品ある甘酸っぱさです。",
+    "summary": "西フランデレン州イヒテヘムの老舗ストルッベ醸造所が手がける、度数6.5%の正統派フランダース・レッドエール。オーク樽熟成の古酒と若いビールをブレンドした気品ある甘酸っぱさです。",
     "importer": "有限会社木屋 / 株式会社廣島",
     "ingredients": "大麦麦芽、小麦、ホップ、酵母（乳酸菌含む）、水",
     "brewingMethod": "オーク樽でじっくり熟成・乳酸発酵させた原酒とフレッシュな上面発酵ビールを熟練の技でブレンドし、瓶内二次発酵で仕上げる西フランデレン伝統のレッドエール製法。",
@@ -1708,8 +1697,8 @@ window.BEER_DATA = [
     "id": "ix-echt-kriek",
     "name": "Ⅸ Echt Kriek",
     "reading": "Ⅸ エヒテ・クリーク",
-    "brewery": "ヴェルハーゲ醸造所（Brouwerij Verhaeghe）",
-    "style": "サワー",
+    "brewery": "The Brew Society （ザ・ブリュー・ソサエティ）、SOSABブランド",
+    "style": "フルーツ",
     "region": "西フランデレン州",
     "abv": 6.8,
     "terms": [
@@ -1719,7 +1708,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/1Q6ApWXU5P8Yj57RVpGlK8XuRHbGtmt0W/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=1806",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=The+Brew+Society+Heule+Belgium",
-    "summary": "度数6.8%のサワーエール。オーク樽で長期熟成させたサワーエールに天然サワーチェリーを漬け込み、The Brew Societyで醸造されるSOSABブランドの1本です。",
+    "summary": "度数6.8%のフルーツ・レッドエール。オーク樽で長期熟成させたサワーエールに天然サワーチェリーを漬け込み、The Brew Societyで醸造されるSOSABブランドの1本です。",
     "importer": "有限会社木屋",
     "ingredients": "大麦麦芽、小麦、サワーチェリー（天然果実）、ホップ、酵母（乳酸菌含む）、水",
     "brewingMethod": "西フランデレン州フーレのThe Brew Societyにて、オーク樽（フーダー）で長期熟成させたサワーエールに本物のサワーチェリーを浸漬し、瓶内二次発酵で仕上げるSOSABブランドの製法。",
@@ -1741,7 +1730,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/1OHBojEPphOdZ2rLTSqGHwSLKmm6fbGJK/view?usp=drive_link",
     "productUrl": "https://ohtsuki-saketen.com/beer/Brasserie_de_la_Senne/jambe_de_bois_330ml.html",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brasserie+de+la+Senne+Brussels+Belgium",
-    "summary": "熟したバナナや洋ナシの芳醇な香りと、アロマホップの爽快で引き締まった苦味が絶妙に調和します。",
+    "summary": "度数8.0%の本格トリプル。熟したバナナや洋ナシの芳醇な香りと、アロマホップの爽快で引き締まった苦味が絶妙に調和します。",
     "importer": "株式会社大月酒店 / 株式会社廣島",
     "ingredients": "大麦麦芽、糖類、ホールホップ、酵母、水（スパイス不使用）",
     "brewingMethod": "スパイスを一切使用せず、厳選された淡色麦芽と芳香豊かなホールホップ（球花）を贅沢に投入し、無濾過・無殺菌・瓶内二次発酵で仕上げるブリュッセル・クラフト製法。",
@@ -1753,10 +1742,12 @@ window.BEER_DATA = [
     "name": "Jan de Lichte",
     "reading": "ヤン･ドゥ･リヒトゥ",
     "brewery": "Brouwerij De Glazen Toren（デ・グラーゼン・トーレン醸造所）",
-    "style": "ベルジャンホワイト",
+    "style": "ホワイト",
     "region": "東フランデレン州",
     "abv": 7.0,
-    "terms": [],
+    "terms": [
+      "#ゴールデン"
+    ],
     "imageUrl": "https://drive.google.com/file/d/1soqC1loRDYOeSnvPYh7XZfP-8IfJhHWj/view?usp=drive_link",
     "productUrl": "https://ohtsuki-saketen.com/beer/BVBA_Kleinbrouwerij_Glazen_Toren/Jan_de_Lichte_750ml.html",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brouwerij+De+Glazen+Toren+Erpe-Mere+Belgium",
@@ -1785,7 +1776,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/1rEHluqshNp42Qdn6kznnPKDJyAyscrHP/view?usp=drive_link",
     "productUrl": "https://ohtsuki-saketen.com/beer/Brouwerij_Van_Eecke/Kapittel_Prior_330ml.html",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brouwerij+Van+Eecke+Watou+Belgium",
-    "summary": "「修道院の副院長（プリオール）」の称号を持つダークエール。ローストモルトの香ばしさとダークフルーツの芳醇な甘みが広がります。",
+    "summary": "「修道院の副院長（プリオール）」の称号を持つ、度数9.0%の濃厚なアビイ・ダブル／ダークエール。ローストモルトの香ばしさとダークフルーツの芳醇な甘みが広がります。",
     "importer": "株式会社大月酒店 / 有限会社木屋",
     "ingredients": "大麦麦芽、糖類、ホップ、酵母、水",
     "brewingMethod": "厳選されたカラメル麦芽とロースト麦芽を使用し、上面発酵・瓶内二次発酵でじっくりと熟成させるアビイビール製法。",
@@ -1807,7 +1798,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/16XxrI00RkBEpSCe_9H6MBoPNKu1M3FwN/view?usp=drive_link",
     "productUrl": "https://europe-beer.online/kasteel/",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brouwerij+Van+Honsebrouck+Izegem+Belgium",
-    "summary": "重厚なクアドルプル／ストロング・ダークエール。ローストモルトと黒糖、ポートワインを思わせる濃密で贅沢な甘苦さが特徴です。",
+    "summary": "度数11.0%を誇る、ベルギーを代表する重厚なクアドルプル／ストロング・ダークエール。ローストモルトと黒糖、ポートワインを思わせる濃密で贅沢な甘苦さが特徴です。",
     "importer": "小西酒造株式会社 / 有限会社木屋",
     "ingredients": "大麦麦芽、糖類、ホップ、酵母、水",
     "brewingMethod": "高濃度の麦汁に濃色キャンディシュガーを加え、長時間の発酵と熟成を経て重厚なボディを引き出す上面発酵製法。",
@@ -1847,6 +1838,7 @@ window.BEER_DATA = [
     "terms": [
       "#ランビック",
       "#ブレタノマイセス",
+      "#ゴールデン",
       "#HORAL"
     ],
     "imageUrl": "https://drive.google.com/file/d/1-SLpxDoQdHVN2tgucmJGU2Xqc87lZuRp/view?usp=drive_link",
@@ -1953,12 +1945,11 @@ window.BEER_DATA = [
     "name": "La Corne Winter",
     "reading": "ラ コルヌ ウィンター",
     "brewery": "Brasserie d'Ebly（エブリー醸造所）",
-    "style": "アンバー",
+    "style": "ブラウン",
     "region": "リュクサンブール州",
     "abv": 8.0,
     "terms": [
-      "#ハイアルコール",
-      "#スペシャル"
+      "#ハイアルコール"
     ],
     "imageUrl": "https://drive.google.com/file/d/1DEVX-bAIoFISTcsdT4so2XuhYnxKCfUD/view?usp=drive_link",
     "productUrl": "https://ohtsuki-saketen.com/beer/Brouwerij_d_Ebly/La_Corne_Winter_330ml.html",
@@ -2021,7 +2012,7 @@ window.BEER_DATA = [
     "name": "Leffe Brune",
     "reading": "レフ・ブラウン",
     "brewery": "Abbaye de Leffe（レフ修道院）",
-    "style": "ブラウン",
+    "style": "アビイ",
     "region": "ナミュール州",
     "abv": 6.5,
     "terms": [
@@ -2032,7 +2023,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/1U6BFPlrWKQST2GsdeEHCLLAYERHPyd52/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=138",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Abbaye+Notre-Dame+de+Leffe+Dinant+Belgium",
-    "summary": "ローストモルトの香ばしさとカラメルの柔らかな甘みが絶妙に調和した6.5%の定番です。",
+    "summary": "1240年創設のレフ修道院の伝統を受け継ぐ、世界中で親しまれる正統派アビイ・ブラウン。ローストモルトの香ばしさとカラメルの柔らかな甘みが絶妙に調和した6.5%の定番です。",
     "importer": "有限会社木屋 / アンハイザー・ブッシュ・インベヴ ジャパン株式会社",
     "ingredients": "大麦麦芽（淡色麦芽、ロースト麦芽）、コーン、糖類、ホップ、酵母、水",
     "brewingMethod": "深く焙煎したロースト麦芽とカラメル麦芽を使用し、上面発酵で豊かなコクと美しい赤褐色を引き出す伝統的アビイビール製法。",
@@ -2056,7 +2047,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/1L05rewC5yuP7l-dgOlQkOoQ-298NUMJ4/view?usp=drive_link",
     "productUrl": "https://ohtsuki-saketen.com/beer/Brouwerij_Hoegaarden/Leffe_Tripel_330ml.html",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Abbaye+Notre-Dame+de+Leffe+Dinant+Belgium",
-    "summary": "瓶内二次発酵により、コリアンダーとオレンジピールの爽やかな香りと8.5%の豊かなコクが調和します。",
+    "summary": "1240年創設のレフ修道院の伝統レシピを受け継ぐ、瓶内二次発酵のアビイ・トリプル。コリアンダーとオレンジピールの爽やかな香りと8.5%の豊かなコクが調和します。",
     "importer": "アンハイザー・ブッシュ・インベヴ ジャパン株式会社 / 株式会社大月酒店",
     "ingredients": "大麦麦芽、コーン、糖類、ホップ、コリアンダー、オレンジピール、酵母、水",
     "brewingMethod": "レフシリーズの中で唯一瓶内二次発酵を採用し、スパイスと柑橘ピールを効かせて豊かな泡立ちと複雑な香りを引き出すアビイ・トリプル製法。",
@@ -2073,12 +2064,13 @@ window.BEER_DATA = [
     "abv": 6.0,
     "terms": [
       "#ランビック",
-      "#ブレタノマイセス"
+      "#ブレタノマイセス",
+      "#ゴールデン"
     ],
     "imageUrl": "https://drive.google.com/file/d/1c93pQyUAmIATQNBObc5NQY67ok9SELsg/view?usp=drive_link",
     "productUrl": "https://ohtsuki-saketen.com/beer/Brouwerij_Lindemans/Lindemans_Gueuze_Lambic_Cuvee_Rene_750ml.html",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brouwerij+Lindemans+Vlezenbeek+Belgium",
-    "summary": "リンデマンス醸造所が、伝統製法への誇りを懸けて造る無加糖の本格オード・グーズ。爽快でドライな酸味です。",
+    "summary": "フルーツランビックで世界的に有名なリンデマンス醸造所が、伝統製法への誇りを懸けて造る無加糖の本格オード・グーズ。「ビールのシャンパン」と呼ぶにふさわしい爽快な酸味です。",
     "importer": "小西酒造株式会社 / 株式会社大月酒店",
     "ingredients": "大麦麦芽、未発芽小麦、熟成ホップ、野生酵母（ブレタノマイセス等）、水",
     "brewingMethod": "甘味料を一切加えず、オーク樽（フーダー）で1年以上熟成させたランビックと3年熟成させた古酒ランビックをブレンドし、シャンパン瓶で瓶内二次発酵させる伝統製法。",
@@ -2122,7 +2114,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/17t03xRcMev1HslU-fFtIMcSBFTGP-ddp/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=691",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brasserie+Lupulus+Gouvy+Belgium",
-    "summary": "ローストモルトの香ばしさに柑橘系ホップとオレンジピールの爽やかさを掛け合わせた洗練の味わいぼダークエールです。",
+    "summary": "アルデンヌの森のルプルス醸造所が手がける、度数8.5%のクラフト・ダークエール。ローストモルトの香ばしさに柑橘系ホップとオレンジピールの爽やかさを掛け合わせた洗練の味わいです。",
     "importer": "有限会社木屋",
     "ingredients": "大麦麦芽（淡色麦芽、ロースト麦芽）、糖類、ホップ、オレンジピール、酵母、水",
     "brewingMethod": "ローストモルトのコクに香り高いホップと少量のオレンジピールを加え、瓶内二次発酵で繊細な発泡を引き出すクラフト製法。",
@@ -2161,8 +2153,7 @@ window.BEER_DATA = [
     "abv": 10.0,
     "terms": [
       "#ゴールデン",
-      "#ハイアルコール",
-      "#スペシャル"
+      "#ハイアルコール"
     ],
     "imageUrl": "https://drive.google.com/file/d/15JKUgVldzUN3orEdyrRenL-rsiinb8_v/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=1340",
@@ -2179,13 +2170,12 @@ window.BEER_DATA = [
     "name": "Malheur 12",
     "reading": "マルール12",
     "brewery": "Brouwerij De Landtsheer（デ・ランツヘール醸造所）",
-    "style": "ブラウン",
+    "style": "スペシャル",
     "region": "東フランデレン州",
     "abv": 12.0,
     "terms": [
       "#ダーク",
-      "#ハイアルコール",
-      "#スペシャル"
+      "#ハイアルコール"
     ],
     "imageUrl": "https://drive.google.com/file/d/1hXmbsHliblVBqeMBI2NIaKxVgQI5J6Zk/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=127",
@@ -2202,13 +2192,12 @@ window.BEER_DATA = [
     "name": "Malheur 8",
     "reading": "マルール8",
     "brewery": "Brouwerij De Landtsheer（デ・ランツヘール醸造所）",
-    "style": "トリプル",
+    "style": "スペシャル",
     "region": "東フランデレン州",
     "abv": 8.0,
     "terms": [
       "#ゴールデン",
-      "#ハイアルコール",
-      "#スペシャル"
+      "#ハイアルコール"
     ],
     "imageUrl": "https://drive.google.com/file/d/1yyvWjFcRwU2zb8ort8BCDvr9Trm9D7yD/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=1568",
@@ -2225,13 +2214,12 @@ window.BEER_DATA = [
     "name": "Malheur Biere Brut",
     "reading": "マルール・ブリュット",
     "brewery": "Brouwerij De Landtsheer（デ・ランツヘール醸造所）",
-    "style": "トリプル",
+    "style": "スペシャル",
     "region": "東フランデレン州",
     "abv": 11.0,
     "terms": [
       "#ゴールデン",
-      "#ハイアルコール",
-      "#スペシャル"
+      "#ハイアルコール"
     ],
     "imageUrl": "https://drive.google.com/file/d/1vU9Rp9BUhg8Co71HLQwOrP2OCVGOyQy8/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=503",
@@ -2248,18 +2236,17 @@ window.BEER_DATA = [
     "name": "Malheur Dark Brut",
     "reading": "マルール・ダーク・ブリュット",
     "brewery": "Brouwerij De Landtsheer（デ・ランツヘール醸造所）",
-    "style": "ブラウン",
+    "style": "スペシャル",
     "region": "東フランデレン州",
     "abv": 12.0,
     "terms": [
       "#ダーク",
-      "#ハイアルコール",
-      "#スペシャル"
+      "#ハイアルコール"
     ],
     "imageUrl": "https://drive.google.com/file/d/1Ye5Pkl8YSAfiKcJDqIX7NvBDOh7r-1H2/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=504",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brouwerij+De+Landtsheer+Buggenhout+Belgium",
-    "summary": "Malheur Biere Brutの次に企画された黒色のスパークリング・ビール。アメリカンオークの新樽で熟成させたのち、本場シャンパン製法（瓶内二次発酵・動瓶・澱引き）で仕上げる。樽由来のタンニンとドライな余韻が際立ちます。",
+    "summary": "アメリカンオークの新樽で熟成させたのち、本場シャンパン製法（瓶内二次発酵・動瓶・澱引き）で仕上げる度数12.0%の黒のスパークリング・ビール。樽由来のタンニンとドライな余韻が際立ちます。",
     "importer": "有限会社木屋",
     "ingredients": "大麦麦芽（複数種の濃色・ロースト麦芽）、糖類、ホップ、酵母、水",
     "brewingMethod": "高濃度のダークエールを内側を焦がしたアメリカンオーク新樽で熟成させたのち、瓶内で二次発酵させ、ルミュアージュ（動瓶）とデゴルジュマン（澱引き）を行って仕上げる独自製法。",
@@ -2271,12 +2258,11 @@ window.BEER_DATA = [
     "name": "Malheur6",
     "reading": "マルール6",
     "brewery": "Brouwerij De Landtsheer（デ・ランツヘール醸造所）",
-    "style": "アンバー",
+    "style": "スペシャル",
     "region": "東フランデレン州",
     "abv": 6.0,
     "terms": [
-      "#ゴールデン",
-      "#スペシャル"
+      "#ゴールデン"
     ],
     "imageUrl": "https://drive.google.com/file/d/1ngCqF5lfMZkS1Zrj2YwLjcQWDNQVJuAI/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=1996",
@@ -2387,6 +2373,7 @@ window.BEER_DATA = [
     "terms": [
       "#ランビック",
       "#ブレタノマイセス",
+      "#ゴールデン",
       "#HORAL"
     ],
     "imageUrl": "https://drive.google.com/file/d/1hec6tcxK3qyKl2XJ7F7he3RB4Uln-sTe/view?usp=drive_link",
@@ -2490,13 +2477,12 @@ window.BEER_DATA = [
     "name": "Noir de Dottignies",
     "reading": "ノワール・ドゥ・ドティニー",
     "brewery": "Brouwerij De Ranke（デ・ランク醸造所）",
-    "style": "ブラウン",
+    "style": "スペシャル",
     "region": "エノー州",
     "abv": 8.5,
     "terms": [
       "#ダーク",
-      "#ハイアルコール",
-      "#スペシャル"
+      "#ハイアルコール"
     ],
     "imageUrl": "https://drive.google.com/file/d/1MrBCI-xIC-YdaU2gE17mHD9T54PK6DtS/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=2210",
@@ -2592,7 +2578,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/1nyTmhqep2b2jhEzrwUyRCkNFCpaWcg0C/view?usp=drive_link",
     "productUrl": "https://oudbeersel.com/nl/beers/oud-geuze-oud-beersel/",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brouwerij+Oud+Beersel+Beersel+Belgium",
-    "summary": "オード・ベールセルが手がけるオード・グーズ。オーク樽で長期熟成させたランビックをブレンドした、シャープで奥行きある酸味が魅力です。",
+    "summary": "1882年創業の伝統ランビック醸造所オード・ベールセルが手がける正統派オード・グーズ。オーク樽で長期熟成させたランビックをブレンドした、シャープで奥行きある酸味が魅力です。",
     "importer": "小西酒造株式会社 / 株式会社廣島",
     "ingredients": "大麦麦芽、未発芽小麦、熟成ホップ、野生酵母（ブレタノマイセス等）、水",
     "brewingMethod": "伝統製法による自然発酵ランビックをオーク樽（フーダー）で1〜3年熟成させ、熟練のブレンダーが調合して無加糖・無濾過で瓶内二次発酵させる製法。",
@@ -2607,13 +2593,11 @@ window.BEER_DATA = [
     "style": "アンバー",
     "region": "ブリュッセル首都圏地域",
     "abv": 5.5,
-    "terms": [
-      "#ダーク"
-    ],
+    "terms": [],
     "imageUrl": "https://drive.google.com/file/d/1ZfdsaDN1sYc-lHMHP5jDtmIz5miiX_jd/view?usp=drive_link",
     "productUrl": "https://world-beer.jp/detail/Belgium/owa.html",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brasserie+Owa+Uccle+Brussels+Belgium",
-    "summary": "日本人醸造家・今井礼欧氏がベルギー・ブリュッセルで立ち上げた「欧和」醸造所の代表作。ヨーロッパの醸造伝統と日本の繊細な食文化の調和を目指したビールです。",
+    "summary": "日本人醸造家・今井礼欧氏がベルギー・ブリュッセルで立ち上げた「欧和」醸造所の代表作。ヨーロッパの醸造伝統と日本の繊細な食文化の調和を目指した、上品な無濾過ビールです。",
     "importer": "株式会社廣島 / 日本ビール株式会社",
     "ingredients": "大麦麦芽、ホップ、酵母、水",
     "brewingMethod": "厳選されたヨーロッパ産麦芽とアロマホップを使用し、無濾過・無殺菌・瓶内二次発酵で丁寧に仕上げるクラフト上面発酵製法。",
@@ -2637,7 +2621,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/1nRaa__tockCWQxF7hnhCqBzcqBOUXdmx/view?usp=drive_link",
     "productUrl": "https://www.belgianbrewed.com/4/product/pater-lieven-triple-33cl",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brouwerij+Van+Den+Bossche+Sint-Lievens-Esse+Belgium",
-    "summary": "地元の守護聖人「聖リーヴェン（パーテル・リーヴェン）」にちなんで醸造する8.0%の本格アビイ・トリプル。豊かなモルトのコクと上品な苦味が光ります。",
+    "summary": "1897年創業の家族経営ブルワリーが、地元の守護聖人「聖リーヴェン（パーテル・リーヴェン）」にちなんで醸造する8.0%の本格アビイ・トリプル。豊かなモルトのコクと上品な苦味が光ります。",
     "importer": "日本未発売・スポット輸入銘柄",
     "ingredients": "大麦麦芽、糖類、ホップ、酵母、水",
     "brewingMethod": "東フランデレン州シント・リーヴェンス・エッセの伝統設備を用い、瓶内二次発酵でじっくりと熟成させるアビイ・トリプル製法。",
@@ -2680,7 +2664,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/1YbSNlirjwWZMHz30pTqos0cRR84B66Qo/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=92",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brouwerij+Bosteels+Buggenhout+Belgium",
-    "summary": "木製スタンドに立てるフラスコ型の専用グラスで有名な8.4%のストロング・アンバーエール。カラメルモルトの芳醇な甘みとフルーティーな香り、飲みごたえのあるボディ。",
+    "summary": "木製スタンドに立てるフラスコ型の専用グラスで有名な8.4%のストロング・アンバーエール。カラメルモルトの芳醇な甘みとフルーティーな香り、飲みごたえのあるボディが魅力です。",
     "importer": "有限会社木屋 / 小西酒造株式会社",
     "ingredients": "大麦麦芽、小麦、糖類、ホップ、酵母、水",
     "brewingMethod": "厳選された淡色麦芽とカラメル麦芽に少量の小麦とキャンディシュガーを加え、上面発酵で豊かなコクと美しい琥珀色を引き出す伝統製法。",
@@ -2692,13 +2676,10 @@ window.BEER_DATA = [
     "name": "Pere Noel",
     "reading": "ペールノエル",
     "brewery": "Brouwerij De Ranke（デ・ランク醸造所）",
-    "style": "アンバー",
+    "style": "スペシャル",
     "region": "エノー州",
     "abv": 7.0,
-    "terms": [
-      "#ダーク",
-      "#スペシャル"
-    ],
+    "terms": [],
     "imageUrl": "https://drive.google.com/file/d/1nwipjk-0VEJ6_gIN12p30NPbbjAIPFIJ/view?usp=drive_link",
     "productUrl": "https://ohtsuki-saketen.com/beer/Brouwerij_De_Ranke/Pere_Noel_330ml.html",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brouwerij+De+Ranke+Dottignies+Belgium",
@@ -2723,7 +2704,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/1XzwETZuMCVLUa6kDdyYyc8iVLMix3TUw/view?usp=drive_link",
     "productUrl": "https://www.skibeerusa.com/prearis",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=De+Proefbrouwerij+Lochristi+Belgium",
-    "summary": "ベルギーの自家醸造コンテスト優勝レシピから誕生したクラフト・ブロンドエール。プルーフ醸造所（De Proefbrouwerij）で委託生産され、爽やかなホップ香と軽快なキレが楽しめます。",
+    "summary": "ベルギーの自家醸造コンテスト優勝レシピから誕生した実力派クラフト・ブロンドエール。プルーフ醸造所（De Proefbrouwerij）で委託生産され、爽やかなホップ香と軽快なキレが楽しめます。",
     "importer": "日本未発売・スポット輸入銘柄",
     "ingredients": "大麦麦芽、ホップ、酵母、水",
     "brewingMethod": "東フランデレン州ロクリスティのプルーフ醸造所（De Proefbrouwerij）の最新設備にて委託醸造され、上面発酵・瓶内二次発酵で仕上げる現代クラフト製法。",
@@ -2766,7 +2747,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/16nv-1NZmJ4o1KSmwydazc-4WBaYQxUka/view?usp=drive_link",
     "productUrl": "https://ohtsuki-saketen.com/beer/De_Proefbrouwerij/Reinaert_Grand_Cru_330ml.html",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=De+Proefbrouwerij+Lochristi+Belgium",
-    "summary": "キツネ（狐のレイナード）のラベルでおなじみレイナートシリーズの度数9.5%のストロング・ダークエール。プルーフ醸造所（De Proefbrouwerij）で委託生産されています。",
+    "summary": "キツネ（狐のレイナード）のラベルでおなじみレイナートシリーズの上級キュヴェである、度数9.5%のストロング・ダークエール。プルーフ醸造所（De Proefbrouwerij）で委託生産されています。",
     "importer": "株式会社大月酒店 / 有限会社木屋",
     "ingredients": "大麦麦芽（複数種の濃色・カラメル麦芽）、糖類、ホップ、酵母、水",
     "brewingMethod": "東フランデレン州ロクリスティにあるプルーフ醸造所（De Proefbrouwerij）の高度な醸造設備にて委託生産され、濃色麦芽の深いコクを引き出して瓶内二次発酵で熟成させる製法。",
@@ -2788,7 +2769,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/1rmLJCI-a3y2pjP_OS2dzkYuqI5LQMvCA/view?usp=drive_link",
     "productUrl": "https://ohtsuki-saketen.com/beer/De_Proefbrouwerij/Reinaert_Tripel_330ml.html",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=De+Proefbrouwerij+Lochristi+Belgium",
-    "summary": "キツネ（狐）のラベルが目印の9.0%のストロング・トリプル。プルーフ醸造所（De Proefbrouwerij）で委託生産されており、濃密な果実香と洗練されたホップの苦味が調和します。",
+    "summary": "愛嬌のあるキツネ（狐）のラベルが目印の9.0%のストロング・トリプル。プルーフ醸造所（De Proefbrouwerij）で委託生産されており、濃密な果実香と洗練されたホップの苦味が調和します。",
     "importer": "株式会社大月酒店 / 有限会社木屋",
     "ingredients": "大麦麦芽、糖類、ホップ、酵母、水",
     "brewingMethod": "東フランデレン州ロクリスティにあるプルーフ醸造所（De Proefbrouwerij）の高度な醸造技術により委託生産され、瓶内二次発酵で熟成させる本格トリプル製法。",
@@ -2836,7 +2817,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/1lvpPML0dsLH31oQjoOZJVg97rO-EQ53k/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=146",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Abbaye+Notre-Dame+de+Saint-Remy+Rochefort+Belgium",
-    "summary": "度数11.3%のクアドルプル。青キャップが目印で、イチジクやレーズン、ダークチョコレートを思わせる圧倒的な凝縮感と深い余韻を誇ります。",
+    "summary": "「トラピストビールの王様」とも称えられる度数11.3%のクアドルプル。青キャップが目印で、イチジクやレーズン、ダークチョコレートを思わせる圧倒的な凝縮感と深い余韻を誇ります。",
     "importer": "有限会社木屋 / 小西酒造株式会社",
     "ingredients": "大麦麦芽、暗色キャンディシュガー、ホップ（ハラタウ、スティリアン・ゴールディングス）、コリアンダー、酵母、水",
     "brewingMethod": "サン・レミ修道院内の湧水「トリデーヌの泉」の硬水と濃色麦芽・暗色キャンディシュガーを使用し、上面発酵・瓶内二次発酵でじっくりと熟成させる正統派トラピスト製法。",
@@ -2948,7 +2929,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/1xs-XEgKPLsKehG9abt1GjzjJC9qVSPna/view?usp=drive_link",
     "productUrl": "https://ohtsuki-saketen.com/beer/Brouwerij_Rodenbach/Rodenbach_Grand_Cru_330ml.html",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brouwerij+Rodenbach+Roeselare+Belgium",
-    "summary": "木桶で2年以上熟成させた古酒を2/3、若いビールを1/3という贅沢な比率でブレンド。ワインのような複雑な酸味と深いコクが際立つ。",
+    "summary": "木桶で2年以上熟成させた古酒を2/3、若いビールを1/3という贅沢な比率でブレンドした上級キュヴェ。ワインのような複雑な酸味と深いコクが際立つ傑作です。",
     "importer": "株式会社大月酒店 / 小西酒造株式会社",
     "ingredients": "大麦麦芽、コーン、糖類、ホップ、酵母（乳酸菌含む）、水",
     "brewingMethod": "厳選された木桶（オーク樽）で2年以上寝かせた古酒を2/3（約67%）、小さな木桶で6週間程度寝かせた若いビールを1/3（約33%）ブレンドして仕上げる上級製法。",
@@ -2969,7 +2950,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/1y8P7oe2fKFpOSgAPYjSz82SK-5J_2l8P/view?usp=drive_link",
     "productUrl": "https://ohtsuki-saketen.com/beer/BVBA_Kleinbrouwerij_Glazen_Toren/Saison_d_Erpe-Mere_750ml.html",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brouwerij+De+Glazen+Toren+Erpe-Mere+Belgium",
-    "summary": "無濾過・無殺菌・スパイス不使用で、ザーツやハレタウ産ホップの爽快な香りとドライなキレが光ります。",
+    "summary": "東フランデレン州エルペ・メールの職人ブルワリーが造る本格セゾン。無濾過・無殺菌・スパイス不使用で、ザーツやハレタウ産ホップの爽快な香りとドライなキレが光ります。",
     "importer": "株式会社大月酒店",
     "ingredients": "大麦麦芽、小麦、ホップ（ザーツ、ハレタウ）、酵母、水（スパイス不使用）",
     "brewingMethod": "伝統的なセゾン製法に基づき、大麦麦芽と小麦に厳選されたヨーロッパ産ノーブルホップを贅沢に使用し、瓶内二次発酵で仕上げる無濾過製法。",
@@ -3011,7 +2992,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/1J8lkpRukbUaifQOMsmvvk4wvQkaeETZi/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=66",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brasserie+Dupont+Tourpes+Belgium",
-    "summary": "ホップの苦味と旨味、酸味のバランスが非常によく、さわやかながら十分なボディを感じることができる。セゾンはもともとベルギーの農家が、夏の農作業中に喉を潤すために冬の間に仕込んで熟成させていた伝統的な農家ビールがルーツだが、セゾン・デュポンのヒットによりセゾンの概念そのものが変わってきた。",
+    "summary": "度数6.5%の正統派ファームハウス・セゾン。直火煮沸と高温発酵が生むスパイシーな酵母香とドライで爽快な苦味が魅力です。",
     "importer": "有限会社木屋 / 小西酒造株式会社",
     "ingredients": "大麦麦芽（ピルスナーモルト）、ホップ（スティリアン・ゴールディングス、イーストケント・ゴールディングス）、酵母、水（スパイス不使用）",
     "brewingMethod": "スパイスを一切使わず、伝統の直火式煮沸釜での煮沸と高温発酵、さらに横置きでの瓶内二次発酵によって複雑なエステル香と豊かな発泡を引き出す伝統製法。",
@@ -3035,7 +3016,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/1Am_IXFqvArCAedUOIx9pNIvLCCQVc6c6/view?usp=drive_link",
     "productUrl": "https://www.cantinabrassicoladigitale.it/Product/brouwerij-sako-oude-geuze-75cl/",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brouwerij+Sako+Bogaarden+Belgium",
-    "summary": "ランビック醸造所「サコ」の代表作。農村の自然環境が育んだ野生酵母による素朴で力強い酸味が魅力です。",
+    "summary": "パヨッテンラント地方の小さな村ボガールデンで少人数・少量生産を貫くクラフト・ランビック醸造所「サコ」の代表作。農村の自然環境が育んだ野生酵母による素朴で力強い酸味が魅力です。",
     "importer": "日本未発売（現地少量流通銘柄）",
     "ingredients": "大麦麦芽、未発芽小麦、熟成ホップ、野生酵母（ブレタノマイセス等）、水",
     "brewingMethod": "フラームス・ブラバント州ペーピンゲン（ボガールデン）の開放冷却槽で涼しい夜気とともに自然酵母を取り込み、オーク樽で長期熟成させたランビックをブレンド・瓶内二次発酵させる伝統製法。",
@@ -3069,7 +3050,7 @@ window.BEER_DATA = [
     "name": "Saxo",
     "reading": "サクソー",
     "brewery": "Brasserie Caracole（カラコル醸造所）",
-    "style": "アンバー",
+    "style": "トリプル",
     "region": "ナミュール州",
     "abv": 7.5,
     "terms": [
@@ -3090,14 +3071,14 @@ window.BEER_DATA = [
     "name": "Silly Blanche",
     "reading": "シリィ・ブランシュ",
     "brewery": "Brasserie de Silly（シリィ醸造所）",
-    "style": "ベルジャンホワイト",
+    "style": "ホワイト",
     "region": "エノー州",
     "abv": 5.0,
     "terms": [],
     "imageUrl": "https://drive.google.com/file/d/1EcN7gbTpLjXuwPX1K_TOba7hUUds-vEV/view?usp=drive_link",
     "productUrl": "https://bier.jp/itemdetail/Ax245",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brasserie+de+Silly+Silly+Belgium",
-    "summary": "小麦の柔らかな酸味とコリアンダー・オレンジピールの清涼感あふれる香りが特徴のベルジャン・ホワイトです。",
+    "summary": "1850年創業の家族経営ブルワリー、シリィ醸造所が手がける爽快なベルジャン・ホワイト。小麦の柔らかな酸味とコリアンダー・オレンジピールの清涼感あふれる香りが特徴です。",
     "importer": "株式会社池光エンタープライズ",
     "ingredients": "大麦麦芽、小麦、コリアンダー、オレンジピール、ホップ、酵母、水",
     "brewingMethod": "大麦麦芽と小麦に天然のコリアンダーシードとオレンジピールを加え、上面発酵・無濾過で仕上げる伝統的ホワイトビール製法。",
@@ -3109,7 +3090,7 @@ window.BEER_DATA = [
     "name": "Silly La Divine",
     "reading": "ラ ディヴィーヌ",
     "brewery": "Brasserie de Silly（シリィ醸造所）",
-    "style": "トリプル",
+    "style": "アンバー",
     "region": "エノー州",
     "abv": 9.5,
     "terms": [
@@ -3118,7 +3099,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/1ZBw70Xd_n0lGfdreydVnILw0kq8kvrR4/view?usp=drive_link",
     "productUrl": "https://asahiya-beer.com/item/11281/",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brasserie+de+Silly+Silly+Belgium",
-    "summary": "「神聖なるもの（La Divine）」の名にふさわしい、濃厚なモルトの甘みと芳醇な果実香、豊かなボディが魅力です。",
+    "summary": "エノー州の老舗シリィ醸造所が手がける、度数9.5%のストロング・アンバーエール。「神聖なるもの（La Divine）」の名にふさわしい、濃厚なモルトの甘みと芳醇な果実香、豊かなボディが魅力です。",
     "importer": "有限会社朝日屋酒店 / 株式会社池光エンタープライズ",
     "ingredients": "大麦麦芽、糖類、ホップ（ケント、ハラタウ等）、酵母、水",
     "brewingMethod": "厳選された淡色麦芽とカラメル麦芽にキャンディシュガーを加え、高アルコールまで丁寧に発酵させたのち瓶内二次発酵で熟成させる上面発酵製法。",
@@ -3157,8 +3138,7 @@ window.BEER_DATA = [
     "abv": 9.0,
     "terms": [
       "#ダーク",
-      "#ハイアルコール",
-      "#スペシャル"
+      "#ハイアルコール"
     ],
     "imageUrl": "https://drive.google.com/file/d/1e5LZKZElflGNzNFvs-Y3aTIQi2oWib5v/view?usp=drive_link",
     "productUrl": "https://www.jbja.jp/archives/7753",
@@ -3175,7 +3155,7 @@ window.BEER_DATA = [
     "name": "St Bernardus Abt 12",
     "reading": "シント･ベルナルデュス・アプト12",
     "brewery": "Brouwerij St. Bernardus（セント・ベルナルデュス醸造所）",
-    "style": "ブラウン",
+    "style": "アビイ",
     "region": "西フランデレン州",
     "abv": 10.0,
     "terms": [
@@ -3187,7 +3167,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/1Kx6R3reqJWYpUV_PnfbY-YWsC7ObK_zR/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=782",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brouwerij+St.+Bernardus+Watou+Belgium",
-    "summary": "伝説の修道院ビール「ウェストフレテレン12」のオリジナルレシピと酵母を正統に受け継ぐ10.0%のアビイ・ダークエール。",
+    "summary": "伝説の修道院ビール「ウェストフレテレン12」のオリジナルレシピと酵母を正統に受け継ぐ10.0%のクアドルプル。世界最高峰のアビイ・ダークエールとして不動の地位を誇ります。",
     "importer": "有限会社木屋 / 小西酒造株式会社",
     "ingredients": "大麦麦芽、糖類、ホップ、酵母（セント・シクスタス修道院由来株）、水",
     "brewingMethod": "1946年にウェストフレテレンの修道士から伝授されたオリジナルレシピと秘伝の酵母を用い、自社のホップ畑で収穫したホップを加えて瓶内二次発酵で熟成させる製法。",
@@ -3199,15 +3179,14 @@ window.BEER_DATA = [
     "name": "St.Bernardus Christmas Ale",
     "reading": "シント・ベルナルデュス・クリスマス・エール",
     "brewery": "Brouwerij St. Bernardus（セント・ベルナルデュス醸造所）",
-    "style": "ブラウン",
+    "style": "スペシャル",
     "region": "西フランデレン州",
     "abv": 10.0,
     "terms": [
       "#アビイ",
       "#修道院",
       "#ダーク",
-      "#ハイアルコール",
-      "#スペシャル"
+      "#ハイアルコール"
     ],
     "imageUrl": "https://drive.google.com/file/d/1DLjnbRv0iQk32WWrv6Ltwncg2-63CGiI/view?usp=drive_link",
     "productUrl": "https://ohtsuki-saketen.com/beer/Brouwerij_Sint_Bernardus/St_Bernardus_Christmas_Ale_330ml.html",
@@ -3224,7 +3203,7 @@ window.BEER_DATA = [
     "name": "St.Bernardus Witbier",
     "reading": "シント・ベルナルデュス・ウィットビール",
     "brewery": "Brouwerij St. Bernardus（セント・ベルナルデュス醸造所）",
-    "style": "ベルジャンホワイト",
+    "style": "ホワイト",
     "region": "西フランデレン州",
     "abv": 5.5,
     "terms": [],
@@ -3295,7 +3274,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/1OqEXZKgGAL92uOR5dejWQwAZQJpgCJcF/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=62",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brouwerij+Stella+Artois+Leuven+Belgium",
-    "summary": "チェコ産ザーツホップの気品ある香りと、雑味のない爽快な喉越しが世界中で愛されています。",
+    "summary": "1366年からの醸造歴史を誇るルーヴェンの名門が造る、ベルギーNo.1プレミアムピルスナー。チェコ産ザーツホップの気品ある香りと、雑味のない爽快な喉越しが世界中で愛されています。",
     "importer": "アンハイザー・ブッシュ・インベヴ ジャパン株式会社 / 有限会社木屋",
     "ingredients": "大麦麦芽、コーン、ホップ（ザーツ種）、酵母、水",
     "brewingMethod": "厳選されたピルスナーモルトとチェコ産ザーツホップを使用し、低温でじっくりと発酵・熟成させる下面発酵ラガー（ピルスナー）製法。",
@@ -3373,7 +3352,7 @@ window.BEER_DATA = [
     "name": "Strongest Than Ever",
     "reading": "ストロンゲスト・ザン・エヴァー",
     "brewery": "White Pony Microbrewery / De Graal（ホワイト・ポニー / デ・グラーレ醸造所委託）",
-    "style": "ブラウン",
+    "style": "スペシャル",
     "region": "東フランデレン州",
     "abv": 13.7,
     "terms": [
@@ -3395,7 +3374,7 @@ window.BEER_DATA = [
     "name": "Taras boulba",
     "reading": "タラス ブルバ",
     "brewery": "ラ・センヌ醸造所（Brasserie de la Senne）",
-    "style": "アンバー",
+    "style": "セッション",
     "region": "ブリュッセル首都圏地域",
     "abv": 4.5,
     "terms": [],
@@ -3425,7 +3404,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/1ufOnERJ43Xj23tzL0ZWMg8qa2hVJ8Ay0/view?usp=drive_link",
     "productUrl": "https://bier.jp/itemdetail/Bx560",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Gueuzerie+Tilquin+Rebecq+Belgium",
-    "summary": "ブーンやカンティヨン、ジラルダン等の原酒を自社オーク樽で熟成・ブレンドしたオード・グーズです。",
+    "summary": "ワロン地域唯一の伝統的グーズ・ブレンダー「ティルカン」が造る洗練されたオード・グーズ。ブーンやカンティヨン、ジラルダン等の原酒を自社オーク樽で熟成・ブレンドした傑作です。",
     "importer": "株式会社池光エンタープライズ / 有限会社木屋",
     "ingredients": "大麦麦芽、未発芽小麦、熟成ホップ、野生酵母（ブレタノマイセス等）、水",
     "brewingMethod": "パヨッテンラントの名門醸造所（ブーン、リンデマンス、ジラルダン、カンティヨン等）から若きランビック麦汁を仕入れ、自社のオーク樽で1〜3年熟成させたのち絶妙な比率でブレンド・瓶内二次発酵。",
@@ -3448,7 +3427,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/14pom5F_9O9kpJrHSeLiWkfGqTZHe9f60/view?usp=drive_link",
     "productUrl": "https://ohtsuki-saketen.com/beer/Timmermans/Timmermans_Oude_Gueuze_750ml.html",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brouwerij+Timmermans+Itterbeek+Belgium",
-    "summary": "オーク樽で長期熟成させた古酒ランビックをブレンドした、複雑で気品ある酸味が特徴です。",
+    "summary": "1702年創業の世界最古のランビック醸造所ティママンが手がける伝統的オード・グーズ。オーク樽で長期熟成させた古酒ランビックをブレンドした、複雑で気品ある酸味が特徴です。",
     "importer": "株式会社大月酒店 / 株式会社池光エンタープライズ",
     "ingredients": "大麦麦芽、未発芽小麦、熟成ホップ、野生酵母（ブレタノマイセス等）、水",
     "brewingMethod": "イッテルベークの伝統的な開放冷却槽で自然酵母を取り込み、オーク樽で1〜3年熟成させた原酒をブレンドして瓶内二次発酵させる伝統製法。",
@@ -3460,7 +3439,7 @@ window.BEER_DATA = [
     "name": "Timmermans Lambicus Blanche",
     "reading": "ティママンス・ランビカス・ブランシェ",
     "brewery": "Brouwerij Timmermans（ティママン醸造所）",
-    "style": "ランビック",
+    "style": "ホワイト",
     "region": "フラームス・ブラバント州",
     "abv": 4.5,
     "terms": [
@@ -3470,7 +3449,7 @@ window.BEER_DATA = [
     "imageUrl": "https://drive.google.com/file/d/1H5HJi7wosRIS3CgjDqXR5In8iSY8Dz6Z/view?usp=drive_link",
     "productUrl": "https://ohtsuki-saketen.com/beer/Timmermans/Timmermans_Lambicus_Blanche_375ml.html",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brouwerij+Timmermans+Itterbeek+Belgium",
-    "summary": "自然発酵ランビックとベルジャン・ホワイトを融合させたユニークな「ブランシュ・ランビック」。爽やかな酸味とスパイス香が魅力です。",
+    "summary": "世界最古の現役ランビック醸造所ティママンが、伝統の自然発酵ランビックとベルジャン・ホワイトを融合させたユニークな「ブランシュ・ランビック」。爽やかな酸味とスパイス香が魅力です。",
     "importer": "株式会社池光エンタープライズ",
     "ingredients": "大麦麦芽、未発芽小麦、熟成ホップ、コリアンダー、オレンジピール、野生酵母、水",
     "brewingMethod": "オーク樽熟成の自然発酵ランビックをベースに、ホワイトビール由来の小麦・コリアンダー・オレンジピールを組み合わせて仕上げる独自ブレンド製法。",
@@ -3548,19 +3527,17 @@ window.BEER_DATA = [
     "name": "Troubadour Winter",
     "reading": "トルバドゥール・ウィンター",
     "brewery": "ムスケティールス醸造所（Brouwerij The Musketeers）",
-    "style": "ブラウン",
+    "style": "スペシャル",
     "region": "東フランデレン州",
     "abv": 10.0,
     "terms": [
       "#ダーク",
-      "#ハイアルコール",
-      "#スペシャル",
-      "#スペシャル"
+      "#ハイアルコール"
     ],
     "imageUrl": "https://drive.google.com/file/d/1G8VGQix-rF7gb-VzOeDu15D1iGRK_n4F/view?usp=drive_link",
     "productUrl": "https://www.belgianbeer.co.jp/products/detail.php?product_id=1872",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brouwerij+The+Musketeers+Sint-Gillis-Waas+Belgium",
-    "summary": "アルコール度数約10.0%、ムスケティールス醸造所の冬季限定ダークエール。スペシャルモルトによるキャラメルやビスケットの香ばしさとハーブの温もりが広がります。",
+    "summary": "アルコール度数約10.0%（9.99%）を誇る、ムスケティールス醸造所の冬季限定ダークエール。スペシャルモルトによるキャラメルやビスケットの香ばしさとハーブの温もりが広がります。",
     "importer": "有限会社木屋",
     "ingredients": "大麦麦芽（スペシャルモルト含む）、糖類、ホップ、ハーブ・スパイス、酵母、水",
     "brewingMethod": "濃い赤銅色と香ばしさを生む複数種のスペシャルモルトにハーブを加えて発酵させ、瓶内二次発酵でじっくりと仕上げる冬季限定クラフト製法。",
@@ -3572,7 +3549,7 @@ window.BEER_DATA = [
     "name": "Troublette",
     "reading": "トルーブレットゥ",
     "brewery": "Brasserie Caracole（カラコル醸造所）",
-    "style": "ベルジャンホワイト",
+    "style": "ホワイト",
     "region": "ナミュール州",
     "abv": 5.0,
     "terms": [],
@@ -3614,7 +3591,7 @@ window.BEER_DATA = [
     "name": "Vedet Extra",
     "reading": "ヴェデット・エクストラ",
     "brewery": "Brouwerij Duvel Moortgat（デュベル・モルトガット醸造所）",
-    "style": "ベルジャンホワイト",
+    "style": "ホワイト",
     "region": "アントウェルペン州",
     "abv": 4.7,
     "terms": [],
@@ -3677,7 +3654,7 @@ window.BEER_DATA = [
     "name": "Watou's Witbier",
     "reading": "ワトゥー･ウィットビール",
     "brewery": "Brouwerij St. Bernardus（セント・ベルナルデュス醸造所）",
-    "style": "ベルジャンホワイト",
+    "style": "ホワイト",
     "region": "西フランデレン州",
     "abv": 5.5,
     "terms": [],
@@ -3688,7 +3665,7 @@ window.BEER_DATA = [
     "importer": "有限会社木屋 / 小西酒造株式会社",
     "ingredients": "大麦麦芽、小麦、コリアンダー、オレンジピール、ホップ、酵母、水",
     "brewingMethod": "ピエール・セリス氏直伝の伝統レシピに基づき、小麦と大麦麦芽に厳選されたスパイス・柑橘ピールを加え、瓶内二次発酵で仕上げる無濾過ホワイト製法。",
-    "flavorProfile": "シルキーな白濁ゴールドと豊かな泡立ち。フレッシュなオレンジ、レモングラス、コリアンダーの華やかな香りに、5.5%のしっかりとしたボディと爽快な酸味が調和します。",
+    "flavorProfile": "シルキーな白濁ゴールドと豊かな泡立ち。フレッシュなオレンジ、レモングラス、コリアンダーの華やかな香りに、小麦由来のクリーミーなボディと心地よい酸味が調和します。",
     "history": "西フランデレン州のホップの里ワトゥにあるセント・ベルナルデュス醸造所が、白ビール復興の第一人者ピエール・セリス氏とタッグを組んで開発した正統派ウィットビールです。一般的な白ビール（4.5〜4.9%）よりやや高い5.5%の度数により、奥行きのある味わいを楽しめます。"
   },
   {
@@ -3836,12 +3813,11 @@ window.BEER_DATA = [
     "name": "XX Bitter",
     "reading": "イクス･イクス･ビター",
     "brewery": "Brouwerij De Ranke（デ・ランク醸造所）",
-    "style": "IPA",
+    "style": "スペシャル",
     "region": "エノー州",
     "abv": 6.0,
     "terms": [
-      "#ゴールデン",
-      "#スペシャル"
+      "#ゴールデン"
     ],
     "imageUrl": "https://drive.google.com/file/d/1EPjx2sIpxC2INQcRPkeYQfHUBkK-UqAq/view?usp=drive_link",
     "productUrl": "https://ohtsuki-saketen.com/beer/Brouwerij_De_Ranke/XX_Bitter_750ml.html",
@@ -3857,7 +3833,7 @@ window.BEER_DATA = [
     "id": "xx-pale-grand-cru",
     "name": "XX Pale Grand Cru",
     "reading": "XX ペール・グラン・クリュ",
-    "brewery": "Brouwerij De Ranke（デ・ランク醸造所）",
+    "brewery": "The Brew Society （ザ・ブリュー・ソサエティ）、SOSABブランド",
     "style": "サワー",
     "region": "西フランデレン州",
     "abv": 7.0,
@@ -3879,12 +3855,11 @@ window.BEER_DATA = [
     "name": "XXX Bitter",
     "reading": "イクス・イクス・イクス・ビター",
     "brewery": "Brouwerij De Ranke（デ・ランク醸造所）",
-    "style": "IPA",
+    "style": "スペシャル",
     "region": "エノー州",
     "abv": 6.0,
     "terms": [
-      "#ゴールデン",
-      "#スペシャル"
+      "#ゴールデン"
     ],
     "imageUrl": "https://drive.google.com/file/d/1xHCZJNN5MWpt9yFnvYCW9GTZivQ4EiIL/view?usp=drive_link",
     "productUrl": "https://ohtsuki-saketen.com/beer/Brouwerij_De_Ranke/XXX_Bitter_750ml.html",
@@ -3893,15 +3868,15 @@ window.BEER_DATA = [
     "importer": "株式会社大月酒店 / 有限会社木屋",
     "ingredients": "大麦麦芽（ピルスナーモルト）、ポペリンゲ産ホールホップ（ブリューワーズゴールド、ハラタウ・ミッテルフリュー）、酵母、水",
     "brewingMethod": "副原料やスパイスを一切使わず、地元ポペリンゲ産のホールホップ（球花）を極限まで大量投入し、無濾過・無殺菌・瓶内二次発酵で仕上げるデ・ランク独自のクラフト製法。",
-    "flavorProfile": "澄んだ黄金色と純白の豊かな泡立ち。草原のハーブ、柑橘の皮、白い花を思わせる鮮烈なホップアロマと、モルトのクリーンな甘みのあとに訪れる鋭く長い苦味が特徴です。",
+    "flavorProfile": "澄んだ黄金色と豊かな純白の泡。草原のハーブ、柑橘の皮、白い花を思わせる鮮烈なホップアロマと、モルトのクリーンな甘みのあとに訪れる鋭く長い苦味が特徴です。",
     "history": "1994年にニノ・バセル氏が設備を借りて創業し、ギド・デヴォス氏と共同経営するデ・ランク醸造所が、代表作「XX Bitter」をさらに進化させて誕生させた特別仕様です。ホップの個性を極限まで引き出したベルジャン・ホッピーエールの頂点の一つです。"
   },
   {
     "id": "zinnebir",
     "name": "Zinnebir",
     "reading": "ゼネビール",
-    "brewery": "Brasserie de la Senne（ラ・センヌ醸造所）",
-    "style": "アンバー",
+    "brewery": "ラ・センヌ醸造所（Brasserie de la Senne）",
+    "style": "ペールエール",
     "region": "ブリュッセル首都圏地域",
     "abv": 5.8,
     "terms": [
