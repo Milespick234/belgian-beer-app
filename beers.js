@@ -2393,25 +2393,6 @@ window.BEER_DATA.push(
     history: "1878年創業の農園ブルワリー、ケルコム醸造所が冬期のみ醸造する特別限定品です。銘柄名の「ウィンテルコニンクスケ（Winterkoninkske）」はオランダ語で小さな鳥「ミソサザイ（直訳で冬の小さな王様）」を意味し、厳しい冬に美しい声でさえずる鳥にちなんで命名されました。"
   },
   {
-    id: "witkap-tripel",
-    name: "Witkap Tripel",
-    reading: "ウィトカップ･トリプゥ",
-    brewery: "Brouwerij Slaghmuylder（スラグムイルデル醸造所）",
-    style: "トリプル",
-    region: "東フランデレン州",
-    abv: 7.5,
-    terms: ["#アビイ", "#修道院", "#ゴールデン"],
-    imageUrl: "https://drive.google.com/file/d/1clVhS6XDLiVwrjf9F6mh8RV1BFuA3SJm/view?usp=drive_link",
-    productUrl: "https://ohtsuki-saketen.com/beer/Brouwerij_Slaghmuylder/Witkap_Tripel_330ml.html",
-    mapUrl: "https://www.google.com/maps/search/?api=1&query=Brouwerij+Slaghmuylder+Ninove+Belgium",
-    summary: "「白い修道帽（ウィトカップ）」を意味する、トラピスト修道士への敬意から誕生した伝統的トリプル。7.5%の飲みやすい度数の中に、爽やかなホップ香と上品なモルトの甘みが調和します。",
-    importer: "株式会社大月酒店",
-    ingredients: "大麦麦芽、糖類、ノーブルホップ、酵母、水",
-    brewingMethod: "1860年創業の家族経営ブルワリー、スラグムイルデル醸造所にて厳選された麦芽とホップを使用し、瓶内二次発酵で丁寧に仕上げる伝統製法。",
-    flavorProfile: "澄んだ黄金色と純白の泡立ち。柑橘や青リンゴのようなフルーティーなエステル香と、ハーバルで心地よいホップの苦味、すっきりとしたドライな後味が楽しめます。",
-    history: "1929年にアントウェルペン近郊のブルーワーが、シトー会（トラピスト会）修道士の白い修道服のフード（Witkap＝白い頭巾）にちなんで開発した歴史的銘柄です。1981年に東フランデレン州ニノーヴェの老舗スラグムイルデル醸造所がレシピとブランドを継承し、伝統の味を守り続けています。"
-  },
-  {
     id: "xx-bitter",
     name: "XX Bitter",
     reading: "イクス･イクス･ビター",
