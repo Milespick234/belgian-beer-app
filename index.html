@@ -1408,7 +1408,6 @@
       </div>
     </section>
 
-    <!-- HORAL情報バナー -->
     <aside id="horalBanner" class="horal-banner" aria-label="HORAL情報">
       <div class="horal-banner-title">HORAL 活動内容・加盟醸造所一覧</div>
       <p class="horal-banner-text">
@@ -1438,7 +1437,6 @@
     <main id="beerGrid" class="beer-grid" aria-live="polite"></main>
   </div>
 
-  <!-- 詳細ポップアップモーダル -->
   <div id="detailModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalBeerTitle">
     <div class="modal-dialog">
       <div class="modal-header">
@@ -1477,7 +1475,6 @@
     </div>
   </div>
 
-  <!-- 画像ライトボックス -->
   <div id="imageModal" class="modal-backdrop image-lightbox" role="dialog" aria-modal="true" aria-labelledby="imageModalTitle">
     <div class="lightbox-dialog">
       <div class="modal-header">
@@ -1494,7 +1491,6 @@
     </div>
   </div>
 
-  <!-- 設定モーダル -->
   <div id="settingsModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
     <div class="modal-dialog" style="max-width: 540px;">
       <div class="modal-header">
@@ -1506,7 +1502,7 @@
       <div class="modal-body">
         <div class="detail-section">
           <h3>データの強制再読込（キャッシュ更新）</h3>
-          <p style="margin-bottom:8px; font-size:0.85rem;"><code>beers.js</code> の画像URLやデータを書き換えた直後に古い画像・情報が残る場合は、下のボタンで最新データを強制再取得できます。</p>
+          <p style="margin-bottom:8px; font-size:0.85rem;"><code>beers.js</code> や <code>beers-v2.js</code> の画像URLやデータを書き換えた直後に古い画像・情報が残る場合は、下のボタンで最新データを強制再取得できます。</p>
           <button type="button" id="forceReloadBtn" class="action-btn primary">最新データに更新（強制再読込）</button>
         </div>
         <hr style="border:none; border-top:1px solid var(--border); margin:16px 0;">
@@ -1558,9 +1554,11 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-  <!-- データ部ファイル2：古いキャッシュを使わず常に最新の beers.js を同期読み込み -->
+  <!-- データ部ファイル：beers-v2.js または beers.js を安全・同期的に自動判別読み込み -->
   <script>
-    document.write('<script src="beers.js?v=' + Date.now() + '"><\/script>');
+    var __loadToken = Date.now();
+    document.write('<script src="beers-v2.js?v=' + __loadToken + '"><\/script>');
+    document.write('<script>if (typeof BEER_DATA === "undefined" && typeof window.BEER_DATA === "undefined") { document.write(\'<script src="beers.js?v=' + __loadToken + '"><\\/script>\'); }<\/script>');
   </script>
 
   <script>
@@ -1802,13 +1800,13 @@
       function compactForSearch(str) {
         return normalizeForSearch(str)
           .replace(/委託醸造|委託生産|委託/g, '')
-          .replace(/[\s・･\-‐－—/／()（）【】\\[\\].,、。!！?？:：]/g, '');
+          .replace(/[\s・･\-‐－—/／()（）【】\[\].,、。!！?？:：]/g, '');
       }
 
       function stripContractSuffix(breweryStr) {
         if (!breweryStr) return '';
         return String(breweryStr)
-          .replace(/（委託醸造）|\\(委託醸造\\)|\\(委託生産\\)|（委託生産）|\\(委託\\)|（委託）/g, '')
+          .replace(/（委託醸造）|\(委託醸造\)|（委託生産）|\(委託生産\)|（委託）|\(委託\)/g, '')
           .replace(/委託醸造|委託生産|委託/g, '')
           .replace(/\s+/g, ' ')
           .trim();
@@ -2000,7 +1998,7 @@
           }
         });
         if (set.size === 0) {
-          return ['すべて', 'ランビック', 'トラピスト', 'アビイ', 'トリプル', 'ダブル', 'セゾン', 'サワー', 'ホワイト', 'アンバー', 'ブラウン', 'ピルスナー', 'IPA', 'フルーツ'];
+          return ['すべて', 'ランビック', 'トラピスト', 'アビイ', 'トリプル', 'ダブル', 'セゾン', 'サワー', 'ベルジャンホワイト', 'アンバー', 'ブラウン', 'ピルスナー', 'IPA', 'フルーツ'];
         }
         return ['すべて', ...Array.from(set).sort((a, b) => a.localeCompare(b, 'ja'))];
       }
@@ -2477,6 +2475,10 @@
             const targetVal = String(value).trim();
             if (bStyle === targetVal) return true;
             if (normalizeForSearch(bStyle) === normalizeForSearch(targetVal)) return true;
+            if ((targetVal === 'ベルジャンホワイト' || targetVal === 'ホワイト') &&
+                (bStyle === 'ベルジャンホワイト' || bStyle === 'ホワイト')) {
+              return true;
+            }
             return false;
           }
           if (type === 'brewery') {
@@ -2552,11 +2554,10 @@
           beerGrid.innerHTML = `
             <div class="empty-state">
               <div class="error-box">
-                <p style="font-weight:800; color:var(--danger); margin:0 0 8px;">データファイル（beers.js）が読み込まれていません</p>
+                <p style="font-weight:800; color:var(--danger); margin:0 0 8px;">データファイル（beers.js / beers-v2.js）が読み込まれていません</p>
                 <ul style="margin:0; padding-left:18px; line-height:1.7;">
-                  <li><code>index.html</code> と <code>beers.js</code> が<strong>同じフォルダ内</strong>に保存されているか確認してください。</li>
+                  <li><code>index.html</code> と <code>beers.js</code>（または <code>beers-v2.js</code>）が<strong>同じフォルダ内</strong>に保存されているか確認してください。</li>
                   <li>ファイル名が <code>beers.js.txt</code> のように後ろに <code>.txt</code> が付いていないか確認してください。</li>
-                  <li><code>beers.js</code> の中身に貼り付け漏れがないか確認してください。</li>
                 </ul>
               </div>
             </div>
@@ -2861,7 +2862,7 @@
         if (isHoralMember(latestBeer)) {
           sections.push({
             title: 'HORAL 加盟情報',
-            text: `この醸造所はHORALの加盟メンバーです。HORALでは、醸造所公開イベント「Toer de Geuze（トゥール・ド・グーズ）」の開催や、加盟醸造所のランビックをブレンドした限定酒「HORAL's Oude Geuze Megablend」のリリースなどの活動を行っています。加盟醸造所（12社）：${HORAL_BREWERIES.join('、')}`
+            text: `この醸造所はHORALの加盟メンバーです。HORALでは、醸造所公開イベント「Toer de Geuze（トゥール・ド・グーズ）」の開催や、加盟醸造所のランビックをブレンドした限定酒「HORAL\'s Oude Geuze Megablend」のリリースなどの活動を行っています。加盟醸造所（12社）：${HORAL_BREWERIES.join('、')}`
           });
         }
 
