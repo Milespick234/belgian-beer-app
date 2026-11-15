@@ -1847,7 +1847,7 @@ window.BEER_DATA = [
       "#ブレタノマイセス",
       "#HORAL"
     ],
-    "imageUrl": "https://drive.google.com/file/d/1-SLpxDoQdHVN2tgucmJGU2Xqc87lZuRp/view?usp=drive_link",
+    "imageUrl": "https://drive.google.com/file/d/1fGLhFjEsOAyLgFev1myu1-ZlcnJFHMps/view?usp=drive_link",
     "productUrl": "https://www.brouwerijkestemont.be/fr/product/old-geuze",
     "mapUrl": "https://www.google.com/maps/search/?api=1&query=Brouwerij+Kestemont+Sint-Gertrudis-Pede+Belgium",
     "summary": "ディルベークの有機農園ブルワリー「ケステモント」が手がけるオーガニック・オード・グーズ。100%有機栽培の大麦と小麦を用い、伝統的な自然発酵とオーク樽熟成で仕上げた逸品です。",
