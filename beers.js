@@ -1770,7 +1770,7 @@ window.BEER_DATA = [
     "name": "Kapittel Prior",
     "reading": "カピテル・プリオール",
     "brewery": "Brouwerij Van Eecke（ヴァン・エーク醸造所）",
-    "style": "ストロング・ダーク,
+    "style": "ストロング・ダーク",
     "region": "西フランデレン州",
     "abv": 9.0,
     "terms": [
