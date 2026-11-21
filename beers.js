@@ -3916,3 +3916,27 @@ window.BEER_DATA = [
     "history": "ラ・センヌ醸造所の創業者イヴァン・ドゥ・ベーツ氏とベルナール・ルブーフ氏が、2002年にブリュッセルの街の祭り「ジネケ・パレード」のために最初に醸造した記念すべき第1号ビールです。ブリュッセル方言で「反骨精神・自由な市民」を意味する「Zinneke」に由来しています。"
   }
 ];
+// ==========================================
+// 追加データ（LEFORT / ルフォー）
+// ==========================================
+window.BEER_DATA.push(
+  {
+    id: "lefort",
+    name: "LEFORT",
+    reading: "ルフォー",
+    brewery: "Brouwerij Omer Vander Ghinste（オメール・ヴァンデルギンスト醸造所（旧ボッコル醸造所））",
+    style: "ブラウン",
+    region: "西フランデレン州",
+    abv: 10.0,
+    terms: ["#ダーク", "#ハイアルコール"],
+    imageUrl: "https://drive.google.com/file/d/1AKmOkfaPg3y-sFUsT9b7ibL9rSVJgVki/view?usp=drive_link",
+    productUrl: "https://www.omervanderghinste.be/nl/onze-bieren/lefort",
+    mapUrl: "https://www.google.com/maps/search/?api=1&query=Brouwerij+Omer+Vander+Ghinste+Bellegem+Belgium",
+    summary: "アルコール度数10.0%のダークビール。淡色麦芽と焙煎された濃色大麦麦芽のバランスに、上面発酵由来のフルーティーさが調和しチョコレートを思わせる甘い香り、コクがありながらフルーティーな余韻も味わえる逸品。",
+    importer: "株式会社エマージトレーディング",
+    ingredients: "大麦麦芽（ペール麦芽・ロースト濃色麦芽）、ホップ、酵母、醸造用糖類",
+    brewingMethod: "ベースとなる淡色（ペール）麦芽と、焙煎した濃色（ダーク）大麦麦芽を組み合わせています。濃色麦芽を使いすぎない配合により、焦げ臭さや強い苦味を抑えている。",
+    flavorProfile: "赤みがかった濃い茶色で、ローストされたダークモルトの香りに、フルーティーさ、甘み、チョコレートやキャラメルのような風味が特徴。",
+    history: "コルトレイクに1854年に創業し1911年まで続いた旧Brasserie LeFort（ルフォール醸造所）の伝統を受け継ぎ醸造されている銘柄です。西フランデレン州にBellegemにあり、代々長男の名前に創業者と同じOMERという名前が付けられている。"
+  }
+);
